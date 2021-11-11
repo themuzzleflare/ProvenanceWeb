@@ -22,17 +22,18 @@ import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
+import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
   components: { TagCell, Spinner },
   data() {
     return {
-      transaction: null,
+      transaction: null as unknown as TransactionResource,
       error: null,
     };
   },
   computed: {
-    transactionId() {
+    transactionId(): string {
       return this.$route.params.transaction;
     },
     tags() {
@@ -40,7 +41,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getTransaction() {
+    getTransaction(): void {
       axios
         .get(
           `https://api.up.com.au/api/v1/transactions/${this.transactionId}`,
@@ -59,7 +60,7 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    listTransactionsByTag(tag: string) {
+    listTransactionsByTag(tag: string): void {
       this.$router.push({
         name: "Transactions By Tag",
         params: {

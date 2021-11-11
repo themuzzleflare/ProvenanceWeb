@@ -12,7 +12,7 @@ import { Options, Vue } from "vue-class-component";
     tag: Object,
   },
   computed: {
-    tagName() {
+    tagName(): string {
       return this.tag.id;
     },
   },

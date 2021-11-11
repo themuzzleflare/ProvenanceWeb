@@ -15,7 +15,7 @@
       :key="transaction.id"
       :transaction="transaction"
       class="list-group-item list-group-item-action"
-      @click="viewTransactionDetails(transaction.id)"
+      @click="viewTransactionDetails(transaction)"
     />
   </div>
 </template>
@@ -23,25 +23,31 @@
 <script lang="ts">
 import TransactionCell from "@/components/TransactionCell.vue";
 import { Options, Vue } from "vue-class-component";
+import GroupedTransaction from "@/GroupedTransaction";
+import { PropType } from "vue";
+import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
   components: { TransactionCell },
   props: {
-    groupedTransactions: Array,
+    groupedTransactions: {
+      type: Array as PropType<GroupedTransaction[]>,
+      required: true,
+    },
   },
   methods: {
-    viewTransactionDetails(transaction: string) {
+    viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
         name: "Transaction Detail",
         params: {
-          transaction: transaction,
+          transaction: transaction.id,
         },
       });
     },
   },
 })
 export default class GroupedTransactionCell extends Vue {
-  groupedTransactions!: [];
+  groupedTransactions!: GroupedTransaction[];
 }
 </script>
 

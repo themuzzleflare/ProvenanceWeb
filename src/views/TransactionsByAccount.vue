@@ -10,7 +10,7 @@
         :key="transaction.id"
         :transaction="transaction"
         class="list-group-item list-group-item-action"
-        @click="viewTransactionDetails(transaction.id)"
+        @click="viewTransactionDetails(transaction)"
       />
     </transition-group>
   </div>
@@ -24,22 +24,23 @@ import TransactionCell from "@/components/TransactionCell.vue";
 import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
+import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
   components: { SearchBar, Spinner, TransactionCell },
   data() {
     return {
-      transactions: null,
+      transactions: null as unknown as TransactionResource[],
       error: null,
       searchQuery: "",
     };
   },
   computed: {
-    accountId() {
+    accountId(): string {
       return this.$route.params.account;
     },
-    filteredTransactions() {
-      return this.transactions.filter((transaction: any) => {
+    filteredTransactions(): TransactionResource[] {
+      return this.transactions.filter((transaction: TransactionResource) => {
         return (
           transaction.attributes.description
             .toLowerCase()
@@ -49,7 +50,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getTransactions() {
+    getTransactions(): void {
       axios
         .get(
           `https://api.up.com.au/api/v1/accounts/${this.accountId}/transactions`,
@@ -71,11 +72,11 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    viewTransactionDetails(transaction: string) {
+    viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
         name: "Transaction Detail",
         params: {
-          transaction: transaction,
+          transaction: transaction.id,
         },
       });
     },

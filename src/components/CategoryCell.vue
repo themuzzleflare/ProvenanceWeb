@@ -12,7 +12,7 @@ import { Options, Vue } from "vue-class-component";
     category: Object,
   },
   computed: {
-    categoryName() {
+    categoryName(): string {
       return this.category.attributes.name;
     },
   },

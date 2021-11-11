@@ -17,7 +17,7 @@
         :key="transaction.id"
         :transaction="transaction"
         class="list-group-item list-group-item-action"
-        @click="viewTransactionDetails(transaction.id)"
+        @click="viewTransactionDetails(transaction)"
       />
     </transition-group>
   </div>
@@ -41,6 +41,9 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 import { Options, Vue } from "vue-class-component";
+import GroupedTransaction from "@/GroupedTransaction";
+import Transaction from "@/UpAPI/Transaction";
+import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
   components: {
@@ -52,14 +55,14 @@ import { Options, Vue } from "vue-class-component";
   },
   data() {
     return {
-      transactions: null,
+      transactions: null as unknown as TransactionResource[],
       error: null,
       searchQuery: "",
     };
   },
   computed: {
-    filteredTransactions() {
-      return this.transactions.filter((transaction: any) => {
+    filteredTransactions(): TransactionResource[] {
+      return this.transactions.filter((transaction: TransactionResource) => {
         return (
           transaction.attributes.description
             .toLowerCase()
@@ -67,27 +70,26 @@ import { Options, Vue } from "vue-class-component";
         );
       });
     },
-    groupedTransactions() {
-      const modified = this.filteredTransactions.map((transaction: any) => {
-        transaction.attributes["sortingDate"] = dayjs(
-          transaction.attributes.createdAt
-        )
-          .tz("Australia/Sydney")
-          .startOf("day")
-          .format("DD/MM/YYYY");
-        return transaction;
-      });
+    groupedTransactions(): GroupedTransaction[] {
+      const modified = this.filteredTransactions.map(
+        (transaction: TransactionResource) => {
+          transaction.attributes["sortingDate"] = dayjs(
+            transaction.attributes.createdAt
+          )
+            .tz("Australia/Sydney")
+            .startOf("day")
+            .format("DD/MM/YYYY");
+          return transaction;
+        }
+      );
       const grouped = this.groupBy(modified, "sortingDate");
-      return Object.keys(grouped).map((key) => {
-        return {
-          date: key,
-          transactions: grouped[key],
-        };
+      return Object.keys(grouped).map((key: string) => {
+        return new GroupedTransaction(key, grouped[key]);
       });
     },
   },
   methods: {
-    getTransactions() {
+    getTransactions(): void {
       axios
         .get("https://api.up.com.au/api/v1/transactions", {
           params: {
@@ -98,23 +100,24 @@ import { Options, Vue } from "vue-class-component";
           },
         })
         .then((response) => {
-          console.log(response.data);
-          this.transactions = response.data.data;
+          const transactionResponse: Transaction = response.data as Transaction;
+          console.log(transactionResponse);
+          this.transactions = transactionResponse.data;
         })
         .catch((error) => {
           console.error(error);
           this.error = error;
         });
     },
-    viewTransactionDetails(transaction: string) {
+    viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
         name: "Transaction Detail",
         params: {
-          transaction: transaction,
+          transaction: transaction.id,
         },
       });
     },
-    groupBy(xs: any, key: string) {
+    groupBy(xs: TransactionResource[], key: string) {
       return xs.reduce(function (rv: any, x: any) {
         (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
         return rv;

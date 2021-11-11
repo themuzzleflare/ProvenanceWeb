@@ -145,12 +145,15 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 import { Options, Vue } from "vue-class-component";
+import TransactionResource from "@/UpAPI/TransactionResource";
+import HoldInfoObject from "@/UpAPI/HoldInfoObject";
+import MoneyObject from "@/UpAPI/MoneyObject";
 
 @Options({
   components: { Spinner, AttributeCell },
   data() {
     return {
-      transaction: null,
+      transaction: null as unknown as TransactionResource,
       error: null,
       account: null,
       transferAccount: null,
@@ -159,31 +162,31 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   computed: {
-    transactionId() {
+    transactionId(): string {
       return this.$route.params.transaction;
     },
-    accountId() {
+    accountId(): string {
       return this.transaction.relationships.account.data.id;
     },
-    transferAccountId() {
+    transferAccountId(): string | null {
       return this.transaction.relationships.transferAccount.data?.id;
     },
-    categoryId() {
+    categoryId(): string | null {
       return this.transaction.relationships.category.data?.id;
     },
-    parentCategoryId() {
+    parentCategoryId(): string | null {
       return this.transaction.relationships.parentCategory.data?.id;
     },
-    holdInfo() {
+    holdInfo(): HoldInfoObject | null {
       return this.transaction.attributes.holdInfo;
     },
-    foreignAmount() {
+    foreignAmount(): MoneyObject | null {
       return this.transaction.attributes.foreignAmount;
     },
-    transactionAmount() {
+    transactionAmount(): MoneyObject {
       return this.transaction.attributes.amount;
     },
-    transactionHoldValue() {
+    transactionHoldValue(): string | null {
       if (
         this.holdInfo &&
         this.holdInfo?.amount.value !== this.transactionAmount.value
@@ -196,7 +199,7 @@ import { Options, Vue } from "vue-class-component";
         return null;
       }
     },
-    transactionHoldForeignValue() {
+    transactionHoldForeignValue(): string | null {
       if (
         this.holdInfo?.foreignAmount &&
         this.holdInfo?.foreignAmount?.value !== this.foreignAmount?.value
@@ -209,7 +212,7 @@ import { Options, Vue } from "vue-class-component";
         return null;
       }
     },
-    transactionForeignValue() {
+    transactionForeignValue(): string | null {
       if (this.foreignAmount) {
         return this.formatAmount(
           this.foreignAmount.currencyCode,
@@ -219,16 +222,16 @@ import { Options, Vue } from "vue-class-component";
         return null;
       }
     },
-    transactionAmountValue() {
+    transactionAmountValue(): string {
       return this.formatAmount(
         this.transactionAmount.currencyCode,
         this.transactionAmount.value
       );
     },
-    transactionCreationDate() {
+    transactionCreationDate(): string {
       return this.formatDate(this.transaction.attributes.createdAt);
     },
-    transactionSettlementDate() {
+    transactionSettlementDate(): string | null {
       if (this.transaction.attributes.settledAt) {
         return this.formatDate(this.transaction.attributes.settledAt);
       } else {
@@ -237,7 +240,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getTransaction() {
+    getTransaction(): void {
       axios
         .get(
           `https://api.up.com.au/api/v1/transactions/${this.transactionId}`,
@@ -266,7 +269,7 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    getAccount() {
+    getAccount(): void {
       axios
         .get(`https://api.up.com.au/api/v1/accounts/${this.accountId}`, {
           headers: {
@@ -281,7 +284,7 @@ import { Options, Vue } from "vue-class-component";
           console.error(error);
         });
     },
-    getTransferAccount() {
+    getTransferAccount(): void {
       axios
         .get(
           `https://api.up.com.au/api/v1/accounts/${this.transferAccountId}`,
@@ -299,7 +302,7 @@ import { Options, Vue } from "vue-class-component";
           console.error(error);
         });
     },
-    getCategory() {
+    getCategory(): void {
       axios
         .get(`https://api.up.com.au/api/v1/categories/${this.categoryId}`, {
           headers: {
@@ -314,7 +317,7 @@ import { Options, Vue } from "vue-class-component";
           console.error(error);
         });
     },
-    getParentCategory() {
+    getParentCategory(): void {
       axios
         .get(
           `https://api.up.com.au/api/v1/categories/${this.parentCategoryId}`,
@@ -332,7 +335,7 @@ import { Options, Vue } from "vue-class-component";
           console.error(error);
         });
     },
-    listTransactionsByAccount(account: string) {
+    listTransactionsByAccount(account: string): void {
       this.$router.push({
         name: "Transactions By Account",
         params: {
@@ -340,7 +343,7 @@ import { Options, Vue } from "vue-class-component";
         },
       });
     },
-    listTransactionsByCategory(category: string) {
+    listTransactionsByCategory(category: string): void {
       this.$router.push({
         name: "Transactions By Category",
         params: {
@@ -348,19 +351,19 @@ import { Options, Vue } from "vue-class-component";
         },
       });
     },
-    listTransactionTags() {
+    listTransactionTags(): void {
       this.$router.push({
         name: "Transaction Tags",
       });
     },
-    formatDate(date: string) {
+    formatDate(date: string): string {
       if (this.$store.state.relativeDates) {
         return dayjs().to(dayjs(date));
       } else {
         return dayjs(date).tz("Australia/Sydney").format("lll");
       }
     },
-    formatAmount(currencyCode: string, amount: string) {
+    formatAmount(currencyCode: string, amount: string): string {
       const formatter = new Intl.NumberFormat("en-AU", {
         style: "currency",
         currency: currencyCode,

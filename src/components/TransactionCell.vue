@@ -28,19 +28,24 @@ dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
 import { Options, Vue } from "vue-class-component";
+import TransactionResource from "@/UpAPI/TransactionResource";
+import { PropType } from "vue";
 
 @Options({
   props: {
-    transaction: Object,
+    transaction: {
+      type: Object as PropType<TransactionResource>,
+      required: true,
+    },
   },
   computed: {
-    description() {
+    description(): string {
       return this.transaction.attributes.description;
     },
-    creationDate() {
+    creationDate(): string {
       return this.formatDate(this.transaction.attributes.createdAt);
     },
-    amount() {
+    amount(): string {
       return this.formatAmount(
         this.transaction.attributes.amount.currencyCode,
         this.transaction.attributes.amount.value
@@ -48,14 +53,14 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    formatDate(date: string) {
+    formatDate(date: string): string {
       if (this.$store.state.relativeDates) {
         return dayjs().to(dayjs(date));
       } else {
         return dayjs(date).tz("Australia/Sydney").format("lll");
       }
     },
-    formatAmount(currencyCode: string, amount: string) {
+    formatAmount(currencyCode: string, amount: string): string {
       const formatter = new Intl.NumberFormat("en-AU", {
         style: "currency",
         currency: currencyCode,
@@ -67,7 +72,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class TransactionCell extends Vue {
-  transaction!: Record<string, unknown>;
+  transaction!: TransactionResource;
 }
 </script>
 

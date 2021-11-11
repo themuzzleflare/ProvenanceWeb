@@ -58,7 +58,7 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   methods: {
-    saveApiKey() {
+    saveApiKey(): void {
       localStorage.apiKey = this.apiKey;
     },
   },

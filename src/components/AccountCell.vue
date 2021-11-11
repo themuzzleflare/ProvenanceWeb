@@ -15,18 +15,18 @@ import { Options, Vue } from "vue-class-component";
     account: Object,
   },
   computed: {
-    accountBalance() {
+    accountBalance(): string {
       return this.formatBalance(
         this.account.attributes.balance.currencyCode,
         this.account.attributes.balance.value
       );
     },
-    accountDisplayName() {
+    accountDisplayName(): string {
       return this.account.attributes.displayName;
     },
   },
   methods: {
-    formatBalance(currencyCode: string, balance: string) {
+    formatBalance(currencyCode: string, balance: string): string {
       const formatter = new Intl.NumberFormat("en-AU", {
         style: "currency",
         currency: currencyCode,
