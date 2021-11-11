@@ -8,11 +8,11 @@ export default createStore({
     dateGrouping: localStorage.dateGrouping === "1",
   },
   mutations: {
-    transactionGrouping(state, payload) {
+    transactionGrouping(state, payload): void {
       localStorage.dateGrouping = payload ? "1" : "0";
       state.dateGrouping = payload;
     },
-    dateStyle(state, payload) {
+    dateStyle(state, payload): void {
       localStorage.relativeDates = payload ? "1" : "0";
       state.relativeDates = payload;
     },
