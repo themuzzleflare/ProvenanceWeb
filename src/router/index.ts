@@ -1,6 +1,7 @@
 // Copyright © 2021 Paul Tavitian
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { trackRouter } from "vue-gtag-next";
 import Transactions from "@/views/Transactions.vue";
 import TransactionDetail from "@/views/TransactionDetail.vue";
 import TransactionsByTag from "@/views/TransactionsByTag.vue";
@@ -83,5 +84,7 @@ const router = createRouter({
   routes,
   linkActiveClass: "active",
 });
+
+trackRouter(router);
 
 export default router;
