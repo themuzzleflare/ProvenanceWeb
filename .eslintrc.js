@@ -1,3 +1,5 @@
+// Copyright © 2021 Paul Tavitian
+
 module.exports = {
   root: true,
   env: {
