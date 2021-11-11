@@ -37,7 +37,7 @@ import AccountResource from "@/UpAPI/AccountResource";
   },
   computed: {
     filteredAccounts(): AccountResource[] {
-      return this.accounts.filter((account: AccountResource) => {
+      return this.accounts.filter((account: AccountResource): boolean => {
         return (
           account.attributes.displayName
             .toLowerCase()

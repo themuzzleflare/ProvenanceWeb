@@ -37,7 +37,7 @@ import TagResource from "@/UpAPI/TagResource";
   },
   computed: {
     filteredTags(): TagResource[] {
-      return this.tags.filter((tag: TagResource) => {
+      return this.tags.filter((tag: TagResource): boolean => {
         return (
           tag.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1
         );

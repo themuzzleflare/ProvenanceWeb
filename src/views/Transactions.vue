@@ -43,6 +43,7 @@ dayjs.extend(localizedFormat);
 import { Options, Vue } from "vue-class-component";
 import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import TransactionResource from "@/UpAPI/TransactionResource";
+import { reactive } from "vue";
 
 type GroupDictionary = Record<string, TransactionResource[]>;
 type SortingDate = "sortingDate";
@@ -75,7 +76,7 @@ type SortingDate = "sortingDate";
       );
     },
     groupedTransactions(): GroupedTransaction[] {
-      const modified = this.filteredTransactions.map(
+      const modified: TransactionResource[] = this.filteredTransactions.map(
         (transaction: TransactionResource): TransactionResource => {
           transaction.attributes["sortingDate"] = dayjs(
             transaction.attributes.createdAt
@@ -86,9 +87,12 @@ type SortingDate = "sortingDate";
           return transaction;
         }
       );
-      const grouped = this.groupBy(modified, "sortingDate");
+      const grouped: GroupDictionary = this.groupBy(modified, "sortingDate");
       return Object.keys(grouped).map((key: string): GroupedTransaction => {
-        return new GroupedTransaction(key, grouped[key]);
+        return reactive<GroupedTransaction>({
+          date: key,
+          transactions: grouped[key],
+        });
       });
     },
   },

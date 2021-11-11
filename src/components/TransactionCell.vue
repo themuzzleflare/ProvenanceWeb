@@ -22,6 +22,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
@@ -57,7 +58,7 @@ import { PropType } from "vue";
       if (this.$store.state.relativeDates) {
         return dayjs().to(dayjs(date));
       } else {
-        return dayjs(date).tz("Australia/Sydney").format("lll");
+        return dayjs(date).tz("Australia/Sydney").format("D MMM, YYYY h:mm A");
       }
     },
     formatAmount(currencyCode: string, amount: string): string {

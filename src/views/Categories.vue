@@ -37,7 +37,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
   },
   computed: {
     filteredCategories(): CategoryResource[] {
-      return this.categories.filter((category: CategoryResource) => {
+      return this.categories.filter((category: CategoryResource): boolean => {
         return (
           category.attributes.name
             .toLowerCase()

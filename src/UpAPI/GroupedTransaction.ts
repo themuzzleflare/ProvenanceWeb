@@ -2,12 +2,7 @@
 
 import TransactionResource from "@/UpAPI/TransactionResource";
 
-export default class GroupedTransaction {
+export default interface GroupedTransaction {
   date: string;
   transactions: TransactionResource[];
-
-  constructor(date: string, transactions: TransactionResource[]) {
-    this.date = date;
-    this.transactions = transactions;
-  }
 }

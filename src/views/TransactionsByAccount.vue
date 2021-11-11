@@ -40,13 +40,15 @@ import TransactionResource from "@/UpAPI/TransactionResource";
       return this.$route.params.account;
     },
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction: TransactionResource) => {
-        return (
-          transaction.attributes.description
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) !== -1
-        );
-      });
+      return this.transactions.filter(
+        (transaction: TransactionResource): boolean => {
+          return (
+            transaction.attributes.description
+              .toLowerCase()
+              .indexOf(this.searchQuery.toLowerCase()) !== -1
+          );
+        }
+      );
     },
   },
   methods: {
