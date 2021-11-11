@@ -9,10 +9,15 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { PropType } from "vue";
+import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({
   props: {
-    account: Object,
+    account: {
+      type: Object as PropType<AccountResource>,
+      required: true,
+    },
   },
   computed: {
     accountBalance(): string {
@@ -38,7 +43,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class AccountCell extends Vue {
-  account!: Record<string, unknown>;
+  account!: AccountResource;
 }
 </script>
 

@@ -10,7 +10,7 @@
         :key="tag.id"
         :tag="tag"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByTag(tag.id)"
+        @click="listTransactionsByTag(tag)"
       />
     </transition-group>
   </div>
@@ -24,19 +24,20 @@ import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
+import TagResource from "@/UpAPI/TagResource";
 
 @Options({
   components: { SearchBar, TagCell, Spinner },
   data() {
     return {
-      tags: null,
+      tags: null as unknown as TagResource[],
       error: null,
       searchQuery: "",
     };
   },
   computed: {
-    filteredTags() {
-      return this.tags.filter((tag: any) => {
+    filteredTags(): TagResource[] {
+      return this.tags.filter((tag: TagResource) => {
         return (
           tag.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1
         );
@@ -44,7 +45,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getTags() {
+    getTags(): void {
       axios
         .get("https://api.up.com.au/api/v1/tags", {
           params: {
@@ -63,11 +64,11 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    listTransactionsByTag(tag: string) {
+    listTransactionsByTag(tag: TagResource): void {
       this.$router.push({
         name: "Transactions By Tag",
         params: {
-          tag: tag,
+          tag: tag.id,
         },
       });
     },

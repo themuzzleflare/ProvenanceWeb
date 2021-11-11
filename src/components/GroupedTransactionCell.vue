@@ -23,7 +23,7 @@
 <script lang="ts">
 import TransactionCell from "@/components/TransactionCell.vue";
 import { Options, Vue } from "vue-class-component";
-import GroupedTransaction from "@/GroupedTransaction";
+import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import { PropType } from "vue";
 import TransactionResource from "@/UpAPI/TransactionResource";
 

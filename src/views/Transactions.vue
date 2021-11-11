@@ -41,9 +41,11 @@ dayjs.extend(timezone);
 dayjs.extend(localizedFormat);
 
 import { Options, Vue } from "vue-class-component";
-import GroupedTransaction from "@/GroupedTransaction";
-import Transaction from "@/UpAPI/Transaction";
+import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import TransactionResource from "@/UpAPI/TransactionResource";
+
+type GroupDictionary = Record<string, TransactionResource[]>;
+type SortingDate = "sortingDate";
 
 @Options({
   components: {
@@ -62,17 +64,19 @@ import TransactionResource from "@/UpAPI/TransactionResource";
   },
   computed: {
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction: TransactionResource) => {
-        return (
-          transaction.attributes.description
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) !== -1
-        );
-      });
+      return this.transactions.filter(
+        (transaction: TransactionResource): boolean => {
+          return (
+            transaction.attributes.description
+              .toLowerCase()
+              .indexOf(this.searchQuery.toLowerCase()) !== -1
+          );
+        }
+      );
     },
     groupedTransactions(): GroupedTransaction[] {
       const modified = this.filteredTransactions.map(
-        (transaction: TransactionResource) => {
+        (transaction: TransactionResource): TransactionResource => {
           transaction.attributes["sortingDate"] = dayjs(
             transaction.attributes.createdAt
           )
@@ -83,7 +87,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
         }
       );
       const grouped = this.groupBy(modified, "sortingDate");
-      return Object.keys(grouped).map((key: string) => {
+      return Object.keys(grouped).map((key: string): GroupedTransaction => {
         return new GroupedTransaction(key, grouped[key]);
       });
     },
@@ -100,9 +104,8 @@ import TransactionResource from "@/UpAPI/TransactionResource";
           },
         })
         .then((response) => {
-          const transactionResponse: Transaction = response.data as Transaction;
-          console.log(transactionResponse);
-          this.transactions = transactionResponse.data;
+          console.log(response.data);
+          this.transactions = response.data.data;
         })
         .catch((error) => {
           console.error(error);
@@ -117,11 +120,15 @@ import TransactionResource from "@/UpAPI/TransactionResource";
         },
       });
     },
-    groupBy(xs: TransactionResource[], key: string) {
-      return xs.reduce(function (rv: any, x: any) {
+    groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
+      return xs.reduce(function (
+        rv: GroupDictionary,
+        x: TransactionResource
+      ): GroupDictionary {
         (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
         return rv;
-      }, {});
+      },
+      {});
     },
   },
   mounted() {

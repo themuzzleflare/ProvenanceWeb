@@ -74,7 +74,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
       this.$router.push({
         name: "Transaction Detail",
         params: {
-          transaction: transaction,
+          transaction: transaction.id,
         },
       });
     },

@@ -6,10 +6,15 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import TagResource from "@/UpAPI/TagResource";
+import { PropType } from "vue";
 
 @Options({
   props: {
-    tag: Object,
+    tag: {
+      type: Object as PropType<TagResource>,
+      required: true,
+    },
   },
   computed: {
     tagName(): string {
@@ -18,7 +23,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class TagCell extends Vue {
-  tag!: Record<string, unknown>;
+  tag!: TagResource;
 }
 </script>
 

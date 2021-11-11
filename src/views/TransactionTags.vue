@@ -9,7 +9,7 @@
         :key="tag.id"
         :tag="tag"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByTag(tag.id)"
+        @click="listTransactionsByTag(tag)"
       />
     </ul>
   </div>
@@ -23,6 +23,7 @@ import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
 import TransactionResource from "@/UpAPI/TransactionResource";
+import TagResource from "@/UpAPI/TagResource";
 
 @Options({
   components: { TagCell, Spinner },
@@ -36,7 +37,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     transactionId(): string {
       return this.$route.params.transaction;
     },
-    tags() {
+    tags(): TagResource[] {
       return this.transaction?.relationships.tags.data;
     },
   },
@@ -60,11 +61,11 @@ import TransactionResource from "@/UpAPI/TransactionResource";
           this.error = error;
         });
     },
-    listTransactionsByTag(tag: string): void {
+    listTransactionsByTag(tag: TagResource): void {
       this.$router.push({
         name: "Transactions By Tag",
         params: {
-          tag: tag,
+          tag: tag.id,
         },
       });
     },

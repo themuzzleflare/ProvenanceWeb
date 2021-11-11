@@ -10,7 +10,7 @@
         :key="account.id"
         :account="account"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByAccount(account.id)"
+        @click="listTransactionsByAccount(account)"
       />
     </transition-group>
   </div>
@@ -24,19 +24,20 @@ import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
+import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({
   components: { SearchBar, AccountCell, Spinner },
   data() {
     return {
-      accounts: null,
+      accounts: null as unknown as AccountResource[],
       error: null,
       searchQuery: "",
     };
   },
   computed: {
-    filteredAccounts() {
-      return this.accounts.filter((account: any) => {
+    filteredAccounts(): AccountResource[] {
+      return this.accounts.filter((account: AccountResource) => {
         return (
           account.attributes.displayName
             .toLowerCase()
@@ -46,7 +47,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getAccounts() {
+    getAccounts(): void {
       axios
         .get("https://api.up.com.au/api/v1/accounts", {
           params: {
@@ -65,11 +66,11 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    listTransactionsByAccount(account: string) {
+    listTransactionsByAccount(account: AccountResource): void {
       this.$router.push({
         name: "Transactions By Account",
         params: {
-          account: account,
+          account: account.id,
         },
       });
     },

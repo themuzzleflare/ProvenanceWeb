@@ -4,22 +4,22 @@
   <div aria-label="Transaction Grouping" class="btn-group" role="group">
     <input
       id="btnradio1"
-      :checked="$store.state.dateGrouping"
+      :checked="this.$store.state.dateGrouping"
       autocomplete="off"
       class="btn-check"
       name="btnradio"
       type="radio"
-      @click="$store.commit('transactionGrouping', true)"
+      @click="this.$store.commit('transactionGrouping', true)"
     />
     <label class="btn btn-outline-primary" for="btnradio1">Dates</label>
     <input
       id="btnradio2"
-      :checked="!$store.state.dateGrouping"
+      :checked="!this.$store.state.dateGrouping"
       autocomplete="off"
       class="btn-check"
       name="btnradio"
       type="radio"
-      @click="$store.commit('transactionGrouping', false)"
+      @click="this.$store.commit('transactionGrouping', false)"
     />
     <label class="btn btn-outline-primary" for="btnradio2">Transactions</label>
   </div>

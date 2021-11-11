@@ -10,7 +10,7 @@
         :key="category.id"
         :category="category"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByCategory(category.id)"
+        @click="listTransactionsByCategory(category)"
       />
     </transition-group>
   </div>
@@ -24,19 +24,20 @@ import Spinner from "@/components/Spinner.vue";
 import axios from "axios";
 
 import { Options, Vue } from "vue-class-component";
+import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
   components: { SearchBar, CategoryCell, Spinner },
   data() {
     return {
-      categories: null,
+      categories: null as unknown as CategoryResource[],
       error: null,
       searchQuery: "",
     };
   },
   computed: {
-    filteredCategories() {
-      return this.categories.filter((category: any) => {
+    filteredCategories(): CategoryResource[] {
+      return this.categories.filter((category: CategoryResource) => {
         return (
           category.attributes.name
             .toLowerCase()
@@ -46,7 +47,7 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    getCategories() {
+    getCategories(): void {
       axios
         .get("https://api.up.com.au/api/v1/categories", {
           headers: {
@@ -62,11 +63,11 @@ import { Options, Vue } from "vue-class-component";
           this.error = error;
         });
     },
-    listTransactionsByCategory(category: string) {
+    listTransactionsByCategory(category: CategoryResource): void {
       this.$router.push({
         name: "Transactions By Category",
         params: {
-          category: category,
+          category: category.id,
         },
       });
     },

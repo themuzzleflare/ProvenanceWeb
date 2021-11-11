@@ -6,10 +6,15 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import CategoryResource from "@/UpAPI/CategoryResource";
+import { PropType } from "vue";
 
 @Options({
   props: {
-    category: Object,
+    category: {
+      type: Object as PropType<CategoryResource>,
+      required: true,
+    },
   },
   computed: {
     categoryName(): string {
@@ -18,7 +23,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class CategoryCell extends Vue {
-  category!: Record<string, unknown>;
+  category!: CategoryResource;
 }
 </script>
 

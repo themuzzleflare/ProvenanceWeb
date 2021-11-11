@@ -15,7 +15,7 @@
         :detail-text="account?.attributes?.displayName"
         left-text="Account"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByAccount(account.id)"
+        @click="listTransactionsByAccount(account)"
       />
       <AttributeCell
         key="transferAccount"
@@ -23,7 +23,7 @@
         :detail-text="transferAccount?.attributes?.displayName"
         left-text="Transfer Account"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByAccount(transferAccount.id)"
+        @click="listTransactionsByAccount(transferAccount)"
       />
     </transition-group>
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -102,7 +102,7 @@
         :detail-text="parentCategory?.attributes?.name"
         left-text="Parent Category"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByCategory(parentCategory.id)"
+        @click="listTransactionsByCategory(parentCategory)"
       />
       <AttributeCell
         key="category"
@@ -110,7 +110,7 @@
         :detail-text="category?.attributes?.name"
         left-text="Category"
         class="list-group-item list-group-item-action"
-        @click="listTransactionsByCategory(category.id)"
+        @click="listTransactionsByCategory(category)"
       />
     </transition-group>
     <transition-group
@@ -148,6 +148,8 @@ import { Options, Vue } from "vue-class-component";
 import TransactionResource from "@/UpAPI/TransactionResource";
 import HoldInfoObject from "@/UpAPI/HoldInfoObject";
 import MoneyObject from "@/UpAPI/MoneyObject";
+import AccountResource from "@/UpAPI/AccountResource";
+import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
   components: { Spinner, AttributeCell },
@@ -155,10 +157,10 @@ import MoneyObject from "@/UpAPI/MoneyObject";
     return {
       transaction: null as unknown as TransactionResource,
       error: null,
-      account: null,
-      transferAccount: null,
-      category: null,
-      parentCategory: null,
+      account: null as unknown as AccountResource,
+      transferAccount: null as unknown as AccountResource,
+      category: null as unknown as CategoryResource,
+      parentCategory: null as unknown as CategoryResource,
     };
   },
   computed: {
@@ -335,19 +337,19 @@ import MoneyObject from "@/UpAPI/MoneyObject";
           console.error(error);
         });
     },
-    listTransactionsByAccount(account: string): void {
+    listTransactionsByAccount(account: AccountResource): void {
       this.$router.push({
         name: "Transactions By Account",
         params: {
-          account: account,
+          account: account.id,
         },
       });
     },
-    listTransactionsByCategory(category: string): void {
+    listTransactionsByCategory(category: CategoryResource): void {
       this.$router.push({
         name: "Transactions By Category",
         params: {
-          category: category,
+          category: category.id,
         },
       });
     },

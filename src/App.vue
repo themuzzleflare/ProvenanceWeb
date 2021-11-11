@@ -55,19 +55,17 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-
 import APIKeyModal from "@/components/APIKeyModal.vue";
-
 import * as bootstrap from "bootstrap";
 
 @Options({
   components: { APIKeyModal },
   methods: {
-    checkApiKey() {
+    checkApiKey(): void {
       if (!localStorage.apiKey) {
-        const apiKeyModal = new bootstrap.Modal(
-          document.getElementById("apiKeyModal")!
-        );
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const el: HTMLElement = document.getElementById("apiKeyModal")!;
+        const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el);
         apiKeyModal.toggle();
       }
     },
