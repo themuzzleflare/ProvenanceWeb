@@ -37,7 +37,6 @@ import AccountResource from "@/UpAPI/AccountResource";
         currency: currencyCode,
       });
       const newBalance = parseInt(balance);
-
       return formatter.format(newBalance);
     },
   },
@@ -51,7 +50,7 @@ export default class AccountCell extends Vue {
 #verticalStack {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  overflow: hidden;
 
   &:hover {
     cursor: pointer;
@@ -62,5 +61,9 @@ export default class AccountCell extends Vue {
   font-weight: bold;
   color: #ff7967;
   font-size: larger;
+}
+
+#accountDisplayName {
+  word-wrap: break-word;
 }
 </style>

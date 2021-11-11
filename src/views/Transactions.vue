@@ -34,11 +34,9 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.extend(localizedFormat);
 
 import { Options, Vue } from "vue-class-component";
 import GroupedTransaction from "@/UpAPI/GroupedTransaction";
