@@ -38,7 +38,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class AccountCell extends Vue {
-  tag!: Record<string, unknown>;
+  account!: Record<string, unknown>;
 }
 </script>
 

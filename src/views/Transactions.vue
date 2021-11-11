@@ -8,7 +8,7 @@
       <SegmentedControl />
     </div>
     <GroupedTransactionCell
-      v-if="$store.state.dateGrouping"
+      v-if="this.$store.state.dateGrouping"
       :grouped-transactions="groupedTransactions"
     />
     <transition-group v-else class="list-group" name="flip-list" tag="ul">
