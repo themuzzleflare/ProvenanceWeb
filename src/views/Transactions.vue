@@ -182,6 +182,10 @@ export default class Transactions extends Vue {}
   flex-direction: row;
   align-items: center;
   gap: 10px;
+
+  @media screen and (max-width: 991px) {
+    flex-direction: column;
+  }
 }
 
 #transactions {
