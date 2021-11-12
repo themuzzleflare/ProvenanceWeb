@@ -43,7 +43,6 @@ export default createStore({
     setPageDescription(state: State, pageDescription: string): void {
       if (!pageDescription) pageDescription = defaultPageDescription;
       state.pageDescription = pageDescription;
-
       document
         .querySelectorAll(".page-description-meta")
         .forEach((el) => el.setAttribute("content", pageDescription));

@@ -31,6 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Transactions,
     meta: {
       title: "Transactions",
+      description: "View your transactions",
     },
   },
   {
@@ -39,6 +40,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Accounts,
     meta: {
       title: "Accounts",
+      description: "View your accounts",
     },
   },
   {
@@ -47,6 +49,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Tags,
     meta: {
       title: "Tags",
+      description: "View your tags",
     },
   },
   {
@@ -55,6 +58,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Categories,
     meta: {
       title: "Categories",
+      description: "View your categories",
     },
   },
   {

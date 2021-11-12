@@ -9,7 +9,11 @@
     id="dateGroup"
     :key="group.date"
   >
-    <div id="dateHeader" class="list-group-item list-group-item-secondary">
+    <div
+      id="dateHeader"
+      class="list-group-item list-group-item-secondary"
+      :key="group.date"
+    >
       <h4>{{ group.date }}</h4>
     </div>
     <TransactionCell
