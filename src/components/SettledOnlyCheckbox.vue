@@ -1,3 +1,5 @@
+<!-- Copyright © 2021 Paul Tavitian -->
+
 <template>
   <div class="form-check">
     <input
@@ -20,5 +22,3 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class SettledOnlyCheckbox extends Vue {}
 </script>
-
-<style lang="scss" scoped></style>

@@ -10,6 +10,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { PropType } from "vue";
+
 import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({

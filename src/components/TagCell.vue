@@ -6,8 +6,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import TagResource from "@/UpAPI/TagResource";
 import { PropType } from "vue";
+
+import TagResource from "@/UpAPI/TagResource";
 
 @Options({
   props: {

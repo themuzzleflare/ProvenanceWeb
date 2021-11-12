@@ -17,6 +17,9 @@
 </template>
 
 <script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import { PropType } from "vue";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -26,9 +29,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 
-import { Options, Vue } from "vue-class-component";
 import TransactionResource from "@/UpAPI/TransactionResource";
-import { PropType } from "vue";
 
 @Options({
   props: {

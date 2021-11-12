@@ -6,8 +6,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import CategoryResource from "@/UpAPI/CategoryResource";
 import { PropType } from "vue";
+
+import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
   props: {
