@@ -369,7 +369,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
         style: "currency",
         currency: currencyCode,
       });
-      const newAmount = parseInt(amount);
+      const newAmount = parseFloat(amount);
       return formatter.format(newAmount);
     },
   },

@@ -6,13 +6,9 @@
       <span id="description">{{ description }}</span>
       <span id="creationDate" class="text-secondary">{{ creationDate }}</span>
     </div>
-    <span
-      id="amount"
-      :class="{
-        positiveAmount: parseInt(transaction.attributes.amount.value) >= 0,
-      }"
-      >{{ amount }}</span
-    >
+    <span id="amount" :class="{ positiveAmount: isPositiveAmount }">{{
+      amount
+    }}</span>
   </div>
 </template>
 
@@ -51,6 +47,9 @@ import TransactionResource from "@/UpAPI/TransactionResource";
         this.transaction.attributes.amount.value
       );
     },
+    isPositiveAmount(): boolean {
+      return parseFloat(this.transaction.attributes.amount.value) > 0;
+    },
   },
   methods: {
     formatDate(date: string): string {
@@ -65,7 +64,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
         style: "currency",
         currency: currencyCode,
       });
-      const newAmount = parseInt(amount);
+      const newAmount = parseFloat(amount);
       return formatter.format(newAmount);
     },
   },

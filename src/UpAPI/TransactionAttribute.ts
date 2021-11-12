@@ -16,6 +16,6 @@ export default interface TransactionAttribute {
   amount: MoneyObject;
   foreignAmount?: MoneyObject;
   settledAt?: string;
-  createdAt?: string;
+  createdAt: string;
   sortingDate: string;
 }

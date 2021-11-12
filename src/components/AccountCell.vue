@@ -37,7 +37,7 @@ import AccountResource from "@/UpAPI/AccountResource";
         style: "currency",
         currency: currencyCode,
       });
-      const newBalance = parseInt(balance);
+      const newBalance = parseFloat(balance);
       return formatter.format(newBalance);
     },
   },
