@@ -5,13 +5,17 @@
   <div v-else id="transactions">
     <div id="searchSection">
       <SearchBar v-model="searchQuery" />
-      <SegmentedControl />
+      <div id="filterSection">
+        <TransactionGroupingSegmentedControl />
+        <DateStyleSegmentedControl />
+        <SettledOnlyCheckbox v-model="settledOnly" />
+      </div>
     </div>
     <GroupedTransactionCell
       v-if="this.$store.state.dateGrouping"
       :grouped-transactions="groupedTransactions"
     />
-    <transition-group v-else class="list-group" name="flip-list" tag="ul">
+    <transition-group v-else class="list-group" name="list-complete" tag="ul">
       <TransactionCell
         v-for="transaction in filteredTransactions"
         :key="transaction.id"
@@ -28,7 +32,9 @@ import TransactionCell from "@/components/TransactionCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import GroupedTransactionCell from "@/components/GroupedTransactionCell.vue";
-import SegmentedControl from "@/components/SegmentedControl.vue";
+import TransactionGroupingSegmentedControl from "@/components/TransactionGroupingSegmentedControl.vue";
+import DateStyleSegmentedControl from "@/components/DateStyleSegmentedControl.vue";
+import SettledOnlyCheckbox from "@/components/SettledOnlyCheckbox.vue";
 
 import axios from "axios";
 import dayjs from "dayjs";
@@ -48,7 +54,9 @@ type SortingDate = "sortingDate";
 
 @Options({
   components: {
-    SegmentedControl,
+    SettledOnlyCheckbox,
+    DateStyleSegmentedControl,
+    TransactionGroupingSegmentedControl,
     GroupedTransactionCell,
     TransactionCell,
     Spinner,
@@ -59,6 +67,7 @@ type SortingDate = "sortingDate";
       transactions: null as unknown as TransactionResource[],
       error: null,
       searchQuery: "",
+      settledOnly: false,
     };
   },
   computed: {
@@ -66,6 +75,8 @@ type SortingDate = "sortingDate";
       return this.transactions.filter(
         (transaction: TransactionResource): boolean => {
           return (
+            (!this.settledOnly ||
+              transaction.attributes.status === "SETTLED") &&
             transaction.attributes.description
               .toLowerCase()
               .indexOf(this.searchQuery.toLowerCase()) !== -1
@@ -141,8 +152,18 @@ export default class Transactions extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-.flip-list-move {
-  transition: transform 200ms ease;
+.list-group-item {
+  transition: all 200ms ease;
+}
+
+.list-complete-enter-from,
+.list-complete-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-complete-leave-active {
+  position: absolute;
 }
 
 #searchBar {
@@ -154,6 +175,13 @@ export default class Transactions extends Vue {}
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
+}
+
+#filterSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
 }
 
 #transactions {

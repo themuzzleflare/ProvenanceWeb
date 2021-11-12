@@ -1,11 +1,10 @@
 // Copyright © 2021 Paul Tavitian
 
 import MoneyObject from "@/UpAPI/MoneyObject";
-import AccountTypeEnum from "@/UpAPI/AccountTypeEnum";
 
 export default interface AccountAttribute {
   displayName: string;
-  accountType: AccountTypeEnum;
+  accountType: string;
   balance: MoneyObject;
   createdAt: string;
 }

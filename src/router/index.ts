@@ -2,17 +2,20 @@
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { trackRouter } from "vue-gtag-next";
+
 import Transactions from "@/views/Transactions.vue";
+import Accounts from "@/views/Accounts.vue";
+import Categories from "@/views/Categories.vue";
+import Tags from "@/views/Tags.vue";
+import About from "@/views/About.vue";
+
 import TransactionDetail from "@/views/TransactionDetail.vue";
 import TransactionsByTag from "@/views/TransactionsByTag.vue";
 import TransactionsByAccount from "@/views/TransactionsByAccount.vue";
-import Categories from "@/views/Categories.vue";
 import TransactionsByCategory from "@/views/TransactionsByCategory.vue";
-import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionTags from "@/views/TransactionTags.vue";
-import Accounts from "@/views/Accounts.vue";
-import Tags from "@/views/Tags.vue";
-import About from "@/views/About.vue";
+
+import PageNotFound from "@/views/PageNotFound.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {

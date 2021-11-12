@@ -1,11 +1,13 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <div
+  <transition-group
+    class="list-group"
+    name="list-complete"
+    tag="ul"
     v-for="group in groupedTransactions"
     id="dateGroup"
     :key="group.date"
-    class="list-group"
   >
     <div id="dateHeader" class="list-group-item list-group-item-secondary">
       <h4>{{ group.date }}</h4>
@@ -17,14 +19,16 @@
       class="list-group-item list-group-item-action"
       @click="viewTransactionDetails(transaction)"
     />
-  </div>
+  </transition-group>
 </template>
 
 <script lang="ts">
-import TransactionCell from "@/components/TransactionCell.vue";
 import { Options, Vue } from "vue-class-component";
-import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import { PropType } from "vue";
+
+import TransactionCell from "@/components/TransactionCell.vue";
+
+import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
@@ -52,6 +56,20 @@ export default class GroupedTransactionCell extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.list-group-item {
+  transition: all 200ms ease;
+}
+
+.list-complete-enter-from,
+.list-complete-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-complete-leave-active {
+  position: absolute;
+}
+
 #dateGroup {
   margin-bottom: 15px;
 

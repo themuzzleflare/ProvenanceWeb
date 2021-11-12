@@ -2,12 +2,11 @@
 
 import MoneyObject from "@/UpAPI/MoneyObject";
 import RoundUpObject from "@/UpAPI/RoundUpObject";
-import TransactionStatusEnum from "@/UpAPI/TransactionStatusEnum";
 import HoldInfoObject from "@/UpAPI/HoldInfoObject";
 import CashbackObject from "@/UpAPI/CashbackObject";
 
 export default interface TransactionAttribute {
-  status: TransactionStatusEnum;
+  status: string;
   rawText?: string;
   description: string;
   message?: string;

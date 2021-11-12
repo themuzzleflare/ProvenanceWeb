@@ -65,7 +65,6 @@ import { PropType } from "vue";
         currency: currencyCode,
       });
       const newAmount = parseInt(amount);
-
       return formatter.format(newAmount);
     },
   },
