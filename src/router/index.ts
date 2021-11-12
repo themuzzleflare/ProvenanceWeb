@@ -5,14 +5,15 @@ import { trackRouter } from "vue-gtag-next";
 
 import Transactions from "@/views/Transactions.vue";
 import Accounts from "@/views/Accounts.vue";
-import Categories from "@/views/Categories.vue";
 import Tags from "@/views/Tags.vue";
+import Categories from "@/views/Categories.vue";
 import About from "@/views/About.vue";
 
-import TransactionDetail from "@/views/TransactionDetail.vue";
-import TransactionsByTag from "@/views/TransactionsByTag.vue";
 import TransactionsByAccount from "@/views/TransactionsByAccount.vue";
+import TransactionsByTag from "@/views/TransactionsByTag.vue";
 import TransactionsByCategory from "@/views/TransactionsByCategory.vue";
+
+import TransactionDetail from "@/views/TransactionDetail.vue";
 import TransactionTags from "@/views/TransactionTags.vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
@@ -48,14 +49,14 @@ const routes: Array<RouteRecordRaw> = [
     component: About,
   },
   {
-    path: "/transactions/:transaction",
-    name: "Transaction Detail",
-    component: TransactionDetail,
-  },
-  {
     path: "/accounts/:account",
     name: "Transactions By Account",
     component: TransactionsByAccount,
+  },
+  {
+    path: "/tags/:tag",
+    name: "Transactions By Tag",
+    component: TransactionsByTag,
   },
   {
     path: "/categories/:category",
@@ -63,9 +64,9 @@ const routes: Array<RouteRecordRaw> = [
     component: TransactionsByCategory,
   },
   {
-    path: "/tags/:tag",
-    name: "Transactions By Tag",
-    component: TransactionsByTag,
+    path: "/transactions/:transaction",
+    name: "Transaction Detail",
+    component: TransactionDetail,
   },
   {
     path: "/transactions/:transaction/tags",
