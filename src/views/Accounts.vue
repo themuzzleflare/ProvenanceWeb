@@ -17,13 +17,14 @@
 </template>
 
 <script lang="ts">
+import { Options, Vue } from "vue-class-component";
+
 import SearchBar from "@/components/SearchBar.vue";
 import AccountCell from "@/components/AccountCell.vue";
 import Spinner from "@/components/Spinner.vue";
 
 import axios from "axios";
 
-import { Options, Vue } from "vue-class-component";
 import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({

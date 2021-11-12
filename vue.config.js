@@ -3,6 +3,6 @@
 module.exports = {
   pwa: {
     name: "Provenance",
-    themeColor: "#ff7967",
+    themeColor: "#22222e",
   },
 };

@@ -17,13 +17,14 @@
 </template>
 
 <script lang="ts">
+import { Options, Vue } from "vue-class-component";
+
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 
 import axios from "axios";
 
-import { Options, Vue } from "vue-class-component";
 import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({

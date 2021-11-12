@@ -131,6 +131,8 @@
 </template>
 
 <script lang="ts">
+import { Options, Vue } from "vue-class-component";
+
 import Spinner from "@/components/Spinner.vue";
 import AttributeCell from "@/components/AttributeCell.vue";
 
@@ -142,7 +144,6 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-import { Options, Vue } from "vue-class-component";
 import TransactionResource from "@/UpAPI/TransactionResource";
 import HoldInfoObject from "@/UpAPI/HoldInfoObject";
 import MoneyObject from "@/UpAPI/MoneyObject";

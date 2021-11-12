@@ -28,6 +28,9 @@
 </template>
 
 <script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import { reactive } from "vue";
+
 import TransactionCell from "@/components/TransactionCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
@@ -44,10 +47,8 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-import { Options, Vue } from "vue-class-component";
 import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import TransactionResource from "@/UpAPI/TransactionResource";
-import { reactive } from "vue";
 
 type GroupDictionary = Record<string, TransactionResource[]>;
 type SortingDate = "sortingDate";

@@ -55,7 +55,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+
 import APIKeyModal from "@/components/APIKeyModal.vue";
+
 import * as bootstrap from "bootstrap";
 
 @Options({
