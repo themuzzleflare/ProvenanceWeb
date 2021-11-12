@@ -3,6 +3,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { trackRouter } from "vue-gtag-next";
 
+import store from "@/store";
+
 import Transactions from "@/views/Transactions.vue";
 import Accounts from "@/views/Accounts.vue";
 import Tags from "@/views/Tags.vue";
@@ -27,26 +29,41 @@ const routes: Array<RouteRecordRaw> = [
     path: "/transactions",
     name: "Transactions",
     component: Transactions,
+    meta: {
+      title: "Transactions",
+    },
   },
   {
     path: "/accounts",
     name: "Accounts",
     component: Accounts,
+    meta: {
+      title: "Accounts",
+    },
   },
   {
     path: "/tags",
     name: "Tags",
     component: Tags,
+    meta: {
+      title: "Tags",
+    },
   },
   {
     path: "/categories",
     name: "Categories",
     component: Categories,
+    meta: {
+      title: "Categories",
+    },
   },
   {
     path: "/about",
     name: "About",
     component: About,
+    meta: {
+      title: "About",
+    },
   },
   {
     path: "/accounts/:account",
@@ -87,6 +104,11 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   linkActiveClass: "active",
+});
+
+router.afterEach((to) => {
+  store.commit("setPageTitle", to.meta.title);
+  store.commit("setPageDescription", to.meta.description);
 });
 
 trackRouter(router);
