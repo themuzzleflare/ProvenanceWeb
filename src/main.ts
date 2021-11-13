@@ -6,9 +6,12 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import VueGtag from "vue-gtag-next";
+import axios from "axios";
 
-createApp(App)
+const app = createApp(App)
   .use(store)
   .use(router)
-  .use(VueGtag, { property: { id: "UA-122946443-40" } })
-  .mount("#app");
+  .use(VueGtag, { property: { id: "UA-122946443-40" } });
+
+app.config.globalProperties.$http = axios;
+app.mount("#app");
