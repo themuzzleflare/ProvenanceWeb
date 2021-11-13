@@ -95,6 +95,10 @@ const routes: Array<RouteRecordRaw> = [
     component: TransactionTags,
   },
   {
+    path: "/.well-known/apple-app-site-association",
+    redirect: "/.well-known/apple-app-site-association",
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/404",
   },
