@@ -1,7 +1,6 @@
 // Copyright © 2021 Paul Tavitian
 
 import { createStore } from "vuex";
-import { reactive } from "vue";
 
 const defaultPageTitle = "Provenance";
 const defaultPageDescription =
@@ -15,7 +14,7 @@ type State = {
 };
 
 export default createStore({
-  state: reactive<State>({
+  state: ({
     relativeDates: localStorage.relativeDates === "1",
     dateGrouping: localStorage.dateGrouping === "1",
     pageTitle: defaultPageTitle,
