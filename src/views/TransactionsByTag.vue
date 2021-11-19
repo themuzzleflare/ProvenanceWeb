@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="transactions === null" />
+  <PageNotFound v-if="error !== null" />
+  <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByTag">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,6 +20,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -28,7 +30,7 @@ import axios from "axios";
 import TransactionResource from "@/UpAPI/TransactionResource";
 
 @Options({
-  components: { SearchBar, Spinner, TransactionCell },
+  components: { PageNotFound, SearchBar, Spinner, TransactionCell },
   data() {
     return {
       transactions: null as unknown as TransactionResource[],
@@ -83,6 +85,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     },
   },
   mounted() {
+    this.$store.commit("setPageTitle", this.tagId);
     this.getTransactions();
   },
 })

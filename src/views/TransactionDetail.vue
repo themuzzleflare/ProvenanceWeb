@@ -1,12 +1,13 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="transaction === null" />
+  <PageNotFound v-if="error !== null" />
+  <Spinner v-else-if="transaction === null" />
   <div v-else id="transactionDetail">
     <transition-group class="list-group" name="flip-list" tag="ul">
       <AttributeCell
         key="status"
-        :detail-text="transaction?.attributes?.status"
+        :detail-text="transactionStatus"
         left-text="Status"
         class="list-group-item"
       />
@@ -133,6 +134,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
 import AttributeCell from "@/components/AttributeCell.vue";
 
@@ -151,7 +153,7 @@ import AccountResource from "@/UpAPI/AccountResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
-  components: { Spinner, AttributeCell },
+  components: { PageNotFound, Spinner, AttributeCell },
   data() {
     return {
       transaction: null as unknown as TransactionResource,
@@ -161,6 +163,11 @@ import CategoryResource from "@/UpAPI/CategoryResource";
       category: null as unknown as CategoryResource,
       parentCategory: null as unknown as CategoryResource,
     };
+  },
+  watch: {
+    transaction(newValue: TransactionResource): void {
+      this.$store.commit("setPageTitle", newValue.attributes.description);
+    },
   },
   computed: {
     transactionId(): string {
@@ -177,6 +184,11 @@ import CategoryResource from "@/UpAPI/CategoryResource";
     },
     parentCategoryId(): string | null {
       return this.transaction.relationships.parentCategory.data?.id;
+    },
+    transactionStatus(): string {
+      return this.transaction.attributes.status
+        .replace("SETTLED", "Settled")
+        .replace("HELD", "Held");
     },
     holdInfo(): HoldInfoObject | null {
       return this.transaction.attributes.holdInfo;

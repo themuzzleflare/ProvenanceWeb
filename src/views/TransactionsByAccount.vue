@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="transactions === null" />
+  <PageNotFound v-if="error !== null" />
+  <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByAccount">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,6 +20,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -26,15 +28,22 @@ import TransactionCell from "@/components/TransactionCell.vue";
 import axios from "axios";
 
 import TransactionResource from "@/UpAPI/TransactionResource";
+import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({
-  components: { SearchBar, Spinner, TransactionCell },
+  components: { PageNotFound, SearchBar, Spinner, TransactionCell },
   data() {
     return {
+      account: null as unknown as AccountResource,
       transactions: null as unknown as TransactionResource[],
       error: null,
       searchQuery: "",
     };
+  },
+  watch: {
+    account(newValue: AccountResource): void {
+      this.$store.commit("setPageTitle", newValue.attributes.displayName);
+    },
   },
   computed: {
     accountId(): string {
@@ -53,6 +62,21 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     },
   },
   methods: {
+    getAccount(): void {
+      axios
+        .get(`https://api.up.com.au/api/v1/accounts/${this.accountId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.apiKey}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.account = response.data.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     getTransactions(): void {
       axios
         .get(
@@ -85,6 +109,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     },
   },
   mounted() {
+    this.getAccount();
     this.getTransactions();
   },
 })

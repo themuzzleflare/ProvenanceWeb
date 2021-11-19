@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="transaction === null" />
+  <PageNotFound v-if="error !== null" />
+  <Spinner v-else-if="transaction === null" />
   <div v-else id="tags">
     <ul class="list-group">
       <TagCell
@@ -18,6 +19,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
 
@@ -27,7 +29,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
 import TagResource from "@/UpAPI/TagResource";
 
 @Options({
-  components: { TagCell, Spinner },
+  components: { PageNotFound, TagCell, Spinner },
   data() {
     return {
       transaction: null as unknown as TransactionResource,
