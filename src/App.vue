@@ -9,7 +9,7 @@
           alt=""
           class="d-inline-block align-text-center rounded-3 shadow-sm bg-body"
           height="50"
-          src="./assets/logo.png"
+          src="./assets/logo.svg"
           width="50"
         />
         Provenance
