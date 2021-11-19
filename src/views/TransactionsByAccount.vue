@@ -1,7 +1,7 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" />
+  <PageNotFound v-if="error !== null" :error="error" />
   <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByAccount">
     <SearchBar v-model="searchQuery" />
@@ -36,13 +36,17 @@ import AccountResource from "@/UpAPI/AccountResource";
     return {
       account: null as unknown as AccountResource,
       transactions: null as unknown as TransactionResource[],
-      error: null,
+      error: null as unknown as Error,
       searchQuery: "",
     };
   },
   watch: {
     account(newValue: AccountResource): void {
       this.$store.commit("setPageTitle", newValue.attributes.displayName);
+    },
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
     },
   },
   computed: {

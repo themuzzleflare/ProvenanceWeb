@@ -1,7 +1,7 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" />
+  <PageNotFound v-if="error !== null" :error="error" />
   <Spinner v-else-if="transaction === null" />
   <div v-else id="transactionDetail">
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -157,7 +157,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
   data() {
     return {
       transaction: null as unknown as TransactionResource,
-      error: null,
+      error: null as unknown as Error,
       account: null as unknown as AccountResource,
       transferAccount: null as unknown as AccountResource,
       category: null as unknown as CategoryResource,
@@ -167,6 +167,10 @@ import CategoryResource from "@/UpAPI/CategoryResource";
   watch: {
     transaction(newValue: TransactionResource): void {
       this.$store.commit("setPageTitle", newValue.attributes.description);
+    },
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
     },
   },
   computed: {

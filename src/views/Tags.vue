@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="tags === null" />
+  <PageNotFound v-if="error !== null" :error="error" />
+  <Spinner v-else-if="tags === null" />
   <div v-else id="tags">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,6 +20,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -28,13 +30,19 @@ import axios from "axios";
 import TagResource from "@/UpAPI/TagResource";
 
 @Options({
-  components: { SearchBar, TagCell, Spinner },
+  components: { PageNotFound, SearchBar, TagCell, Spinner },
   data() {
     return {
       tags: null as unknown as TagResource[],
-      error: null,
+      error: null as unknown as Error,
       searchQuery: "",
     };
+  },
+  watch: {
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
+    },
   },
   computed: {
     filteredTags(): TagResource[] {

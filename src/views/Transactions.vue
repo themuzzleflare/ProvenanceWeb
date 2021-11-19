@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="transactions === null" />
+  <PageNotFound v-if="error !== null" :error="error" />
+  <Spinner v-else-if="transactions === null" />
   <div v-else id="transactions">
     <div id="searchSection">
       <SearchBar v-model="searchQuery" />
@@ -31,6 +32,7 @@
 import { Options, Vue } from "vue-class-component";
 import { reactive } from "vue";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
@@ -55,6 +57,7 @@ type SortingDate = "sortingDate";
 
 @Options({
   components: {
+    PageNotFound,
     SettledOnlyCheckbox,
     DateStyleSegmentedControl,
     TransactionGroupingSegmentedControl,
@@ -66,10 +69,16 @@ type SortingDate = "sortingDate";
   data() {
     return {
       transactions: null as unknown as TransactionResource[],
-      error: null,
+      error: null as unknown as Error,
       searchQuery: "",
       settledOnly: false,
     };
+  },
+  watch: {
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
+    },
   },
   computed: {
     filteredTransactions(): TransactionResource[] {

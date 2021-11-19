@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="categories === null" />
+  <PageNotFound v-if="error !== null" :error="error" />
+  <Spinner v-else-if="categories === null" />
   <div v-else id="categories">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,6 +20,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import CategoryCell from "@/components/CategoryCell.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -28,13 +30,19 @@ import axios from "axios";
 import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
-  components: { SearchBar, CategoryCell, Spinner },
+  components: { PageNotFound, SearchBar, CategoryCell, Spinner },
   data() {
     return {
       categories: null as unknown as CategoryResource[],
-      error: null,
+      error: null as unknown as Error,
       searchQuery: "",
     };
+  },
+  watch: {
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
+    },
   },
   computed: {
     filteredCategories(): CategoryResource[] {

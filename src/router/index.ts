@@ -101,6 +101,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/404",
     component: PageNotFound,
+    meta: {
+      title: "404",
+      description: "Page not found",
+    },
   },
 ];
 

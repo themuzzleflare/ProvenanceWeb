@@ -2,13 +2,20 @@
 
 <template>
   <div class="page-not-found">
-    <h1>Page Not Found</h1>
+    <h1>{{ error?.name ?? "Error" }}</h1>
+    <h4>{{ error?.message ?? "Page Not Found" }}</h4>
     <router-link to="/">Back to Home</router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
+
+@Options({
+  props: {
+    error: Error,
+  },
+})
 export default class PageNotFound extends Vue {}
 </script>
 

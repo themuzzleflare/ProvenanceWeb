@@ -1,7 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <Spinner v-if="accounts === null" />
+  <PageNotFound v-if="error !== null" :error="error" />
+  <Spinner v-else-if="accounts === null" />
   <div v-else id="accounts">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,6 +20,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
+import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import AccountCell from "@/components/AccountCell.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -28,13 +30,19 @@ import axios from "axios";
 import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({
-  components: { SearchBar, AccountCell, Spinner },
+  components: { PageNotFound, SearchBar, AccountCell, Spinner },
   data() {
     return {
       accounts: null as unknown as AccountResource[],
-      error: null,
+      error: null as unknown as Error,
       searchQuery: "",
     };
+  },
+  watch: {
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
+    },
   },
   computed: {
     filteredAccounts(): AccountResource[] {

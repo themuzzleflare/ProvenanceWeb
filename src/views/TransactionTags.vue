@@ -1,7 +1,7 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" />
+  <PageNotFound v-if="error !== null" :error="error" />
   <Spinner v-else-if="transaction === null" />
   <div v-else id="tags">
     <ul class="list-group">
@@ -33,8 +33,14 @@ import TagResource from "@/UpAPI/TagResource";
   data() {
     return {
       transaction: null as unknown as TransactionResource,
-      error: null,
+      error: null as unknown as Error,
     };
+  },
+  watch: {
+    error(newValue: Error): void {
+      this.$store.commit("setPageTitle", newValue.name);
+      this.$store.commit("setPageDescription", newValue.message);
+    },
   },
   computed: {
     transactionId(): string {
