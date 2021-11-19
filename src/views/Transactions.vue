@@ -135,14 +135,13 @@ type SortingDate = "sortingDate";
       });
     },
     groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
-      return xs.reduce(function (
-        rv: GroupDictionary,
-        x: TransactionResource
-      ): GroupDictionary {
-        (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
-        return rv;
-      },
-      {});
+      return xs.reduce(
+        (rv: GroupDictionary, x: TransactionResource): GroupDictionary => {
+          (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
+          return rv;
+        },
+        {}
+      );
     },
   },
   mounted() {

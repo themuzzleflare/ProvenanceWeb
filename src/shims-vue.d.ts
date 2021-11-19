@@ -1,4 +1,4 @@
-// Copyright © 2021 Paul Tavitian
+// Copyright © 2021-2021 Paul Tavitian
 
 /* eslint-disable */
 declare module '*.vue' {
