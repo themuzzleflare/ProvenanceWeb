@@ -19,7 +19,6 @@
       <a
         class="list-group-item list-group-item-action"
         href="mailto:feedback@tavitian.cloud?subject=Feedback%20for%20Provenance"
-        target="_blank"
       >
         <font-awesome-icon :icon="['fas', 'envelope']" />
         <span>Contact Developer</span>

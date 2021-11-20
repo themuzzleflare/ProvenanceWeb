@@ -16,7 +16,9 @@ import { Options, Vue } from "vue-class-component";
     error: Error,
   },
 })
-export default class PageNotFound extends Vue {}
+export default class PageNotFound extends Vue {
+  error?: Error;
+}
 </script>
 
 <style lang="scss" scoped>

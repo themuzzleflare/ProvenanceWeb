@@ -2,6 +2,10 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent
+    v-else-if="noTags === true"
+    :message="`No tags exist for transaction: ${transactionDescription}`"
+  />
   <Spinner v-else-if="transaction === null" />
   <div v-else id="tags">
     <ul class="list-group">
@@ -22,6 +26,7 @@ import { Options, Vue } from "vue-class-component";
 import PageNotFound from "@/views/PageNotFound.vue";
 import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 
@@ -29,14 +34,18 @@ import TransactionResource from "@/UpAPI/TransactionResource";
 import TagResource from "@/UpAPI/TagResource";
 
 @Options({
-  components: { PageNotFound, TagCell, Spinner },
+  components: { NoContent, PageNotFound, TagCell, Spinner },
   data() {
     return {
       transaction: null as unknown as TransactionResource,
       error: null as unknown as Error,
+      noTags: false,
     };
   },
   watch: {
+    transaction(newValue: TransactionResource): void {
+      this.noTags = newValue.relationships.tags.data.length === 0;
+    },
     error(newValue: Error): void {
       this.$store.commit("setPageTitle", newValue.name);
       this.$store.commit("setPageDescription", newValue.message);
@@ -46,8 +55,11 @@ import TagResource from "@/UpAPI/TagResource";
     transactionId(): string {
       return this.$route.params.transaction;
     },
+    transactionDescription(): string {
+      return this.transaction.attributes.description;
+    },
     tags(): TagResource[] {
-      return this.transaction?.relationships.tags.data;
+      return this.transaction.relationships.tags.data;
     },
   },
   methods: {

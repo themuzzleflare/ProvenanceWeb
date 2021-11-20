@@ -4,7 +4,7 @@
   <PageNotFound v-if="error !== null" :error="error" />
   <NoContent
     v-else-if="noTransactions === true"
-    :message="`No transactions exist for category: ${category.attributes.name}`"
+    :message="`No transactions exist for category: ${categoryName}`"
   />
   <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByCategory">
@@ -61,6 +61,9 @@ import CategoryResource from "@/UpAPI/CategoryResource";
   computed: {
     categoryId(): string {
       return this.$route.params.category;
+    },
+    categoryName(): string {
+      return this.category.attributes.name;
     },
     filteredTransactions(): TransactionResource[] {
       return this.transactions.filter(

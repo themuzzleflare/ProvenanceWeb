@@ -4,7 +4,7 @@
   <PageNotFound v-if="error !== null" :error="error" />
   <NoContent
     v-else-if="noTransactions === true"
-    :message="`No transactions exist for account: ${account.attributes.displayName}`"
+    :message="`No transactions exist for account: ${accountDisplayName}`"
   />
   <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByAccount">
@@ -61,6 +61,9 @@ import AccountResource from "@/UpAPI/AccountResource";
   computed: {
     accountId(): string {
       return this.$route.params.account;
+    },
+    accountDisplayName(): string {
+      return this.account.attributes.displayName;
     },
     filteredTransactions(): TransactionResource[] {
       return this.transactions.filter(
