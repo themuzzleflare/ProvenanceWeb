@@ -2,6 +2,10 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent
+    v-else-if="noTransactions === true"
+    :message="`No transactions exist for category: ${category.attributes.name}`"
+  />
   <Spinner v-else-if="transactions === null" />
   <div v-else id="transactionsByCategory">
     <SearchBar v-model="searchQuery" />
@@ -24,6 +28,7 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 
@@ -31,16 +36,20 @@ import TransactionResource from "@/UpAPI/TransactionResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
-  components: { PageNotFound, SearchBar, Spinner, TransactionCell },
+  components: { PageNotFound, SearchBar, Spinner, TransactionCell, NoContent },
   data() {
     return {
       category: null as unknown as CategoryResource,
       transactions: null as unknown as TransactionResource[],
       error: null as unknown as Error,
       searchQuery: "",
+      noTransactions: false,
     };
   },
   watch: {
+    transactions(newValue: TransactionResource[]): void {
+      this.noTransactions = newValue.length === 0;
+    },
     category(newValue: CategoryResource): void {
       this.$store.commit("setPageTitle", newValue.attributes.name);
     },

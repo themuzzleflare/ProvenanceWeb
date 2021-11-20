@@ -2,6 +2,10 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent
+    v-else-if="noTransactions === true"
+    message="No transactions exist"
+  />
   <Spinner v-else-if="transactions === null" />
   <div v-else id="transactions">
     <div id="searchSection">
@@ -40,6 +44,7 @@ import GroupedTransactionCell from "@/components/GroupedTransactionCell.vue";
 import TransactionGroupingSegmentedControl from "@/components/TransactionGroupingSegmentedControl.vue";
 import DateStyleSegmentedControl from "@/components/DateStyleSegmentedControl.vue";
 import SettledOnlyCheckbox from "@/components/SettledOnlyCheckbox.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 import dayjs from "dayjs";
@@ -65,6 +70,7 @@ type SortingDate = "sortingDate";
     TransactionCell,
     Spinner,
     SearchBar,
+    NoContent,
   },
   data() {
     return {
@@ -72,9 +78,13 @@ type SortingDate = "sortingDate";
       error: null as unknown as Error,
       searchQuery: "",
       settledOnly: false,
+      noTransactions: false,
     };
   },
   watch: {
+    transactions(newValue: TransactionResource[]): void {
+      this.noTransactions = newValue.length === 0;
+    },
     error(newValue: Error): void {
       this.$store.commit("setPageTitle", newValue.name);
       this.$store.commit("setPageDescription", newValue.message);

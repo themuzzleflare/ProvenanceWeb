@@ -2,6 +2,7 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent v-else-if="noAccounts === true" message="No accounts exist" />
   <Spinner v-else-if="accounts === null" />
   <div v-else id="accounts">
     <SearchBar v-model="searchQuery" />
@@ -24,21 +25,26 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import AccountCell from "@/components/AccountCell.vue";
 import Spinner from "@/components/Spinner.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 
 import AccountResource from "@/UpAPI/AccountResource";
 
 @Options({
-  components: { PageNotFound, SearchBar, AccountCell, Spinner },
+  components: { PageNotFound, SearchBar, AccountCell, Spinner, NoContent },
   data() {
     return {
       accounts: null as unknown as AccountResource[],
       error: null as unknown as Error,
       searchQuery: "",
+      noAccounts: false,
     };
   },
   watch: {
+    accounts(newValue: AccountResource[]): void {
+      this.noAccounts = newValue.length === 0;
+    },
     error(newValue: Error): void {
       this.$store.commit("setPageTitle", newValue.name);
       this.$store.commit("setPageDescription", newValue.message);

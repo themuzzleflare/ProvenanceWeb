@@ -2,6 +2,7 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent v-else-if="noTags === true" message="No tags exist" />
   <Spinner v-else-if="tags === null" />
   <div v-else id="tags">
     <SearchBar v-model="searchQuery" />
@@ -24,21 +25,26 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 
 import TagResource from "@/UpAPI/TagResource";
 
 @Options({
-  components: { PageNotFound, SearchBar, TagCell, Spinner },
+  components: { PageNotFound, SearchBar, TagCell, Spinner, NoContent },
   data() {
     return {
       tags: null as unknown as TagResource[],
       error: null as unknown as Error,
       searchQuery: "",
+      noTags: false,
     };
   },
   watch: {
+    tags(newValue: TagResource[]): void {
+      this.noTags = newValue.length === 0;
+    },
     error(newValue: Error): void {
       this.$store.commit("setPageTitle", newValue.name);
       this.$store.commit("setPageDescription", newValue.message);

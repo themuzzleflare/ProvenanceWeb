@@ -2,6 +2,7 @@
 
 <template>
   <PageNotFound v-if="error !== null" :error="error" />
+  <NoContent v-else-if="noCategories === true" message="No categories exist" />
   <Spinner v-else-if="categories === null" />
   <div v-else id="categories">
     <SearchBar v-model="searchQuery" />
@@ -24,21 +25,26 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import CategoryCell from "@/components/CategoryCell.vue";
 import Spinner from "@/components/Spinner.vue";
+import NoContent from "@/components/NoContent.vue";
 
 import axios from "axios";
 
 import CategoryResource from "@/UpAPI/CategoryResource";
 
 @Options({
-  components: { PageNotFound, SearchBar, CategoryCell, Spinner },
+  components: { PageNotFound, SearchBar, CategoryCell, Spinner, NoContent },
   data() {
     return {
       categories: null as unknown as CategoryResource[],
       error: null as unknown as Error,
       searchQuery: "",
+      noCategories: false,
     };
   },
   watch: {
+    categories(newValue: CategoryResource[]): void {
+      this.noCategories = newValue.length === 0;
+    },
     error(newValue: Error): void {
       this.$store.commit("setPageTitle", newValue.name);
       this.$store.commit("setPageDescription", newValue.message);
