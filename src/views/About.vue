@@ -30,13 +30,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(faGithub);
-library.add(faEnvelope);
 
 @Options({
   components: { FontAwesomeIcon },

@@ -2,6 +2,7 @@
 
 <template>
   <APIKeyModal />
+  <SettingsModal />
   <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">
@@ -47,6 +48,13 @@
             <router-link class="nav-link" to="/about">About</router-link>
           </li>
         </ul>
+        <button
+          type="button"
+          class="d-flex btn btn-outline-primary"
+          @click="openSettingsModal"
+        >
+          <font-awesome-icon :icon="['fas', 'cog']" />
+        </button>
       </div>
     </div>
   </nav>
@@ -57,11 +65,20 @@
 import { Options, Vue } from "vue-class-component";
 
 import APIKeyModal from "@/components/APIKeyModal.vue";
+import SettingsModal from "@/components/SettingsModal.vue";
 
 import * as bootstrap from "bootstrap";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faEnvelope, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faGithub);
+library.add(faEnvelope);
+library.add(faCog);
 
 @Options({
-  components: { APIKeyModal },
+  components: { SettingsModal, APIKeyModal, FontAwesomeIcon },
   methods: {
     checkApiKey(): void {
       if (!localStorage.apiKey) {
@@ -70,6 +87,12 @@ import * as bootstrap from "bootstrap";
         const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el);
         apiKeyModal.toggle();
       }
+    },
+    openSettingsModal(): void {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const el: HTMLElement = document.getElementById("settingsModal")!;
+      const settingsModal: bootstrap.Modal = new bootstrap.Modal(el);
+      settingsModal.toggle();
     },
   },
   mounted() {
