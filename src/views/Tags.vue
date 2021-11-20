@@ -1,9 +1,9 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
-  <NoContent v-else-if="noTags === true" message="No tags exist" />
-  <Spinner v-else-if="tags === null" />
+  <PageNotFound v-if="error" :error="error" />
+  <NoContent v-else-if="noTags" message="No tags exist" />
+  <Spinner v-else-if="!tags" />
   <div v-else id="tags">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">

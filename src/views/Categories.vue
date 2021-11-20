@@ -1,9 +1,9 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
-  <NoContent v-else-if="noCategories === true" message="No categories exist" />
-  <Spinner v-else-if="categories === null" />
+  <PageNotFound v-if="error" :error="error" />
+  <NoContent v-else-if="noCategories" message="No categories exist" />
+  <Spinner v-else-if="!categories" />
   <div v-else id="categories">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">

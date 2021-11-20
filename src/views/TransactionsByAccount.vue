@@ -1,12 +1,12 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
+  <PageNotFound v-if="error" :error="error" />
   <NoContent
-    v-else-if="noTransactions === true"
+    v-else-if="noTransactions"
     :message="`No transactions exist for account: ${accountDisplayName}`"
   />
-  <Spinner v-else-if="transactions === null" />
+  <Spinner v-else-if="!transactions" />
   <div v-else id="transactionsByAccount">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">

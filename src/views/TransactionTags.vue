@@ -1,12 +1,12 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
+  <PageNotFound v-if="error" :error="error" />
   <NoContent
-    v-else-if="noTags === true"
+    v-else-if="noTags"
     :message="`No tags exist for transaction: ${transactionDescription}`"
   />
-  <Spinner v-else-if="transaction === null" />
+  <Spinner v-else-if="!transaction" />
   <div v-else id="tags">
     <ul class="list-group">
       <TagCell

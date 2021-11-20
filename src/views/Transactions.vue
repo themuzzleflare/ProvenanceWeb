@@ -1,12 +1,9 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
-  <NoContent
-    v-else-if="noTransactions === true"
-    message="No transactions exist"
-  />
-  <Spinner v-else-if="transactions === null" />
+  <PageNotFound v-if="error" :error="error" />
+  <NoContent v-else-if="noTransactions" message="No transactions exist" />
+  <Spinner v-else-if="!transactions" />
   <div v-else id="transactions">
     <div id="searchSection">
       <SearchBar v-model="searchQuery" />

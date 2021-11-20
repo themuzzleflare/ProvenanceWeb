@@ -1,8 +1,8 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
-  <Spinner v-else-if="transaction === null" />
+  <PageNotFound v-if="error" :error="error" />
+  <Spinner v-else-if="!transaction" />
   <div v-else id="transactionDetail">
     <transition-group class="list-group" name="flip-list" tag="ul">
       <AttributeCell

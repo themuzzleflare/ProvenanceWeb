@@ -1,9 +1,9 @@
 <!-- Copyright © 2021 Paul Tavitian -->
 
 <template>
-  <PageNotFound v-if="error !== null" :error="error" />
-  <NoContent v-else-if="noAccounts === true" message="No accounts exist" />
-  <Spinner v-else-if="accounts === null" />
+  <PageNotFound v-if="error" :error="error" />
+  <NoContent v-else-if="noAccounts" message="No accounts exist" />
+  <Spinner v-else-if="!accounts" />
   <div v-else id="accounts">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
