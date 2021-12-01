@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
@@ -31,7 +31,8 @@ import axios from "axios";
 
 import AccountResource from "@/UpAPI/AccountResource";
 
-@Options({
+export default defineComponent({
+  name: "Accounts",
   components: { PageNotFound, SearchBar, AccountCell, Spinner, NoContent },
   data() {
     return {
@@ -93,8 +94,7 @@ import AccountResource from "@/UpAPI/AccountResource";
   mounted() {
     this.getAccounts();
   },
-})
-export default class Accounts extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

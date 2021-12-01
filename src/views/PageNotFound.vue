@@ -9,16 +9,14 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "PageNotFound",
   props: {
     error: Error,
   },
-})
-export default class PageNotFound extends Vue {
-  error?: Error;
-}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -34,7 +34,8 @@ import axios from "axios";
 
 import TransactionResource from "@/UpAPI/TransactionResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionsByTag",
   components: { NoContent, PageNotFound, SearchBar, Spinner, TransactionCell },
   data() {
     return {
@@ -54,7 +55,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     },
   },
   computed: {
-    tagId(): string {
+    tagId(): string | string[] {
       return this.$route.params.tag;
     },
     filteredTransactions(): TransactionResource[] {
@@ -103,8 +104,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
     this.$store.commit("setPageTitle", this.tagId);
     this.getTransactions();
   },
-})
-export default class TransactionsByTag extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

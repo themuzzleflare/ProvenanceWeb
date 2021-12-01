@@ -28,14 +28,14 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-@Options({
+export default defineComponent({
+  name: "About",
   components: { FontAwesomeIcon },
-})
-export default class About extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -35,7 +35,8 @@ import axios from "axios";
 import TransactionResource from "@/UpAPI/TransactionResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionsByCategory",
   components: { PageNotFound, SearchBar, Spinner, TransactionCell, NoContent },
   data() {
     return {
@@ -59,7 +60,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
     },
   },
   computed: {
-    categoryId(): string {
+    categoryId(): string | string[] {
       return this.$route.params.category;
     },
     categoryName(): string {
@@ -126,8 +127,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
     this.getCategory();
     this.getTransactions();
   },
-})
-export default class TransactionsByCategory extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -9,7 +9,7 @@
       class="btn-check"
       name="dsradio"
       type="radio"
-      @click="this.$store.commit('dateStyle', false)"
+      @click="this.$store.commit('setRelativeDates', false)"
     />
     <label class="btn btn-outline-primary" for="dsradio1">Absolute</label>
     <input
@@ -19,13 +19,16 @@
       class="btn-check"
       name="dsradio"
       type="radio"
-      @click="this.$store.commit('dateStyle', true)"
+      @click="this.$store.commit('setRelativeDates', true)"
     />
     <label class="btn btn-outline-primary" for="dsradio2">Relative</label>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
-export default class DateStyleSegmentedControl extends Vue {}
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "DateStyleSegmentedControl",
+});
 </script>

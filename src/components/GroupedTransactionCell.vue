@@ -27,15 +27,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import TransactionCell from "@/components/TransactionCell.vue";
 
 import GroupedTransaction from "@/UpAPI/GroupedTransaction";
 import TransactionResource from "@/UpAPI/TransactionResource";
 
-@Options({
+export default defineComponent({
+  name: "GroupedTransactionCell",
   components: { TransactionCell },
   props: {
     groupedTransactions: {
@@ -53,10 +53,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
       });
     },
   },
-})
-export default class GroupedTransactionCell extends Vue {
-  groupedTransactions!: GroupedTransaction[];
-}
+});
 </script>
 
 <style lang="scss" scoped>

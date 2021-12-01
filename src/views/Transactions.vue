@@ -30,8 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -57,7 +56,8 @@ import TransactionResource from "@/UpAPI/TransactionResource";
 type GroupDictionary = Record<string, TransactionResource[]>;
 type SortingDate = "sortingDate";
 
-@Options({
+export default defineComponent({
+  name: "Transactions",
   components: {
     PageNotFound,
     SettledOnlyCheckbox,
@@ -163,8 +163,7 @@ type SortingDate = "sortingDate";
   mounted() {
     this.getTransactions();
   },
-})
-export default class Transactions extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

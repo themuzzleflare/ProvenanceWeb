@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import CategoryResource from "@/UpAPI/CategoryResource";
 
-@Options({
+export default defineComponent({
+  name: "CategoryCell",
   props: {
     category: {
       type: Object as PropType<CategoryResource>,
@@ -22,10 +22,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
       return this.category.attributes.name;
     },
   },
-})
-export default class CategoryCell extends Vue {
-  category!: CategoryResource;
-}
+});
 </script>
 
 <style lang="scss" scoped>

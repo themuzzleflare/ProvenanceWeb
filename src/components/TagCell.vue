@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import TagResource from "@/UpAPI/TagResource";
 
-@Options({
+export default defineComponent({
+  name: "TagCell",
   props: {
     tag: {
       type: Object as PropType<TagResource>,
@@ -22,10 +22,7 @@ import TagResource from "@/UpAPI/TagResource";
       return this.tag.id;
     },
   },
-})
-export default class TagCell extends Vue {
-  tag!: TagResource;
-}
+});
 </script>
 
 <style lang="scss" scoped>

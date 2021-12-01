@@ -13,8 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -27,7 +26,8 @@ dayjs.extend(relativeTime);
 
 import TransactionResource from "@/UpAPI/TransactionResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionCell",
   props: {
     transaction: {
       type: Object as PropType<TransactionResource>,
@@ -68,10 +68,7 @@ import TransactionResource from "@/UpAPI/TransactionResource";
       return formatter.format(newAmount);
     },
   },
-})
-export default class TransactionCell extends Vue {
-  transaction!: TransactionResource;
-}
+});
 </script>
 
 <!--suppress CssUnusedSymbol -->

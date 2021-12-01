@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import TagCell from "@/components/TagCell.vue";
@@ -33,7 +33,8 @@ import axios from "axios";
 import TransactionResource from "@/UpAPI/TransactionResource";
 import TagResource from "@/UpAPI/TagResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionTags",
   components: { NoContent, PageNotFound, TagCell, Spinner },
   data() {
     return {
@@ -52,7 +53,7 @@ import TagResource from "@/UpAPI/TagResource";
     },
   },
   computed: {
-    transactionId(): string {
+    transactionId(): string | string[] {
       return this.$route.params.transaction;
     },
     transactionDescription(): string {
@@ -94,8 +95,7 @@ import TagResource from "@/UpAPI/TagResource";
   mounted() {
     this.getTransaction();
   },
-})
-export default class TransactionTags extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

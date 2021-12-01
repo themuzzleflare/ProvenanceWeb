@@ -9,7 +9,6 @@ import Transactions from "@/views/Transactions.vue";
 import Accounts from "@/views/Accounts.vue";
 import Tags from "@/views/Tags.vue";
 import Categories from "@/views/Categories.vue";
-import About from "@/views/About.vue";
 
 import TransactionsByAccount from "@/views/TransactionsByAccount.vue";
 import TransactionsByTag from "@/views/TransactionsByTag.vue";
@@ -64,7 +63,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/about",
     name: "About",
-    component: About,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/About.vue"),
     meta: {
       title: "About",
     },

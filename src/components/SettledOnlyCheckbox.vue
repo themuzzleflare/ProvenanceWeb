@@ -3,10 +3,10 @@
 <template>
   <div class="form-check">
     <input
+      id="settledOnly"
+      :value="modelValue"
       class="form-check-input"
       type="checkbox"
-      id="settledOnly"
-      :checked="modelValue"
       @input="$emit('update:modelValue', $event.target.checked)"
     />
     <label class="form-check-label" for="settledOnly">Settled Only</label>
@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "SettledOnlyCheckbox",
   props: ["modelValue"],
   emits: ["update:modelValue"],
-})
-export default class SettledOnlyCheckbox extends Vue {}
+});
 </script>

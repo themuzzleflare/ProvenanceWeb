@@ -9,7 +9,7 @@
       class="btn-check"
       name="tgradio"
       type="radio"
-      @click="this.$store.commit('transactionGrouping', true)"
+      @click="this.$store.commit('setDateGrouping', true)"
     />
     <label class="btn btn-outline-primary" for="tgradio1">Dates</label>
     <input
@@ -19,13 +19,16 @@
       class="btn-check"
       name="tgradio"
       type="radio"
-      @click="this.$store.commit('transactionGrouping', false)"
+      @click="this.$store.commit('setDateGrouping', false)"
     />
     <label class="btn btn-outline-primary" for="tgradio2">Transactions</label>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
-export default class TransactionGroupingSegmentedControl extends Vue {}
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "TransactionGroupingSegmentedControl",
+});
 </script>

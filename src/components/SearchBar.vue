@@ -3,23 +3,32 @@
 <template>
   <input
     id="searchBar"
-    :value="modelValue"
+    v-model="value"
     aria-label="Search"
     class="form-control"
     placeholder="Search"
     type="search"
-    @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "SearchBar",
   props: ["modelValue"],
   emits: ["update:modelValue"],
-})
-export default class SearchBar extends Vue {}
+  computed: {
+    value: {
+      get(): string {
+        return this.modelValue;
+      },
+      set(newValue: string): void {
+        this.$emit("update:modelValue", newValue);
+      },
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

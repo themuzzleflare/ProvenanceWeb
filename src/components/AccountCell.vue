@@ -8,12 +8,12 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 
 import AccountResource from "@/UpAPI/AccountResource";
 
-@Options({
+export default defineComponent({
+  name: "AccountCell",
   props: {
     account: {
       type: Object as PropType<AccountResource>,
@@ -41,10 +41,7 @@ import AccountResource from "@/UpAPI/AccountResource";
       return formatter.format(newBalance);
     },
   },
-})
-export default class AccountCell extends Vue {
-  account!: AccountResource;
-}
+});
 </script>
 
 <style lang="scss" scoped>

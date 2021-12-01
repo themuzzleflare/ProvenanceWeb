@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -35,7 +35,8 @@ import axios from "axios";
 import TransactionResource from "@/UpAPI/TransactionResource";
 import AccountResource from "@/UpAPI/AccountResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionsByAccount",
   components: { PageNotFound, SearchBar, Spinner, TransactionCell, NoContent },
   data() {
     return {
@@ -59,7 +60,7 @@ import AccountResource from "@/UpAPI/AccountResource";
     },
   },
   computed: {
-    accountId(): string {
+    accountId(): string | string[] {
       return this.$route.params.account;
     },
     accountDisplayName(): string {
@@ -128,8 +129,7 @@ import AccountResource from "@/UpAPI/AccountResource";
     this.getAccount();
     this.getTransactions();
   },
-})
-export default class TransactionsByAccount extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

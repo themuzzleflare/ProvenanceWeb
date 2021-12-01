@@ -14,18 +14,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "AttributeCell",
   props: {
     leftText: String,
     detailText: String,
   },
-})
-export default class AttributeCell extends Vue {
-  leftText!: string;
-  detailText!: string;
-}
+});
 </script>
 
 <!--suppress CssUnusedSymbol -->

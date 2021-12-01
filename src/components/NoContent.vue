@@ -5,16 +5,14 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "NoContent",
   props: {
     message: String,
   },
-})
-export default class NoContent extends Vue {
-  message!: string;
-}
+});
 </script>
 
 <style lang="scss" scoped>

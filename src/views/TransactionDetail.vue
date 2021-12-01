@@ -132,7 +132,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
@@ -152,7 +152,8 @@ import MoneyObject from "@/UpAPI/MoneyObject";
 import AccountResource from "@/UpAPI/AccountResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
 
-@Options({
+export default defineComponent({
+  name: "TransactionDetail",
   components: { PageNotFound, Spinner, AttributeCell },
   data() {
     return {
@@ -174,19 +175,19 @@ import CategoryResource from "@/UpAPI/CategoryResource";
     },
   },
   computed: {
-    transactionId(): string {
+    transactionId(): string | string[] {
       return this.$route.params.transaction;
     },
     accountId(): string {
       return this.transaction.relationships.account.data.id;
     },
-    transferAccountId(): string | null {
+    transferAccountId(): string | undefined {
       return this.transaction.relationships.transferAccount.data?.id;
     },
-    categoryId(): string | null {
+    categoryId(): string | undefined {
       return this.transaction.relationships.category.data?.id;
     },
-    parentCategoryId(): string | null {
+    parentCategoryId(): string | undefined {
       return this.transaction.relationships.parentCategory.data?.id;
     },
     transactionStatus(): string {
@@ -194,10 +195,10 @@ import CategoryResource from "@/UpAPI/CategoryResource";
         .replace("SETTLED", "Settled")
         .replace("HELD", "Held");
     },
-    holdInfo(): HoldInfoObject | null {
+    holdInfo(): HoldInfoObject | undefined {
       return this.transaction.attributes.holdInfo;
     },
-    foreignAmount(): MoneyObject | null {
+    foreignAmount(): MoneyObject | undefined {
       return this.transaction.attributes.foreignAmount;
     },
     transactionAmount(): MoneyObject {
@@ -392,8 +393,7 @@ import CategoryResource from "@/UpAPI/CategoryResource";
   mounted() {
     this.getTransaction();
   },
-})
-export default class TransactionDetail extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

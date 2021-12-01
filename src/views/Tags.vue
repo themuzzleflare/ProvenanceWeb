@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import SearchBar from "@/components/SearchBar.vue";
@@ -31,7 +31,8 @@ import axios from "axios";
 
 import TagResource from "@/UpAPI/TagResource";
 
-@Options({
+export default defineComponent({
+  name: "Tags",
   components: { PageNotFound, SearchBar, TagCell, Spinner, NoContent },
   data() {
     return {
@@ -91,8 +92,7 @@ import TagResource from "@/UpAPI/TagResource";
   mounted() {
     this.getTags();
   },
-})
-export default class Tags extends Vue {}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -48,9 +48,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-@Options({
+export default defineComponent({
+  name: "SettingsModal",
   data() {
     return {
       apiKey: "",
@@ -66,6 +67,5 @@ import { Options, Vue } from "vue-class-component";
       this.apiKey = localStorage.apiKey;
     }
   },
-})
-export default class SettingsModal extends Vue {}
+});
 </script>

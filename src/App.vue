@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
 import APIKeyModal from "@/components/APIKeyModal.vue";
 import SettingsModal from "@/components/SettingsModal.vue";
@@ -77,7 +77,8 @@ library.add(faGithub);
 library.add(faEnvelope);
 library.add(faCog);
 
-@Options({
+export default defineComponent({
+  name: "App",
   components: { SettingsModal, APIKeyModal, FontAwesomeIcon },
   methods: {
     checkApiKey(): void {
@@ -98,8 +99,7 @@ library.add(faCog);
   mounted() {
     this.checkApiKey();
   },
-})
-export default class App extends Vue {}
+});
 </script>
 
 <style lang="scss">
