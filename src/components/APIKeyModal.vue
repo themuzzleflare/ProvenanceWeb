@@ -60,7 +60,7 @@ export default defineComponent({
   },
   methods: {
     saveApiKey(): void {
-      this.$store.state.apiKey = this.apiKey;
+      this.$store.commit("setApiKey", this.apiKey);
     },
   },
   mounted() {
