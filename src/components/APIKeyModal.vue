@@ -60,12 +60,12 @@ export default defineComponent({
   },
   methods: {
     saveApiKey(): void {
-      localStorage.apiKey = this.apiKey;
+      this.$store.state.apiKey = this.apiKey;
     },
   },
   mounted() {
-    if (localStorage.apiKey) {
-      this.apiKey = localStorage.apiKey;
+    if (this.$store.state.apiKey) {
+      this.apiKey = this.$store.state.apiKey;
     }
   },
 });
