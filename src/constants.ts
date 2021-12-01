@@ -9,4 +9,5 @@ export interface State {
   dateGrouping: boolean;
   pageTitle: string;
   pageDescription: string;
+  apiKey: string;
 }

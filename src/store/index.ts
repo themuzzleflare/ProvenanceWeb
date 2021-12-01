@@ -10,6 +10,7 @@ export default createStore<State>({
     dateGrouping: localStorage.dateGrouping === "1",
     pageTitle: defaultPageTitle,
     pageDescription: defaultPageDescription,
+    apiKey: localStorage.apiKey,
   },
   mutations: {
     setRelativeDates(state: State, payload: boolean): void {
@@ -35,6 +36,10 @@ export default createStore<State>({
       document
         .querySelectorAll(".page-description-meta")
         .forEach((el) => el.setAttribute("content", pageDescription));
+    },
+    setApiKey(state: State, apiKey: string): void {
+      localStorage.apiKey = apiKey;
+      state.apiKey = apiKey;
     },
   },
 });

@@ -4,10 +4,9 @@
   <div class="form-check">
     <input
       id="settledOnly"
-      :value="modelValue"
+      v-model="value"
       class="form-check-input"
       type="checkbox"
-      @input="$emit('update:modelValue', $event.target.checked)"
     />
     <label class="form-check-label" for="settledOnly">Settled Only</label>
   </div>
@@ -20,5 +19,15 @@ export default defineComponent({
   name: "SettledOnlyCheckbox",
   props: ["modelValue"],
   emits: ["update:modelValue"],
+  computed: {
+    value: {
+      get(): boolean {
+        return this.modelValue;
+      },
+      set(newValue: boolean): void {
+        this.$emit("update:modelValue", newValue);
+      },
+    },
+  },
 });
 </script>

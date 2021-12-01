@@ -2,17 +2,17 @@
 
 <template>
   <transition-group
-    class="list-group"
-    name="list-complete"
-    tag="ul"
     v-for="group in groupedTransactions"
     id="dateGroup"
     :key="group.date"
+    class="list-group"
+    name="list-complete"
+    tag="ul"
   >
     <div
       id="dateHeader"
-      class="list-group-item list-group-item-secondary"
       :key="group.date"
+      class="list-group-item list-group-item-secondary"
     >
       <h4>{{ group.date }}</h4>
     </div>
