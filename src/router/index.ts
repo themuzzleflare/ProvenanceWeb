@@ -9,13 +9,7 @@ import Transactions from "@/views/Transactions.vue";
 import Accounts from "@/views/Accounts.vue";
 import Tags from "@/views/Tags.vue";
 import Categories from "@/views/Categories.vue";
-
-import TransactionsByAccount from "@/views/TransactionsByAccount.vue";
-import TransactionsByTag from "@/views/TransactionsByTag.vue";
-import TransactionsByCategory from "@/views/TransactionsByCategory.vue";
-
-import TransactionDetail from "@/views/TransactionDetail.vue";
-import TransactionTags from "@/views/TransactionTags.vue";
+import About from "@/views/About.vue";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 
@@ -63,8 +57,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/about",
     name: "About",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/About.vue"),
+    component: About,
     meta: {
       title: "About",
     },
@@ -72,27 +65,42 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/accounts/:account",
     name: "Transactions By Account",
-    component: TransactionsByAccount,
+    component: () =>
+      import(
+        /* webpackChunkName: "transactionsByAccount" */ "@/views/TransactionsByAccount.vue"
+      ),
   },
   {
     path: "/tags/:tag",
     name: "Transactions By Tag",
-    component: TransactionsByTag,
+    component: () =>
+      import(
+        /* webpackChunkName: "transactionsByTag" */ "@/views/TransactionsByTag.vue"
+      ),
   },
   {
     path: "/categories/:category",
     name: "Transactions By Category",
-    component: TransactionsByCategory,
+    component: () =>
+      import(
+        /* webpackChunkName: "transactionsByCategory" */ "@/views/TransactionsByCategory.vue"
+      ),
   },
   {
     path: "/transactions/:transaction",
     name: "Transaction Detail",
-    component: TransactionDetail,
+    component: () =>
+      import(
+        /* webpackChunkName: "transactionDetail" */ "@/views/TransactionDetail.vue"
+      ),
   },
   {
     path: "/transactions/:transaction/tags",
     name: "Transaction Tags",
-    component: TransactionTags,
+    component: () =>
+      import(
+        /* webpackChunkName: "transactionTags" */ "@/views/TransactionTags.vue"
+      ),
   },
   {
     path: "/:pathMatch(.*)*",
