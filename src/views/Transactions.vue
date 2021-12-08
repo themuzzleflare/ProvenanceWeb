@@ -46,12 +46,11 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import GroupedTransaction from "@/UpAPI/GroupedTransaction";
+import TransactionResource from "@/UpAPI/TransactionResource";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-import GroupedTransaction from "@/UpAPI/GroupedTransaction";
-import TransactionResource from "@/UpAPI/TransactionResource";
 
 type GroupDictionary = Record<string, TransactionResource[]>;
 type SortingDate = "sortingDate";

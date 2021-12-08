@@ -8,22 +8,22 @@
       <AttributeCell
         key="status"
         :detail-text="transactionStatus"
-        left-text="Status"
         class="list-group-item"
+        left-text="Status"
       />
       <AttributeCell
         key="account"
         :detail-text="account?.attributes?.displayName"
-        left-text="Account"
         class="list-group-item list-group-item-action"
+        left-text="Account"
         @click="listTransactionsByAccount(account)"
       />
       <AttributeCell
-        key="transferAccount"
         v-if="transferAccount"
+        key="transferAccount"
         :detail-text="transferAccount?.attributes?.displayName"
-        left-text="Transfer Account"
         class="list-group-item list-group-item-action"
+        left-text="Transfer Account"
         @click="listTransactionsByAccount(transferAccount)"
       />
     </transition-group>
@@ -31,86 +31,86 @@
       <AttributeCell
         key="description"
         :detail-text="transaction?.attributes?.description"
+        class="list-group-item"
         left-text="Description"
-        class="list-group-item"
       />
       <AttributeCell
-        key="rawText"
         v-if="transaction?.attributes?.rawText"
+        key="rawText"
         :detail-text="transaction?.attributes?.rawText"
-        left-text="Raw Text"
         class="list-group-item"
+        left-text="Raw Text"
       />
       <AttributeCell
-        key="message"
         v-if="
           transaction?.attributes?.message &&
           transaction?.attributes?.message !== ''
         "
+        key="message"
         :detail-text="transaction?.attributes?.message"
-        left-text="Message"
         class="list-group-item"
+        left-text="Message"
       />
     </transition-group>
     <transition-group class="list-group" name="flip-list" tag="ul">
       <AttributeCell
-        key="holdAmount"
         v-if="transactionHoldValue"
+        key="holdAmount"
         :detail-text="transactionHoldValue"
+        class="list-group-item"
         left-text="Hold Amount"
-        class="list-group-item"
       />
       <AttributeCell
-        key="holdForeignAmount"
         v-if="transactionHoldForeignValue"
+        key="holdForeignAmount"
         :detail-text="transactionHoldForeignValue"
-        left-text="Hold Foreign Amount"
         class="list-group-item"
+        left-text="Hold Foreign Amount"
       />
       <AttributeCell
-        key="foreignAmount"
         v-if="transactionForeignValue"
+        key="foreignAmount"
         :detail-text="transactionForeignValue"
-        left-text="Foreign Amount"
         class="list-group-item"
+        left-text="Foreign Amount"
       />
       <AttributeCell
         key="amount"
         :detail-text="transactionAmountValue"
-        left-text="Amount"
         class="list-group-item"
+        left-text="Amount"
       />
     </transition-group>
     <transition-group class="list-group" name="flip-list" tag="ul">
       <AttributeCell
         key="creationDate"
         :detail-text="transactionCreationDate"
-        left-text="Creation Date"
         class="list-group-item"
+        left-text="Creation Date"
       />
       <AttributeCell
-        key="settlementDate"
         v-if="transactionSettlementDate"
+        key="settlementDate"
         :detail-text="transactionSettlementDate"
-        left-text="Settlement Date"
         class="list-group-item"
+        left-text="Settlement Date"
       />
     </transition-group>
     <transition-group class="list-group" name="flip-list" tag="ul">
       <AttributeCell
-        key="parentCategory"
         v-if="parentCategory"
+        key="parentCategory"
         :detail-text="parentCategory?.attributes?.name"
-        left-text="Parent Category"
         class="list-group-item list-group-item-action"
+        left-text="Parent Category"
         @click="listTransactionsByCategory(parentCategory)"
       />
       <AttributeCell
-        key="category"
         v-if="category"
+        key="category"
         :detail-text="category?.attributes?.name"
-        left-text="Category"
         class="list-group-item list-group-item-action"
+        left-text="Category"
         @click="listTransactionsByCategory(category)"
       />
     </transition-group>
@@ -123,8 +123,8 @@
       <AttributeCell
         key="tags"
         :detail-text="transaction.relationships.tags.data.length.toString()"
-        left-text="Tags"
         class="list-group-item list-group-item-action"
+        left-text="Tags"
         @click="listTransactionTags"
       />
     </transition-group>
@@ -142,15 +142,14 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-
 import TransactionResource from "@/UpAPI/TransactionResource";
 import HoldInfoObject from "@/UpAPI/HoldInfoObject";
 import MoneyObject from "@/UpAPI/MoneyObject";
 import AccountResource from "@/UpAPI/AccountResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export default defineComponent({
   name: "TransactionDetail",

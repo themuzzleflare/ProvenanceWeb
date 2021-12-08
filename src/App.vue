@@ -30,8 +30,8 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <router-link class="nav-link" to="/transactions"
-              >Transactions</router-link
-            >
+              >Transactions
+            </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/accounts">Accounts</router-link>
@@ -49,8 +49,8 @@
           </li>
         </ul>
         <button
-          type="button"
           class="d-flex btn btn-outline-primary"
+          type="button"
           @click="openSettingsModal"
         >
           <font-awesome-icon :icon="['fas', 'cog']" />
@@ -69,7 +69,7 @@ import SettingsModal from "@/components/SettingsModal.vue";
 
 import * as bootstrap from "bootstrap";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEnvelope, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 

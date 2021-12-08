@@ -2,7 +2,7 @@
 
 import { createStore } from "vuex";
 
-import { defaultPageTitle, defaultPageDescription, State } from "@/constants";
+import { defaultPageDescription, defaultPageTitle, State } from "@/constants";
 
 export default createStore<State>({
   state: {
