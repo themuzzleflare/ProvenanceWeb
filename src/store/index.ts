@@ -2,7 +2,12 @@
 
 import { createStore } from "vuex";
 
-import { defaultPageDescription, defaultPageTitle, State } from "@/constants";
+import {
+  defaultPageDescription,
+  defaultPageTitle,
+  State,
+  axiosInstance as axios,
+} from "@/constants";
 
 export default createStore<State>({
   state: {
@@ -40,6 +45,28 @@ export default createStore<State>({
     setApiKey(state: State, apiKey: string): void {
       localStorage.apiKey = apiKey;
       state.apiKey = apiKey;
+    },
+  },
+  actions: {
+    getTransactions() {
+      return axios.get(`/transactions`, {
+        params: {
+          "page[size]": "100",
+        },
+      });
+    },
+    getTransactionsByAccount(context, accountId: string) {
+      return axios.get(`/accounts/${accountId}/transactions`, {
+        params: {
+          "page[size]": "100",
+        },
+      });
+    },
+    getTransaction(context, transactionId: string) {
+      return axios.get(`/transactions/${transactionId}`);
+    },
+    getAccount(context, accountId: string) {
+      return axios.get(`/accounts/${accountId}`);
     },
   },
 });

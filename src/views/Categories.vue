@@ -27,9 +27,8 @@ import CategoryCell from "@/components/CategoryCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import CategoryResource from "@/UpAPI/CategoryResource";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "Categories",
@@ -47,8 +46,8 @@ export default defineComponent({
       this.noCategories = newValue.length === 0;
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
@@ -64,12 +63,8 @@ export default defineComponent({
   },
   methods: {
     getCategories(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/categories", {
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
+      this.$http
+        .get("/categories")
         .then((response) => {
           console.log(response.data);
           this.categories = response.data.data;
@@ -87,6 +82,10 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
   },
   mounted() {
     this.getCategories();

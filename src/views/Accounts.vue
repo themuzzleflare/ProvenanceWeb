@@ -27,9 +27,8 @@ import AccountCell from "@/components/AccountCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import AccountResource from "@/UpAPI/AccountResource";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "Accounts",
@@ -47,8 +46,8 @@ export default defineComponent({
       this.noAccounts = newValue.length === 0;
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
@@ -64,13 +63,10 @@ export default defineComponent({
   },
   methods: {
     getAccounts(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/accounts", {
+      this.$http
+        .get("/accounts", {
           params: {
             "page[size]": "100",
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
           },
         })
         .then((response) => {
@@ -90,6 +86,10 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
   },
   mounted() {
     this.getAccounts();

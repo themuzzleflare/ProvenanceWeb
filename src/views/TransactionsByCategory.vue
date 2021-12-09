@@ -30,10 +30,9 @@ import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import TransactionResource from "@/UpAPI/TransactionResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "TransactionsByCategory",
@@ -52,16 +51,16 @@ export default defineComponent({
       this.noTransactions = newValue.length === 0;
     },
     category(newValue: CategoryResource): void {
-      this.$store.commit("setPageTitle", newValue.attributes.name);
+      this.pageTitle(newValue.attributes.name);
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
-    categoryId(): string | string[] {
-      return this.$route.params.category;
+    categoryId(): string {
+      return this.$route.params.category as string;
     },
     categoryName(): string {
       return this.category.attributes.name;
@@ -80,12 +79,8 @@ export default defineComponent({
   },
   methods: {
     getCategory(): void {
-      axios
-        .get(`https://api.up.com.au/api/v1/categories/${this.categoryId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
+      this.$http
+        .get(`/categories/${this.categoryId}`)
         .then((response) => {
           console.log(response.data);
           this.category = response.data.data;
@@ -95,14 +90,11 @@ export default defineComponent({
         });
     },
     getTransactions(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/transactions", {
+      this.$http
+        .get("/transactions", {
           params: {
             "filter[category]": this.categoryId,
             "page[size]": "100",
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
           },
         })
         .then((response) => {
@@ -122,6 +114,10 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
   },
   mounted() {
     this.getCategory();

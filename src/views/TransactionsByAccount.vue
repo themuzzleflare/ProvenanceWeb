@@ -30,10 +30,9 @@ import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import TransactionResource from "@/UpAPI/TransactionResource";
 import AccountResource from "@/UpAPI/AccountResource";
+import { mapActions, mapMutations } from "vuex";
 
 export default defineComponent({
   name: "TransactionsByAccount",
@@ -52,16 +51,16 @@ export default defineComponent({
       this.noTransactions = newValue.length === 0;
     },
     account(newValue: AccountResource): void {
-      this.$store.commit("setPageTitle", newValue.attributes.displayName);
+      this.pageTitle(newValue.attributes.displayName);
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
-    accountId(): string | string[] {
-      return this.$route.params.account;
+    accountId(): string {
+      return this.$route.params.account as string;
     },
     accountDisplayName(): string {
       return this.account.attributes.displayName;
@@ -80,12 +79,7 @@ export default defineComponent({
   },
   methods: {
     getAccount(): void {
-      axios
-        .get(`https://api.up.com.au/api/v1/accounts/${this.accountId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
+      this.fetchAccount(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.account = response.data.data;
@@ -95,18 +89,7 @@ export default defineComponent({
         });
     },
     getTransactions(): void {
-      axios
-        .get(
-          `https://api.up.com.au/api/v1/accounts/${this.accountId}/transactions`,
-          {
-            params: {
-              "page[size]": "100",
-            },
-            headers: {
-              Authorization: `Bearer ${localStorage.apiKey}`,
-            },
-          }
-        )
+      this.fetchTransactions(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.transactions = response.data.data;
@@ -124,6 +107,14 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
+    ...mapActions({
+      fetchTransactions: "getTransactionsByAccount",
+      fetchAccount: "getAccount",
+    }),
   },
   mounted() {
     this.getAccount();

@@ -10,7 +10,10 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "NoContent",
   props: {
-    message: String,
+    message: {
+      type: String,
+      required: true,
+    },
   },
 });
 </script>

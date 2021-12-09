@@ -27,9 +27,8 @@ import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import TagResource from "@/UpAPI/TagResource";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "Tags",
@@ -47,8 +46,8 @@ export default defineComponent({
       this.noTags = newValue.length === 0;
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
@@ -62,13 +61,10 @@ export default defineComponent({
   },
   methods: {
     getTags(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/tags", {
+      this.$http
+        .get("/tags", {
           params: {
             "page[size]": "100",
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
           },
         })
         .then((response) => {
@@ -88,6 +84,10 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
   },
   mounted() {
     this.getTags();

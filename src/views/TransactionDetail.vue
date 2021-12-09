@@ -138,7 +138,6 @@ import PageNotFound from "@/views/PageNotFound.vue";
 import Spinner from "@/components/Spinner.vue";
 import AttributeCell from "@/components/AttributeCell.vue";
 
-import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -147,6 +146,7 @@ import HoldInfoObject from "@/UpAPI/HoldInfoObject";
 import MoneyObject from "@/UpAPI/MoneyObject";
 import AccountResource from "@/UpAPI/AccountResource";
 import CategoryResource from "@/UpAPI/CategoryResource";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -166,11 +166,11 @@ export default defineComponent({
   },
   watch: {
     transaction(newValue: TransactionResource): void {
-      this.$store.commit("setPageTitle", newValue.attributes.description);
+      this.pageTitle(newValue.attributes.description);
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
@@ -230,14 +230,12 @@ export default defineComponent({
       }
     },
     transactionForeignValue(): string | null {
-      if (this.foreignAmount) {
-        return this.formatAmount(
-          this.foreignAmount.currencyCode,
-          this.foreignAmount.value
-        );
-      } else {
-        return null;
-      }
+      return this.foreignAmount
+        ? this.formatAmount(
+            this.foreignAmount.currencyCode,
+            this.foreignAmount.value
+          )
+        : null;
     },
     transactionAmountValue(): string {
       return this.formatAmount(
@@ -249,24 +247,15 @@ export default defineComponent({
       return this.formatDate(this.transaction.attributes.createdAt);
     },
     transactionSettlementDate(): string | null {
-      if (this.transaction.attributes.settledAt) {
-        return this.formatDate(this.transaction.attributes.settledAt);
-      } else {
-        return null;
-      }
+      return this.transaction.attributes.settledAt
+        ? this.formatDate(this.transaction.attributes.settledAt)
+        : null;
     },
+    ...mapState(["relativeDates"]),
   },
   methods: {
     getTransaction(): void {
-      axios
-        .get(
-          `https://api.up.com.au/api/v1/transactions/${this.transactionId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.apiKey}`,
-            },
-          }
-        )
+      this.fetchTransaction(this.transactionId)
         .then((response) => {
           console.log(response.data);
           this.transaction = response.data.data;
@@ -287,12 +276,7 @@ export default defineComponent({
         });
     },
     getAccount(): void {
-      axios
-        .get(`https://api.up.com.au/api/v1/accounts/${this.accountId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
+      this.fetchAccount(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.account = response.data.data;
@@ -302,15 +286,8 @@ export default defineComponent({
         });
     },
     getTransferAccount(): void {
-      axios
-        .get(
-          `https://api.up.com.au/api/v1/accounts/${this.transferAccountId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.apiKey}`,
-            },
-          }
-        )
+      this.$http
+        .get(`/accounts/${this.transferAccountId}`)
         .then((response) => {
           console.log(response.data);
           this.transferAccount = response.data.data;
@@ -320,12 +297,8 @@ export default defineComponent({
         });
     },
     getCategory(): void {
-      axios
-        .get(`https://api.up.com.au/api/v1/categories/${this.categoryId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
+      this.$http
+        .get(`/categories/${this.categoryId}`)
         .then((response) => {
           console.log(response.data);
           this.category = response.data.data;
@@ -335,15 +308,8 @@ export default defineComponent({
         });
     },
     getParentCategory(): void {
-      axios
-        .get(
-          `https://api.up.com.au/api/v1/categories/${this.parentCategoryId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.apiKey}`,
-            },
-          }
-        )
+      this.$http
+        .get(`/categories/${this.parentCategoryId}`)
         .then((response) => {
           console.log(response.data);
           this.parentCategory = response.data.data;
@@ -374,11 +340,9 @@ export default defineComponent({
       });
     },
     formatDate(date: string): string {
-      if (this.$store.state.relativeDates) {
-        return dayjs().to(dayjs(date));
-      } else {
-        return dayjs(date).tz("Australia/Sydney").format("D MMM, YYYY h:mm A");
-      }
+      return this.relativeDates
+        ? dayjs().to(dayjs(date))
+        : dayjs(date).tz("Australia/Sydney").format("D MMM, YYYY h:mm A");
     },
     formatAmount(currencyCode: string, amount: string): string {
       const formatter = new Intl.NumberFormat("en-AU", {
@@ -388,6 +352,14 @@ export default defineComponent({
       const newAmount = parseFloat(amount);
       return formatter.format(newAmount);
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
+    ...mapActions({
+      fetchTransaction: "getTransaction",
+      fetchAccount: "getAccount",
+    }),
   },
   mounted() {
     this.getTransaction();

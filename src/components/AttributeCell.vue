@@ -6,7 +6,7 @@
     <span
       id="detailText"
       :class="{
-        monoRight: leftText === 'Raw Text',
+        monoRight: isMonoRight,
       }"
       >{{ detailText }}</span
     >
@@ -19,13 +19,23 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "AttributeCell",
   props: {
-    leftText: String,
-    detailText: String,
+    leftText: {
+      type: String,
+      required: true,
+    },
+    detailText: {
+      type: String,
+      required: false,
+    },
+  },
+  computed: {
+    isMonoRight(): boolean {
+      return this.leftText === "Raw Text";
+    },
   },
 });
 </script>
 
-<!--suppress CssUnusedSymbol -->
 <style lang="scss" scoped>
 #horizontalStack {
   display: flex;

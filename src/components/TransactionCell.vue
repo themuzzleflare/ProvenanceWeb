@@ -20,6 +20,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import relativeTime from "dayjs/plugin/relativeTime";
 import TransactionResource from "@/UpAPI/TransactionResource";
+import { mapState } from "vuex";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -49,14 +50,13 @@ export default defineComponent({
     isPositiveAmount(): boolean {
       return parseFloat(this.transaction.attributes.amount.value) > 0;
     },
+    ...mapState(["relativeDates"]),
   },
   methods: {
     formatDate(date: string): string {
-      if (this.$store.state.relativeDates) {
-        return dayjs().to(dayjs(date));
-      } else {
-        return dayjs(date).tz("Australia/Sydney").format("D MMM, YYYY h:mm A");
-      }
+      return this.relativeDates
+        ? dayjs().to(dayjs(date))
+        : dayjs(date).tz("Australia/Sydney").format("D MMM, YYYY h:mm A");
     },
     formatAmount(currencyCode: string, amount: string): string {
       const formatter = new Intl.NumberFormat("en-AU", {
@@ -70,7 +70,6 @@ export default defineComponent({
 });
 </script>
 
-<!--suppress CssUnusedSymbol -->
 <style lang="scss" scoped>
 #horizontalStack {
   display: flex;

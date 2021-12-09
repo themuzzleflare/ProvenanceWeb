@@ -30,9 +30,8 @@ import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
-
 import TransactionResource from "@/UpAPI/TransactionResource";
+import { mapMutations } from "vuex";
 
 export default defineComponent({
   name: "TransactionsByTag",
@@ -50,13 +49,13 @@ export default defineComponent({
       this.noTransactions = newValue.length === 0;
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
-    tagId(): string | string[] {
-      return this.$route.params.tag;
+    tagId(): string {
+      return this.$route.params.tag as string;
     },
     filteredTransactions(): TransactionResource[] {
       return this.transactions.filter(
@@ -72,14 +71,11 @@ export default defineComponent({
   },
   methods: {
     getTransactions(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/transactions", {
+      this.$http
+        .get("/transactions", {
           params: {
             "filter[tag]": this.tagId,
             "page[size]": "100",
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
           },
         })
         .then((response) => {
@@ -99,6 +95,10 @@ export default defineComponent({
         },
       });
     },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
   },
   mounted() {
     this.$store.commit("setPageTitle", this.tagId);

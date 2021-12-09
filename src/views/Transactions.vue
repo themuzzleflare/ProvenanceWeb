@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
+import { mapActions, mapMutations } from "vuex";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -42,7 +43,6 @@ import DateStyleSegmentedControl from "@/components/DateStyleSegmentedControl.vu
 import SettledOnlyCheckbox from "@/components/SettledOnlyCheckbox.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -82,8 +82,8 @@ export default defineComponent({
       this.noTransactions = newValue.length === 0;
     },
     error(newValue: Error): void {
-      this.$store.commit("setPageTitle", newValue.name);
-      this.$store.commit("setPageDescription", newValue.message);
+      this.pageTitle(newValue.name);
+      this.pageDescription(newValue.message);
     },
   },
   computed: {
@@ -122,25 +122,11 @@ export default defineComponent({
     },
   },
   methods: {
-    getTransactions(): void {
-      axios
-        .get("https://api.up.com.au/api/v1/transactions", {
-          params: {
-            "page[size]": "100",
-          },
-          headers: {
-            Authorization: `Bearer ${localStorage.apiKey}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.transactions = response.data.data;
-        })
-        .catch((error) => {
-          console.error(error);
-          this.error = error;
-        });
-    },
+    ...mapMutations({
+      pageTitle: "setPageTitle",
+      pageDescription: "setPageDescription",
+    }),
+    ...mapActions(["getTransactions"]),
     viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
         name: "Transaction Detail",
@@ -160,7 +146,15 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.getTransactions();
+    this.getTransactions()
+      .then((response) => {
+        console.log(response.data);
+        this.transactions = response.data.data;
+      })
+      .catch((error) => {
+        console.error(error);
+        this.error = error;
+      });
   },
 });
 </script>

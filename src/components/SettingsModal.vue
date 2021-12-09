@@ -17,7 +17,7 @@
           <div class="form-floating mb-3">
             <input
               id="floatingInput"
-              v-model="apiKey"
+              v-model="text"
               class="form-control"
               placeholder="API Key"
               type="text"
@@ -49,22 +49,25 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapMutations, mapState } from "vuex";
 
 export default defineComponent({
   name: "SettingsModal",
   data() {
     return {
-      apiKey: "",
+      text: "",
     };
   },
+  computed: mapState(["apiKey"]),
   methods: {
     saveApiKey(): void {
-      this.$store.commit("setApiKey", this.apiKey);
+      this.setApiKey(this.text);
     },
+    ...mapMutations(["setApiKey"]),
   },
   mounted() {
-    if (this.$store.state.apiKey) {
-      this.apiKey = this.$store.state.apiKey;
+    if (this.apiKey) {
+      this.text = this.apiKey;
     }
   },
 });
