@@ -37,7 +37,7 @@
             class="btn btn-primary"
             data-bs-dismiss="modal"
             type="button"
-            @click="saveApiKey"
+            @click="setApiKey(this.text)"
           >
             Save
           </button>
@@ -59,12 +59,7 @@ export default defineComponent({
     };
   },
   computed: mapState(["apiKey"]),
-  methods: {
-    saveApiKey(): void {
-      this.setApiKey(this.text);
-    },
-    ...mapMutations(["setApiKey"]),
-  },
+  methods: mapMutations(["setApiKey"]),
   mounted() {
     if (this.apiKey) {
       this.text = this.apiKey;
