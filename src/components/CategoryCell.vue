@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import CategoryResource from "@/UpAPI/CategoryResource";
+import CategoryResource from "@/upapi/CategoryResource";
 
 export default defineComponent({
   name: "CategoryCell",

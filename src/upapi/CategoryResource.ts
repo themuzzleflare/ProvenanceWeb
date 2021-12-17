@@ -1,8 +1,8 @@
 // Copyright © 2021 Paul Tavitian
 
-import SelfLink from "@/UpAPI/SelfLink";
-import CategoryAttribute from "@/UpAPI/CategoryAttribute";
-import CategoryRelationship from "@/UpAPI/CategoryRelationship";
+import SelfLink from "@/upapi/SelfLink";
+import CategoryAttribute from "@/upapi/CategoryAttribute";
+import CategoryRelationship from "@/upapi/CategoryRelationship";
 
 export default interface CategoryResource {
   type: string;

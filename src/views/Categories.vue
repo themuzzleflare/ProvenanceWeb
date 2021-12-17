@@ -27,7 +27,7 @@ import CategoryCell from "@/components/CategoryCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import CategoryResource from "@/UpAPI/CategoryResource";
+import CategoryResource from "@/upapi/CategoryResource";
 import { mapMutations } from "vuex";
 
 export default defineComponent({

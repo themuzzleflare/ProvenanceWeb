@@ -46,8 +46,8 @@ import NoContent from "@/components/NoContent.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import GroupedTransaction from "@/UpAPI/GroupedTransaction";
-import TransactionResource from "@/UpAPI/TransactionResource";
+import GroupedTransaction from "@/upapi/GroupedTransaction";
+import TransactionResource from "@/upapi/TransactionResource";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

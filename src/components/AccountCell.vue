@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import AccountResource from "@/UpAPI/AccountResource";
+import AccountResource from "@/upapi/AccountResource";
 
 export default defineComponent({
   name: "AccountCell",

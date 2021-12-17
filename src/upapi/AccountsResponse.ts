@@ -1,7 +1,7 @@
 // Copyright © 2021 Paul Tavitian
 
-import Pagination from "@/UpAPI/Pagination";
-import AccountResource from "@/UpAPI/AccountResource";
+import Pagination from "@/upapi/Pagination";
+import AccountResource from "@/upapi/AccountResource";
 
 export default interface AccountsResponse {
   data: AccountResource[];

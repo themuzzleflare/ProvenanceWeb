@@ -1,9 +1,9 @@
 // Copyright © 2021 Paul Tavitian
 
-import MoneyObject from "@/UpAPI/MoneyObject";
-import RoundUpObject from "@/UpAPI/RoundUpObject";
-import HoldInfoObject from "@/UpAPI/HoldInfoObject";
-import CashbackObject from "@/UpAPI/CashbackObject";
+import MoneyObject from "@/upapi/MoneyObject";
+import RoundUpObject from "@/upapi/RoundUpObject";
+import HoldInfoObject from "@/upapi/HoldInfoObject";
+import CashbackObject from "@/upapi/CashbackObject";
 
 export default interface TransactionAttribute {
   status: string;

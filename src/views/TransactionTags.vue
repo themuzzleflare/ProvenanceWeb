@@ -28,8 +28,8 @@ import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import TransactionResource from "@/UpAPI/TransactionResource";
-import TagResource from "@/UpAPI/TagResource";
+import TransactionResource from "@/upapi/TransactionResource";
+import TagResource from "@/upapi/TagResource";
 import { mapActions, mapMutations } from "vuex";
 
 export default defineComponent({

@@ -31,8 +31,8 @@ import { defineComponent, PropType } from "vue";
 
 import TransactionCell from "@/components/TransactionCell.vue";
 
-import GroupedTransaction from "@/UpAPI/GroupedTransaction";
-import TransactionResource from "@/UpAPI/TransactionResource";
+import GroupedTransaction from "@/upapi/GroupedTransaction";
+import TransactionResource from "@/upapi/TransactionResource";
 
 export default defineComponent({
   name: "GroupedTransactionCell",

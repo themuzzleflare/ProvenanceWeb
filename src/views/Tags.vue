@@ -27,7 +27,7 @@ import TagCell from "@/components/TagCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import TagResource from "@/UpAPI/TagResource";
+import TagResource from "@/upapi/TagResource";
 import { mapMutations } from "vuex";
 
 export default defineComponent({

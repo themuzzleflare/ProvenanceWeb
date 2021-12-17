@@ -30,8 +30,8 @@ import SearchBar from "@/components/SearchBar.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import TransactionResource from "@/UpAPI/TransactionResource";
-import AccountResource from "@/UpAPI/AccountResource";
+import TransactionResource from "@/upapi/TransactionResource";
+import AccountResource from "@/upapi/AccountResource";
 import { mapActions, mapMutations } from "vuex";
 
 export default defineComponent({

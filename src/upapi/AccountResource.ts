@@ -1,8 +1,8 @@
 // Copyright © 2021 Paul Tavitian
 
-import SelfLink from "@/UpAPI/SelfLink";
-import AccountAttribute from "@/UpAPI/AccountAttribute";
-import AccountRelationship from "@/UpAPI/AccountRelationship";
+import SelfLink from "@/upapi/SelfLink";
+import AccountAttribute from "@/upapi/AccountAttribute";
+import AccountRelationship from "@/upapi/AccountRelationship";
 
 export default interface AccountResource {
   type: string;

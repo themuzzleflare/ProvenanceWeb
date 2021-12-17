@@ -30,8 +30,8 @@ import Spinner from "@/components/Spinner.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import TransactionResource from "@/UpAPI/TransactionResource";
-import CategoryResource from "@/UpAPI/CategoryResource";
+import TransactionResource from "@/upapi/TransactionResource";
+import CategoryResource from "@/upapi/CategoryResource";
 import { mapMutations } from "vuex";
 
 export default defineComponent({

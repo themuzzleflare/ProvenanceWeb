@@ -27,7 +27,7 @@ import AccountCell from "@/components/AccountCell.vue";
 import Spinner from "@/components/Spinner.vue";
 import NoContent from "@/components/NoContent.vue";
 
-import AccountResource from "@/UpAPI/AccountResource";
+import AccountResource from "@/upapi/AccountResource";
 import { mapMutations } from "vuex";
 
 export default defineComponent({

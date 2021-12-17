@@ -141,11 +141,11 @@ import AttributeCell from "@/components/AttributeCell.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import TransactionResource from "@/UpAPI/TransactionResource";
-import HoldInfoObject from "@/UpAPI/HoldInfoObject";
-import MoneyObject from "@/UpAPI/MoneyObject";
-import AccountResource from "@/UpAPI/AccountResource";
-import CategoryResource from "@/UpAPI/CategoryResource";
+import TransactionResource from "@/upapi/TransactionResource";
+import HoldInfoObject from "@/upapi/HoldInfoObject";
+import MoneyObject from "@/upapi/MoneyObject";
+import AccountResource from "@/upapi/AccountResource";
+import CategoryResource from "@/upapi/CategoryResource";
 import { mapActions, mapMutations, mapState } from "vuex";
 
 dayjs.extend(utc);

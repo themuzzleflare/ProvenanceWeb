@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import TagResource from "@/UpAPI/TagResource";
+import TagResource from "@/upapi/TagResource";
 
 export default defineComponent({
   name: "TagCell",
