@@ -2,6 +2,6 @@
 
 import CategoryResource from "@/UpAPI/CategoryResource";
 
-export default interface Category {
+export default interface CategoriesResponse {
   data: CategoryResource[];
 }

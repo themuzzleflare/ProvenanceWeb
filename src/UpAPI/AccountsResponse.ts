@@ -3,7 +3,7 @@
 import Pagination from "@/UpAPI/Pagination";
 import AccountResource from "@/UpAPI/AccountResource";
 
-export default interface Account {
+export default interface AccountsResponse {
   data: AccountResource[];
   links: Pagination;
 }

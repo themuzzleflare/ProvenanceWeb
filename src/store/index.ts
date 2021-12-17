@@ -3,10 +3,10 @@
 import { createStore } from "vuex";
 
 import {
+  axiosInstance as axios,
   defaultPageDescription,
   defaultPageTitle,
   State,
-  axiosInstance as axios,
 } from "@/constants";
 
 export default createStore<State>({
