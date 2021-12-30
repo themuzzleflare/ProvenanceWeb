@@ -49,7 +49,7 @@ export default createStore<State>({
   },
   actions: {
     getTransactions() {
-      return axios.get(`/transactions`, {
+      return axios.get("/transactions", {
         params: {
           "page[size]": "100",
         },
