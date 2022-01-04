@@ -1,4 +1,4 @@
-// Copyright © 2021 Paul Tavitian
+// Copyright © 2021-2022 Paul Tavitian
 
 import TransactionAttribute from "@/upapi/TransactionAttribute";
 import TransactionRelationship from "@/upapi/TransactionRelationship";

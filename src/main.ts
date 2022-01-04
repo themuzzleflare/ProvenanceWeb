@@ -1,4 +1,4 @@
-// Copyright © 2021 Paul Tavitian
+// Copyright © 2021-2022 Paul Tavitian
 
 import { createApp } from "vue";
 import store from "@/store";

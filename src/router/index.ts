@@ -1,4 +1,4 @@
-// Copyright © 2021 Paul Tavitian
+// Copyright © 2021-2022 Paul Tavitian
 
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { trackRouter } from "vue-gtag-next";
