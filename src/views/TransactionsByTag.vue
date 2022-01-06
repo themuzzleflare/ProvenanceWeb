@@ -32,6 +32,7 @@ import NoContent from "@/components/NoContent.vue";
 
 import TransactionResource from "@/upapi/TransactionResource";
 import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "TransactionsByTag",
@@ -58,26 +59,18 @@ export default defineComponent({
       return this.$route.params.tag as string;
     },
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter(
-        (transaction: TransactionResource): boolean => {
-          return (
-            transaction.attributes.description
-              .toLowerCase()
-              .indexOf(this.searchQuery.toLowerCase()) !== -1
-          );
-        }
-      );
+      return this.transactions.filter((transaction) => {
+        return (
+          transaction.attributes.description
+            .toLowerCase()
+            .indexOf(this.searchQuery.toLowerCase()) !== -1
+        );
+      });
     },
   },
   methods: {
     getTransactions(): void {
-      this.$http
-        .get("/transactions", {
-          params: {
-            "filter[tag]": this.tagId,
-            "page[size]": "100",
-          },
-        })
+      UpFacade.getTransactionsByTag(this.tagId)
         .then((response) => {
           console.log(response.data);
           this.transactions = response.data.data;

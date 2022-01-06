@@ -2,6 +2,6 @@
 
 import TransactionsLinkObject from "@/upapi/TransactionsLinkObject";
 
-export default interface AccountRelationship {
+export default interface TagRelationships {
   transactions: TransactionsLinkObject;
 }

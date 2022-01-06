@@ -1,9 +1,9 @@
 // Copyright © 2021-2022 Paul Tavitian
 
-import TagRelationship from "@/upapi/TagRelationship";
+import TagRelationships from "@/upapi/TagRelationships";
 
 export default interface TagResource {
   type: string;
   id: string;
-  relationships?: TagRelationship;
+  relationships?: TagRelationships;
 }

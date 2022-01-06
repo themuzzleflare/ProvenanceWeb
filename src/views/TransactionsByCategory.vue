@@ -33,6 +33,7 @@ import NoContent from "@/components/NoContent.vue";
 import TransactionResource from "@/upapi/TransactionResource";
 import CategoryResource from "@/upapi/CategoryResource";
 import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "TransactionsByCategory",
@@ -66,21 +67,18 @@ export default defineComponent({
       return this.category.attributes.name;
     },
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter(
-        (transaction: TransactionResource): boolean => {
-          return (
-            transaction.attributes.description
-              .toLowerCase()
-              .indexOf(this.searchQuery.toLowerCase()) !== -1
-          );
-        }
-      );
+      return this.transactions.filter((transaction) => {
+        return (
+          transaction.attributes.description
+            .toLowerCase()
+            .indexOf(this.searchQuery.toLowerCase()) !== -1
+        );
+      });
     },
   },
   methods: {
     getCategory(): void {
-      this.$http
-        .get(`/categories/${this.categoryId}`)
+      UpFacade.getCategory(this.categoryId)
         .then((response) => {
           console.log(response.data);
           this.category = response.data.data;
@@ -90,13 +88,7 @@ export default defineComponent({
         });
     },
     getTransactions(): void {
-      this.$http
-        .get("/transactions", {
-          params: {
-            "filter[category]": this.categoryId,
-            "page[size]": "100",
-          },
-        })
+      UpFacade.getTransactionsByCategory(this.categoryId)
         .then((response) => {
           console.log(response.data);
           this.transactions = response.data.data;

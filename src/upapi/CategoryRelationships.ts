@@ -3,7 +3,7 @@
 import CategoryRelationshipParent from "@/upapi/CategoryRelationshipParent";
 import CategoryRelationshipChildren from "@/upapi/CategoryRelationshipChildren";
 
-export default interface CategoryRelationship {
+export default interface CategoryRelationships {
   parent: CategoryRelationshipParent;
   children: CategoryRelationshipChildren;
 }

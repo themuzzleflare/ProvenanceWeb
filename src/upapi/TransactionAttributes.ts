@@ -5,7 +5,7 @@ import RoundUpObject from "@/upapi/RoundUpObject";
 import HoldInfoObject from "@/upapi/HoldInfoObject";
 import CashbackObject from "@/upapi/CashbackObject";
 
-export default interface TransactionAttribute {
+export default interface TransactionAttributes {
   status: string;
   rawText?: string;
   description: string;

@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { mapActions, mapMutations } from "vuex";
+import { defineComponent } from "vue";
+import { mapMutations } from "vuex";
 
 import PageNotFound from "@/views/PageNotFound.vue";
 import TransactionCell from "@/components/TransactionCell.vue";
@@ -46,8 +46,9 @@ import NoContent from "@/components/NoContent.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import GroupedTransaction from "@/upapi/GroupedTransaction";
+import GroupedTransactions from "@/upapi/GroupedTransactions";
 import TransactionResource from "@/upapi/TransactionResource";
+import UpFacade from "@/UpFacade";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -88,22 +89,19 @@ export default defineComponent({
   },
   computed: {
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter(
-        (transaction: TransactionResource): boolean => {
-          return (
-            (!this.settledOnly ||
-              transaction.attributes.status === "SETTLED") &&
-            transaction.attributes.description
-              .toLowerCase()
-              .indexOf(this.searchQuery.toLowerCase()) !== -1
-          );
-        }
-      );
+      return this.transactions.filter((transaction) => {
+        return (
+          (!this.settledOnly || transaction.attributes.status === "SETTLED") &&
+          transaction.attributes.description
+            .toLowerCase()
+            .indexOf(this.searchQuery.toLowerCase()) !== -1
+        );
+      });
     },
-    groupedTransactions(): GroupedTransaction[] {
-      const modified: TransactionResource[] = this.filteredTransactions.map(
-        (transaction: TransactionResource): TransactionResource => {
-          transaction.attributes["sortingDate"] = dayjs(
+    groupedTransactions(): GroupedTransactions[] {
+      const modified = this.filteredTransactions.map<TransactionResource>(
+        (transaction) => {
+          transaction.attributes.sortingDate = dayjs(
             transaction.attributes.createdAt
           )
             .tz("Australia/Sydney")
@@ -113,11 +111,11 @@ export default defineComponent({
         }
       );
       const grouped: GroupDictionary = this.groupBy(modified, "sortingDate");
-      return Object.keys(grouped).map((key: string): GroupedTransaction => {
-        return reactive<GroupedTransaction>({
+      return Object.keys(grouped).map((key) => {
+        return {
           date: key,
           transactions: grouped[key],
-        });
+        };
       });
     },
   },
@@ -126,7 +124,6 @@ export default defineComponent({
       pageTitle: "setPageTitle",
       pageDescription: "setPageDescription",
     }),
-    ...mapActions(["getTransactions"]),
     viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
         name: "Transaction Detail",
@@ -136,17 +133,14 @@ export default defineComponent({
       });
     },
     groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
-      return xs.reduce(
-        (rv: GroupDictionary, x: TransactionResource): GroupDictionary => {
-          (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
-          return rv;
-        },
-        {}
-      );
+      return xs.reduce<GroupDictionary>((rv, x) => {
+        (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
+        return rv;
+      }, {});
     },
   },
   mounted() {
-    this.getTransactions()
+    UpFacade.fetchTransactions()
       .then((response) => {
         console.log(response.data);
         this.transactions = response.data.data;

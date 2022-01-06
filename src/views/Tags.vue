@@ -29,6 +29,7 @@ import NoContent from "@/components/NoContent.vue";
 
 import TagResource from "@/upapi/TagResource";
 import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "Tags",
@@ -52,7 +53,7 @@ export default defineComponent({
   },
   computed: {
     filteredTags(): TagResource[] {
-      return this.tags.filter((tag: TagResource): boolean => {
+      return this.tags.filter((tag) => {
         return (
           tag.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1
         );
@@ -61,12 +62,7 @@ export default defineComponent({
   },
   methods: {
     getTags(): void {
-      this.$http
-        .get("/tags", {
-          params: {
-            "page[size]": "100",
-          },
-        })
+      UpFacade.getTags()
         .then((response) => {
           console.log(response.data);
           this.tags = response.data.data;

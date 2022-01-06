@@ -147,7 +147,8 @@ import HoldInfoObject from "@/upapi/HoldInfoObject";
 import MoneyObject from "@/upapi/MoneyObject";
 import AccountResource from "@/upapi/AccountResource";
 import CategoryResource from "@/upapi/CategoryResource";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
+import UpFacade from "@/UpFacade";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -176,8 +177,8 @@ export default defineComponent({
     },
   },
   computed: {
-    transactionId(): string | string[] {
-      return this.$route.params.transaction;
+    transactionId(): string {
+      return this.$route.params.transaction as string;
     },
     accountId(): string {
       return this.transaction.relationships.account.data.id;
@@ -257,7 +258,7 @@ export default defineComponent({
   },
   methods: {
     getTransaction(): void {
-      this.fetchTransaction(this.transactionId)
+      UpFacade.getTransaction(this.transactionId)
         .then((response) => {
           console.log(response.data);
           this.transaction = response.data.data;
@@ -278,7 +279,7 @@ export default defineComponent({
         });
     },
     getAccount(): void {
-      this.fetchAccount(this.accountId)
+      UpFacade.getAccount(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.account = response.data.data;
@@ -288,8 +289,7 @@ export default defineComponent({
         });
     },
     getTransferAccount(): void {
-      this.$http
-        .get(`/accounts/${this.transferAccountId}`)
+      UpFacade.getAccount(this.transferAccountId ?? "")
         .then((response) => {
           console.log(response.data);
           this.transferAccount = response.data.data;
@@ -299,8 +299,7 @@ export default defineComponent({
         });
     },
     getCategory(): void {
-      this.$http
-        .get(`/categories/${this.categoryId}`)
+      UpFacade.getCategory(this.categoryId ?? "")
         .then((response) => {
           console.log(response.data);
           this.category = response.data.data;
@@ -310,8 +309,7 @@ export default defineComponent({
         });
     },
     getParentCategory(): void {
-      this.$http
-        .get(`/categories/${this.parentCategoryId}`)
+      UpFacade.getCategory(this.parentCategoryId ?? "")
         .then((response) => {
           console.log(response.data);
           this.parentCategory = response.data.data;
@@ -357,10 +355,6 @@ export default defineComponent({
     ...mapMutations({
       pageTitle: "setPageTitle",
       pageDescription: "setPageDescription",
-    }),
-    ...mapActions({
-      fetchTransaction: "getTransaction",
-      fetchAccount: "getAccount",
     }),
   },
   mounted() {

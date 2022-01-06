@@ -31,7 +31,7 @@ import { defineComponent, PropType } from "vue";
 
 import TransactionCell from "@/components/TransactionCell.vue";
 
-import GroupedTransaction from "@/upapi/GroupedTransaction";
+import GroupedTransactions from "@/upapi/GroupedTransactions";
 import TransactionResource from "@/upapi/TransactionResource";
 
 export default defineComponent({
@@ -39,7 +39,7 @@ export default defineComponent({
   components: { TransactionCell },
   props: {
     groupedTransactions: {
-      type: Array as PropType<GroupedTransaction[]>,
+      type: Array as PropType<GroupedTransactions[]>,
       required: true,
     },
   },

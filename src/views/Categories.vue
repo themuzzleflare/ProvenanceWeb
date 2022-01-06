@@ -29,6 +29,7 @@ import NoContent from "@/components/NoContent.vue";
 
 import CategoryResource from "@/upapi/CategoryResource";
 import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "Categories",
@@ -52,7 +53,7 @@ export default defineComponent({
   },
   computed: {
     filteredCategories(): CategoryResource[] {
-      return this.categories.filter((category: CategoryResource): boolean => {
+      return this.categories.filter((category) => {
         return (
           category.attributes.name
             .toLowerCase()
@@ -63,8 +64,7 @@ export default defineComponent({
   },
   methods: {
     getCategories(): void {
-      this.$http
-        .get("/categories")
+      UpFacade.getCategories()
         .then((response) => {
           console.log(response.data);
           this.categories = response.data.data;

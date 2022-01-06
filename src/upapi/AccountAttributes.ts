@@ -2,7 +2,7 @@
 
 import MoneyObject from "@/upapi/MoneyObject";
 
-export default interface AccountAttribute {
+export default interface AccountAttributes {
   displayName: string;
   accountType: string;
   balance: MoneyObject;

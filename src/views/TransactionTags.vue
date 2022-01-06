@@ -30,7 +30,8 @@ import NoContent from "@/components/NoContent.vue";
 
 import TransactionResource from "@/upapi/TransactionResource";
 import TagResource from "@/upapi/TagResource";
-import { mapActions, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "TransactionTags",
@@ -64,7 +65,7 @@ export default defineComponent({
   },
   methods: {
     getTransaction(): void {
-      this.fetchTransaction(this.transactionId)
+      UpFacade.getTransaction(this.transactionId)
         .then((response) => {
           console.log(response.data);
           this.transaction = response.data.data;
@@ -85,9 +86,6 @@ export default defineComponent({
     ...mapMutations({
       pageTitle: "setPageTitle",
       pageDescription: "setPageDescription",
-    }),
-    ...mapActions({
-      fetchTransaction: "getTransaction",
     }),
   },
   mounted() {

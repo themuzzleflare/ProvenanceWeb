@@ -1,13 +1,13 @@
 // Copyright © 2021-2022 Paul Tavitian
 
-import TransactionAttribute from "@/upapi/TransactionAttribute";
-import TransactionRelationship from "@/upapi/TransactionRelationship";
+import TransactionAttributes from "@/upapi/TransactionAttributes";
+import TransactionRelationships from "@/upapi/TransactionRelationships";
 import SelfLink from "@/upapi/SelfLink";
 
 export default interface TransactionResource {
   type: string;
   id: string;
-  attributes: TransactionAttribute;
-  relationships: TransactionRelationship;
+  attributes: TransactionAttributes;
+  relationships: TransactionRelationships;
   links?: SelfLink;
 }

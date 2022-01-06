@@ -32,7 +32,8 @@ import NoContent from "@/components/NoContent.vue";
 
 import TransactionResource from "@/upapi/TransactionResource";
 import AccountResource from "@/upapi/AccountResource";
-import { mapActions, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "TransactionsByAccount",
@@ -66,20 +67,18 @@ export default defineComponent({
       return this.account.attributes.displayName;
     },
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter(
-        (transaction: TransactionResource): boolean => {
-          return (
-            transaction.attributes.description
-              .toLowerCase()
-              .indexOf(this.searchQuery.toLowerCase()) !== -1
-          );
-        }
-      );
+      return this.transactions.filter((transaction) => {
+        return (
+          transaction.attributes.description
+            .toLowerCase()
+            .indexOf(this.searchQuery.toLowerCase()) !== -1
+        );
+      });
     },
   },
   methods: {
     getAccount(): void {
-      this.fetchAccount(this.accountId)
+      UpFacade.getAccount(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.account = response.data.data;
@@ -89,7 +88,7 @@ export default defineComponent({
         });
     },
     getTransactions(): void {
-      this.fetchTransactions(this.accountId)
+      UpFacade.getTransactionsByAccount(this.accountId)
         .then((response) => {
           console.log(response.data);
           this.transactions = response.data.data;
@@ -110,10 +109,6 @@ export default defineComponent({
     ...mapMutations({
       pageTitle: "setPageTitle",
       pageDescription: "setPageDescription",
-    }),
-    ...mapActions({
-      fetchTransactions: "getTransactionsByAccount",
-      fetchAccount: "getAccount",
     }),
   },
   mounted() {

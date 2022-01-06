@@ -5,7 +5,7 @@ import TransactionRelationshipCategory from "@/upapi/TransactionRelationshipCate
 import TransactionRelationshipTransferAccount from "@/upapi/TransactionRelationshipTransferAccount";
 import TransactionRelationshipAccount from "@/upapi/TransactionRelationshipAccount";
 
-export default interface TransactionRelationship {
+export default interface TransactionRelationships {
   account: TransactionRelationshipAccount;
   transferAccount: TransactionRelationshipTransferAccount;
   category: TransactionRelationshipCategory;

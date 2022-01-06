@@ -2,7 +2,7 @@
 
 import TransactionResource from "@/upapi/TransactionResource";
 
-export default interface GroupedTransaction {
+export default interface GroupedTransactions {
   date: string;
   transactions: TransactionResource[];
 }

@@ -29,6 +29,7 @@ import NoContent from "@/components/NoContent.vue";
 
 import AccountResource from "@/upapi/AccountResource";
 import { mapMutations } from "vuex";
+import UpFacade from "@/UpFacade";
 
 export default defineComponent({
   name: "Accounts",
@@ -63,12 +64,7 @@ export default defineComponent({
   },
   methods: {
     getAccounts(): void {
-      this.$http
-        .get("/accounts", {
-          params: {
-            "page[size]": "100",
-          },
-        })
+      UpFacade.getAccounts()
         .then((response) => {
           console.log(response.data);
           this.accounts = response.data.data;
