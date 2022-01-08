@@ -5,14 +5,6 @@ import { trackRouter } from "vue-gtag-next";
 
 import store from "@/store";
 
-import Transactions from "@/views/Transactions.vue";
-import Accounts from "@/views/Accounts.vue";
-import Tags from "@/views/Tags.vue";
-import Categories from "@/views/Categories.vue";
-import About from "@/views/About.vue";
-
-import PageNotFound from "@/views/PageNotFound.vue";
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -21,7 +13,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/transactions",
     name: "Transactions",
-    component: Transactions,
+    component: () =>
+      import(/* webpackChunkName: "transactions" */ "@/views/Transactions.vue"),
     meta: {
       title: "Transactions",
       description: "View your transactions",
@@ -30,7 +23,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/accounts",
     name: "Accounts",
-    component: Accounts,
+    component: () =>
+      import(/* webpackChunkName: "accounts" */ "@/views/Accounts.vue"),
     meta: {
       title: "Accounts",
       description: "View your accounts",
@@ -39,7 +33,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/tags",
     name: "Tags",
-    component: Tags,
+    component: () => import(/* webpackChunkName: "tags" */ "@/views/Tags.vue"),
     meta: {
       title: "Tags",
       description: "View your tags",
@@ -48,7 +42,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/categories",
     name: "Categories",
-    component: Categories,
+    component: () =>
+      import(/* webpackChunkName: "categories" */ "@/views/Categories.vue"),
     meta: {
       title: "Categories",
       description: "View your categories",
@@ -57,7 +52,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/about",
     name: "About",
-    component: About,
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/About.vue"),
     meta: {
       title: "About",
     },
@@ -108,7 +104,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/404",
-    component: PageNotFound,
+    name: "404",
+    component: () =>
+      import(/* webpackChunkName: "404" */ "@/views/PageNotFound.vue"),
     meta: {
       title: "404",
       description: "Page not found",
@@ -125,9 +123,6 @@ const router = createRouter({
 router.afterEach((to) => {
   store.commit("setPageTitle", to.meta.title);
   store.commit("setPageDescription", to.meta.description);
-  document
-    .querySelector("link[rel=canonical]")
-    ?.setAttribute("href", "https://provenance.tavitian.cloud" + to.path);
 });
 
 trackRouter(router);
