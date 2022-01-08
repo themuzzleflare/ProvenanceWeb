@@ -94,7 +94,7 @@ export default defineComponent({
     }),
   },
   mounted() {
-    this.$store.commit("setPageTitle", this.tagId);
+    this.pageTitle(this.tagId);
     this.getTransactions();
   },
 });

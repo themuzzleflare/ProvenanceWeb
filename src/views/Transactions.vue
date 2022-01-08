@@ -140,7 +140,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    UpFacade.fetchTransactions()
+    UpFacade.getTransactions()
       .then((response) => {
         console.log(response.data);
         this.transactions = response.data.data;

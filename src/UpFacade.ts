@@ -11,7 +11,7 @@ import CategoriesResponse from "@/upapi/CategoriesResponse";
 import AccountsResponse from "@/upapi/AccountsResponse";
 
 export default class UpFacade {
-  static fetchTransactions(): Promise<AxiosResponse<TransactionsResponse>> {
+  static getTransactions(): Promise<AxiosResponse<TransactionsResponse>> {
     return axios.get<TransactionsResponse>("/transactions", {
       params: {
         "page[size]": "100",
