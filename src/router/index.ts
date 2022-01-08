@@ -125,6 +125,9 @@ const router = createRouter({
 router.afterEach((to) => {
   store.commit("setPageTitle", to.meta.title);
   store.commit("setPageDescription", to.meta.description);
+  document
+    .querySelector("link[rel=canonical]")
+    ?.setAttribute("href", "https://provenance.tavitian.cloud" + to.path);
 });
 
 trackRouter(router);
