@@ -73,9 +73,7 @@ import { faCog, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faGithub);
-library.add(faEnvelope);
-library.add(faCog);
+library.add(faGithub, faEnvelope, faCog);
 
 export default defineComponent({
   name: "App",
