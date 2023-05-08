@@ -1,14 +1,14 @@
 // Copyright © 2021-2022 Paul Tavitian
 
-import TransactionRelationshipTag from "@/upapi/TransactionRelationshipTag";
-import TransactionRelationshipCategory from "@/upapi/TransactionRelationshipCategory";
-import TransactionRelationshipTransferAccount from "@/upapi/TransactionRelationshipTransferAccount";
-import TransactionRelationshipAccount from "@/upapi/TransactionRelationshipAccount";
+import type TransactionRelationshipTag from '@/upapi/TransactionRelationshipTag'
+import type TransactionRelationshipCategory from '@/upapi/TransactionRelationshipCategory'
+import type TransactionRelationshipTransferAccount from '@/upapi/TransactionRelationshipTransferAccount'
+import type TransactionRelationshipAccount from '@/upapi/TransactionRelationshipAccount'
 
 export default interface TransactionRelationships {
-  account: TransactionRelationshipAccount;
-  transferAccount: TransactionRelationshipTransferAccount;
-  category: TransactionRelationshipCategory;
-  parentCategory: TransactionRelationshipCategory;
-  tags: TransactionRelationshipTag;
+  account: TransactionRelationshipAccount
+  transferAccount: TransactionRelationshipTransferAccount
+  category: TransactionRelationshipCategory
+  parentCategory: TransactionRelationshipCategory
+  tags: TransactionRelationshipTag
 }

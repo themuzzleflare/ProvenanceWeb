@@ -2,21 +2,21 @@
 
 <template>
   <div class="page-not-found">
-    <h1>{{ error?.name ?? "Error" }}</h1>
-    <h4>{{ error?.message ?? "Page Not Found" }}</h4>
+    <h1>{{ error?.name ?? 'Error' }}</h1>
+    <h4>{{ error?.message ?? 'Page Not Found' }}</h4>
     <router-link to="/">Back to Home</router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "PageNotFound",
+  name: 'PageNotFound',
   props: {
-    error: Error,
-  },
-});
+    error: Error
+  }
+})
 </script>
 
 <style lang="scss" scoped>

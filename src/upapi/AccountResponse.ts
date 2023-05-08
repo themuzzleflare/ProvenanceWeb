@@ -1,8 +1,6 @@
 // Copyright © 2022 Paul Tavitian
 
-import AccountResource from "@/upapi/AccountResource";
-import SingleResourceResponse from "@/upapi/SingleResourceResponse";
+import type AccountResource from '@/upapi/AccountResource'
+import type SingleResourceResponse from '@/upapi/SingleResourceResponse'
 
-type AccountResponse = SingleResourceResponse<AccountResource>;
-
-export default AccountResponse;
+export type AccountResponse = SingleResourceResponse<AccountResource>

@@ -5,24 +5,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
-import TagResource from "@/upapi/TagResource";
+import type TagResource from '@/upapi/TagResource'
 
 export default defineComponent({
-  name: "TagCell",
+  name: 'TagCell',
   props: {
     tag: {
       type: Object as PropType<TagResource>,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     tagName(): string {
-      return this.tag.id;
-    },
-  },
-});
+      return this.tag.id
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

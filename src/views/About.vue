@@ -3,9 +3,8 @@
 <template>
   <div class="about">
     <span>
-      Provenance is a web application that interacts with the Up Banking
-      Developer API to display information about your bank accounts,
-      transactions, categories, tags and more.
+      Provenance is a web application that interacts with the Up Banking Developer API to display
+      information about your bank accounts, transactions, categories, tags and more.
     </span>
     <div class="list-group">
       <a
@@ -28,14 +27,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default defineComponent({
-  name: "About",
-  components: { FontAwesomeIcon },
-});
+  name: 'AboutComp',
+  components: { FontAwesomeIcon }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -9,11 +9,7 @@
     name="list-complete"
     tag="ul"
   >
-    <div
-      id="dateHeader"
-      :key="group.date"
-      class="list-group-item list-group-item-secondary"
-    >
+    <div id="dateHeader" :key="group.date" class="list-group-item list-group-item-secondary">
       <h4>{{ group.date }}</h4>
     </div>
     <TransactionCell
@@ -27,33 +23,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
-import TransactionCell from "@/components/TransactionCell.vue";
+import TransactionCell from '@/components/TransactionCell.vue'
 
-import GroupedTransactions from "@/upapi/GroupedTransactions";
-import TransactionResource from "@/upapi/TransactionResource";
+import type GroupedTransactions from '@/upapi/GroupedTransactions'
+import type TransactionResource from '@/upapi/TransactionResource'
 
 export default defineComponent({
-  name: "GroupedTransactionCell",
+  name: 'GroupedTransactionCell',
   components: { TransactionCell },
   props: {
     groupedTransactions: {
       type: Array as PropType<GroupedTransactions[]>,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
-        name: "Transaction Detail",
+        name: 'Transaction Detail',
         params: {
-          transaction: transaction.id,
-        },
-      });
-    },
-  },
-});
+          transaction: transaction.id
+        }
+      })
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

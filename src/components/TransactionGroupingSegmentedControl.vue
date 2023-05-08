@@ -4,34 +4,42 @@
   <div aria-label="Transaction Grouping" class="btn-group" role="group">
     <input
       id="tgradio1"
-      :checked="this.dateGrouping"
+      :checked="dateGrouping"
       autocomplete="off"
       class="btn-check"
       name="tgradio"
       type="radio"
-      @click="this.setDateGrouping(true)"
+      @click="setDateGrouping(true)"
     />
     <label class="btn btn-outline-primary" for="tgradio1">Dates</label>
     <input
       id="tgradio2"
-      :checked="!this.dateGrouping"
+      :checked="!dateGrouping"
       autocomplete="off"
       class="btn-check"
       name="tgradio"
       type="radio"
-      @click="this.setDateGrouping(false)"
+      @click="setDateGrouping(false)"
     />
     <label class="btn btn-outline-primary" for="tgradio2">Transactions</label>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { mapMutations, mapState } from "vuex";
+import { defineComponent } from 'vue'
+import { mapStores, mapActions, mapState } from 'pinia'
+import { useProvenanceStore } from '@/store'
 
 export default defineComponent({
-  name: "TransactionGroupingSegmentedControl",
-  computed: mapState(["dateGrouping"]),
-  methods: mapMutations(["setDateGrouping"]),
-});
+  name: 'TransactionGroupingSegmentedControl',
+  computed: {
+    ...mapStores(useProvenanceStore),
+    ...mapState(useProvenanceStore, ['dateGrouping'])
+  },
+  methods: {
+    ...mapActions(useProvenanceStore, {
+      setDateGrouping: 'setDateGrouping'
+    })
+  }
+})
 </script>

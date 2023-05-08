@@ -12,23 +12,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "SearchBar",
-  props: ["modelValue"],
-  emits: ["update:modelValue"],
+  name: 'SearchBar',
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   computed: {
     value: {
       get(): string {
-        return this.modelValue;
+        return this.modelValue
       },
       set(newValue: string): void {
-        this.$emit("update:modelValue", newValue);
-      },
-    },
-  },
-});
+        this.$emit('update:modelValue', newValue)
+      }
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -13,10 +13,7 @@
         <SettledOnlyCheckbox v-model="settledOnly" />
       </div>
     </div>
-    <GroupedTransactionCell
-      v-if="this.$store.state.dateGrouping"
-      :grouped-transactions="groupedTransactions"
-    />
+    <GroupedTransactionCell v-if="dateGrouping" :grouped-transactions="groupedTransactions" />
     <transition-group v-else class="list-group" name="list-complete" tag="ul">
       <TransactionCell
         v-for="transaction in filteredTransactions"
@@ -30,34 +27,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { mapMutations } from "vuex";
+import { defineComponent } from 'vue'
+import { mapActions, mapState, mapStores } from 'pinia'
 
-import PageNotFound from "@/views/PageNotFound.vue";
-import TransactionCell from "@/components/TransactionCell.vue";
-import Spinner from "@/components/Spinner.vue";
-import SearchBar from "@/components/SearchBar.vue";
-import GroupedTransactionCell from "@/components/GroupedTransactionCell.vue";
-import TransactionGroupingSegmentedControl from "@/components/TransactionGroupingSegmentedControl.vue";
-import DateStyleSegmentedControl from "@/components/DateStyleSegmentedControl.vue";
-import SettledOnlyCheckbox from "@/components/SettledOnlyCheckbox.vue";
-import NoContent from "@/components/NoContent.vue";
+import PageNotFound from '@/views/PageNotFound.vue'
+import TransactionCell from '@/components/TransactionCell.vue'
+import Spinner from '@/components/Spinner.vue'
+import SearchBar from '@/components/SearchBar.vue'
+import GroupedTransactionCell from '@/components/GroupedTransactionCell.vue'
+import TransactionGroupingSegmentedControl from '@/components/TransactionGroupingSegmentedControl.vue'
+import DateStyleSegmentedControl from '@/components/DateStyleSegmentedControl.vue'
+import SettledOnlyCheckbox from '@/components/SettledOnlyCheckbox.vue'
+import NoContent from '@/components/NoContent.vue'
 
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import GroupedTransactions from "@/upapi/GroupedTransactions";
-import TransactionResource from "@/upapi/TransactionResource";
-import UpFacade from "@/UpFacade";
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import type GroupedTransactions from '@/upapi/GroupedTransactions'
+import type TransactionResource from '@/upapi/TransactionResource'
+import UpFacade from '@/UpFacade'
+import useProvenanceStore from '@/store'
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
-type GroupDictionary = Record<string, TransactionResource[]>;
-type SortingDate = "sortingDate";
+type GroupDictionary = Record<string, TransactionResource[]>
+type SortingDate = 'sortingDate'
 
 export default defineComponent({
-  name: "Transactions",
+  name: 'TransactionsComp',
   components: {
     PageNotFound,
     SettledOnlyCheckbox,
@@ -67,90 +65,89 @@ export default defineComponent({
     TransactionCell,
     Spinner,
     SearchBar,
-    NoContent,
+    NoContent
   },
   data() {
     return {
       transactions: null as unknown as TransactionResource[],
       error: null as unknown as Error,
-      searchQuery: "",
+      searchQuery: '',
       settledOnly: false,
-      noTransactions: false,
-    };
+      noTransactions: false
+    }
   },
   watch: {
     transactions(newValue: TransactionResource[]): void {
-      this.noTransactions = newValue.length === 0;
+      this.noTransactions = newValue.length === 0
     },
     error(newValue: Error): void {
-      this.pageTitle(newValue.name);
-      this.pageDescription(newValue.message);
-    },
+      this.pageTitle(newValue.name)
+      this.pageDescription(newValue.message)
+    }
   },
   computed: {
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction) => {
+      return this.transactions.filter((transaction: TransactionResource) => {
         return (
-          (!this.settledOnly || transaction.attributes.status === "SETTLED") &&
+          (!this.settledOnly || transaction.attributes.status === 'SETTLED') &&
           transaction.attributes.description
             .toLowerCase()
             .indexOf(this.searchQuery.toLowerCase()) !== -1
-        );
-      });
+        )
+      })
     },
     groupedTransactions(): GroupedTransactions[] {
-      const modified = this.filteredTransactions.map<TransactionResource>(
-        (transaction) => {
-          transaction.attributes.sortingDate = dayjs(
-            transaction.attributes.createdAt
-          )
-            .tz("Australia/Sydney")
-            .startOf("day")
-            .format("DD/MM/YYYY");
-          return transaction;
-        }
-      );
-      const grouped: GroupDictionary = this.groupBy(modified, "sortingDate");
+      const modified = this.filteredTransactions.map((transaction: TransactionResource) => {
+        transaction.attributes.sortingDate = dayjs(transaction.attributes.createdAt)
+          .tz('Australia/Sydney')
+          .startOf('day')
+          .format('DD/MM/YYYY')
+        return transaction
+      })
+
+      const grouped: GroupDictionary = this.groupBy(modified, 'sortingDate')
       return Object.keys(grouped).map((key) => {
         return {
           date: key,
-          transactions: grouped[key],
-        };
-      });
+          transactions: grouped[key]
+        }
+      })
     },
+    ...mapStores(useProvenanceStore),
+    ...mapState(useProvenanceStore, ['dateGrouping'])
   },
   methods: {
-    ...mapMutations({
-      pageTitle: "setPageTitle",
-      pageDescription: "setPageDescription",
-    }),
     viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
-        name: "Transaction Detail",
+        name: 'Transaction Detail',
         params: {
-          transaction: transaction.id,
-        },
-      });
+          transaction: transaction.id
+        }
+      })
     },
     groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
       return xs.reduce<GroupDictionary>((rv, x) => {
-        (rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x);
-        return rv;
-      }, {});
+        ;(rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x)
+        return rv
+      }, {})
     },
+    ...mapActions(useProvenanceStore, {
+      pageTitle: 'setPageTitle',
+      pageDescription: 'setPageDescription'
+    })
   },
   mounted() {
     UpFacade.getTransactions()
       .then((response) => {
-        console.log(response.data);
-        this.transactions = response.data.data;
+        console.log(response.data)
+        this.transactions = response.data.data
       })
       .catch((error) => {
-        console.error(error);
-        this.error = error;
-      });
-  },
-});
+        console.error(error)
+        this.error = error
+      })
+  }
+})
 </script>
 
 <style lang="scss" scoped>

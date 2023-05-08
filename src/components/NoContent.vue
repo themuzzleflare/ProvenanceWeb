@@ -5,17 +5,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "NoContent",
+  name: 'NoContent',
   props: {
     message: {
       type: String,
-      required: true,
-    },
-  },
-});
+      required: true
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

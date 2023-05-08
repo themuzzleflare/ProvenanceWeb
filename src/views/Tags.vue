@@ -19,76 +19,75 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import PageNotFound from "@/views/PageNotFound.vue";
-import SearchBar from "@/components/SearchBar.vue";
-import TagCell from "@/components/TagCell.vue";
-import Spinner from "@/components/Spinner.vue";
-import NoContent from "@/components/NoContent.vue";
+import PageNotFound from '@/views/PageNotFound.vue'
+import SearchBar from '@/components/SearchBar.vue'
+import TagCell from '@/components/TagCell.vue'
+import Spinner from '@/components/Spinner.vue'
+import NoContent from '@/components/NoContent.vue'
 
-import TagResource from "@/upapi/TagResource";
-import { mapMutations } from "vuex";
-import UpFacade from "@/UpFacade";
+import type TagResource from '@/upapi/TagResource'
+import { mapActions } from 'pinia'
+import UpFacade from '@/UpFacade'
+import { useProvenanceStore } from '@/store'
 
 export default defineComponent({
-  name: "Tags",
+  name: 'TagsComp',
   components: { PageNotFound, SearchBar, TagCell, Spinner, NoContent },
   data() {
     return {
       tags: null as unknown as TagResource[],
       error: null as unknown as Error,
-      searchQuery: "",
-      noTags: false,
-    };
+      searchQuery: '',
+      noTags: false
+    }
   },
   watch: {
     tags(newValue: TagResource[]): void {
-      this.noTags = newValue.length === 0;
+      this.noTags = newValue.length === 0
     },
     error(newValue: Error): void {
-      this.pageTitle(newValue.name);
-      this.pageDescription(newValue.message);
-    },
+      this.pageTitle(newValue.name)
+      this.pageDescription(newValue.message)
+    }
   },
   computed: {
     filteredTags(): TagResource[] {
-      return this.tags.filter((tag) => {
-        return (
-          tag.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1
-        );
-      });
-    },
+      return this.tags.filter((tag: TagResource) => {
+        return tag.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1
+      })
+    }
   },
   methods: {
     getTags(): void {
       UpFacade.getTags()
         .then((response) => {
-          console.log(response.data);
-          this.tags = response.data.data;
+          console.log(response.data)
+          this.tags = response.data.data
         })
         .catch((error) => {
-          console.error(error);
-          this.error = error;
-        });
+          console.error(error)
+          this.error = error
+        })
     },
     listTransactionsByTag(tag: TagResource): void {
       this.$router.push({
-        name: "Transactions By Tag",
+        name: 'Transactions By Tag',
         params: {
-          tag: tag.id,
-        },
-      });
+          tag: tag.id
+        }
+      })
     },
-    ...mapMutations({
-      pageTitle: "setPageTitle",
-      pageDescription: "setPageDescription",
-    }),
+    ...mapActions(useProvenanceStore, {
+      pageTitle: 'setPageTitle',
+      pageDescription: 'setPageDescription'
+    })
   },
   mounted() {
-    this.getTags();
-  },
-});
+    this.getTags()
+  }
+})
 </script>
 
 <style lang="scss" scoped>

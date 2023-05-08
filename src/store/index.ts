@@ -1,45 +1,53 @@
+/*
+ * Copyright © 2023 Paul Tavitian.
+ */
+
 // Copyright © 2021-2022 Paul Tavitian
 
-import { createStore } from "vuex";
+import { defineStore } from 'pinia'
 
-import { defaultPageDescription, defaultPageTitle, State } from "@/constants";
+import { defaultPageDescription, defaultPageTitle } from '@/constants'
+import type { State } from '@/constants'
 
-export default createStore<State>({
-  state: {
-    relativeDates: localStorage.relativeDates === "1",
-    dateGrouping: localStorage.dateGrouping === "1",
+export const useProvenanceStore = defineStore('provenanceStore', {
+  // convert to a function
+  state: (): State => ({
+    relativeDates: localStorage.relativeDates === '1',
+    dateGrouping: localStorage.dateGrouping === '1',
     pageTitle: defaultPageTitle,
     pageDescription: defaultPageDescription,
-    apiKey: localStorage.apiKey,
-  },
-  mutations: {
-    setRelativeDates(state: State, payload: boolean): void {
-      localStorage.relativeDates = payload ? "1" : "0";
-      state.relativeDates = payload;
+    apiKey: localStorage.apiKey
+  }),
+  actions: {
+    setRelativeDates(payload: boolean): void {
+      localStorage.relativeDates = payload ? '1' : '0'
+      this.relativeDates = payload
     },
-    setDateGrouping(state: State, payload: boolean): void {
-      localStorage.dateGrouping = payload ? "1" : "0";
-      state.dateGrouping = payload;
+    setDateGrouping(payload: boolean): void {
+      localStorage.dateGrouping = payload ? '1' : '0'
+      this.dateGrouping = payload
     },
-    setPageTitle(state: State, pageTitle: string): void {
-      if (!pageTitle) pageTitle = defaultPageTitle;
-      else pageTitle += " | Provenance";
-      state.pageTitle = pageTitle;
-      document.title = pageTitle;
+    setPageTitle(pageTitle: string): void {
+      if (!pageTitle) pageTitle = defaultPageTitle
+      else pageTitle += ' | Provenance'
+      this.pageTitle = pageTitle
+      document.title = pageTitle
       document
-        .querySelectorAll(".page-title-meta")
-        .forEach((el) => el.setAttribute("content", pageTitle));
+        .querySelectorAll('.page-title-meta')
+        .forEach((el) => el.setAttribute('content', pageTitle))
     },
-    setPageDescription(state: State, pageDescription: string): void {
-      if (!pageDescription) pageDescription = defaultPageDescription;
-      state.pageDescription = pageDescription;
+    setPageDescription(pageDescription: string): void {
+      if (!pageDescription) pageDescription = defaultPageDescription
+      this.pageDescription = pageDescription
       document
-        .querySelectorAll(".page-description-meta")
-        .forEach((el) => el.setAttribute("content", pageDescription));
+        .querySelectorAll('.page-description-meta')
+        .forEach((el) => el.setAttribute('content', pageDescription))
     },
-    setApiKey(state: State, apiKey: string): void {
-      localStorage.apiKey = apiKey;
-      state.apiKey = apiKey;
-    },
-  },
-});
+    setApiKey(apiKey: string): void {
+      localStorage.apiKey = apiKey
+      this.apiKey = apiKey
+    }
+  }
+})
+
+export default useProvenanceStore

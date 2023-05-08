@@ -22,100 +22,101 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import PageNotFound from "@/views/PageNotFound.vue";
-import Spinner from "@/components/Spinner.vue";
-import SearchBar from "@/components/SearchBar.vue";
-import TransactionCell from "@/components/TransactionCell.vue";
-import NoContent from "@/components/NoContent.vue";
+import PageNotFound from '@/views/PageNotFound.vue'
+import Spinner from '@/components/Spinner.vue'
+import SearchBar from '@/components/SearchBar.vue'
+import TransactionCell from '@/components/TransactionCell.vue'
+import NoContent from '@/components/NoContent.vue'
 
-import TransactionResource from "@/upapi/TransactionResource";
-import AccountResource from "@/upapi/AccountResource";
-import { mapMutations } from "vuex";
-import UpFacade from "@/UpFacade";
+import type TransactionResource from '@/upapi/TransactionResource'
+import type AccountResource from '@/upapi/AccountResource'
+import { mapActions } from 'pinia'
+import UpFacade from '@/UpFacade'
+import { useProvenanceStore } from '@/store'
 
 export default defineComponent({
-  name: "TransactionsByAccount",
+  name: 'TransactionsByAccount',
   components: { PageNotFound, SearchBar, Spinner, TransactionCell, NoContent },
   data() {
     return {
       account: null as unknown as AccountResource,
       transactions: null as unknown as TransactionResource[],
       error: null as unknown as Error,
-      searchQuery: "",
-      noTransactions: false,
-    };
+      searchQuery: '',
+      noTransactions: false
+    }
   },
   watch: {
     transactions(newValue: TransactionResource[]): void {
-      this.noTransactions = newValue.length === 0;
+      this.noTransactions = newValue.length === 0
     },
     account(newValue: AccountResource): void {
-      this.pageTitle(newValue.attributes.displayName);
+      this.pageTitle(newValue.attributes.displayName)
     },
     error(newValue: Error): void {
-      this.pageTitle(newValue.name);
-      this.pageDescription(newValue.message);
-    },
+      this.pageTitle(newValue.name)
+      this.pageDescription(newValue.message)
+    }
   },
   computed: {
     accountId(): string {
-      return this.$route.params.account as string;
+      return this.$route.params.account as string
     },
     accountDisplayName(): string {
-      return this.account.attributes.displayName;
+      return this.account.attributes.displayName
     },
     filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction) => {
+      return this.transactions.filter((transaction: TransactionResource) => {
         return (
           transaction.attributes.description
             .toLowerCase()
             .indexOf(this.searchQuery.toLowerCase()) !== -1
-        );
-      });
-    },
+        )
+      })
+    }
   },
   methods: {
     getAccount(): void {
       UpFacade.getAccount(this.accountId)
         .then((response) => {
-          console.log(response.data);
-          this.account = response.data.data;
+          console.log(response.data)
+          this.account = response.data.data
         })
         .catch((error) => {
-          console.error(error);
-        });
+          console.error(error)
+        })
     },
     getTransactions(): void {
       UpFacade.getTransactionsByAccount(this.accountId)
         .then((response) => {
-          console.log(response.data);
-          this.transactions = response.data.data;
+          console.log(response.data)
+          this.transactions = response.data.data
         })
         .catch((error) => {
-          console.error(error);
-          this.error = error;
-        });
+          console.error(error)
+          this.error = error
+        })
     },
     viewTransactionDetails(transaction: TransactionResource): void {
       this.$router.push({
-        name: "Transaction Detail",
+        name: 'Transaction Detail',
         params: {
-          transaction: transaction.id,
-        },
-      });
+          transaction: transaction.id
+        }
+      })
     },
-    ...mapMutations({
-      pageTitle: "setPageTitle",
-      pageDescription: "setPageDescription",
-    }),
+    ...mapActions(useProvenanceStore, {
+      pageTitle: 'setPageTitle',
+      pageDescription: 'setPageDescription'
+    })
   },
   mounted() {
-    this.getAccount();
-    this.getTransactions();
-  },
-});
+    this.getAccount()
+    this.getTransactions()
+  }
+})
 </script>
 
 <style lang="scss" scoped>

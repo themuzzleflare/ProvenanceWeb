@@ -1,9 +1,9 @@
 // Copyright © 2021-2022 Paul Tavitian
 
-import Pagination from "@/upapi/Pagination";
-import TagResource from "@/upapi/TagResource";
+import type Pagination from '@/upapi/Pagination'
+import type TagResource from '@/upapi/TagResource'
 
 export default interface TagsResponse {
-  data: TagResource[];
-  links: Pagination;
+  data: TagResource[]
+  links: Pagination
 }

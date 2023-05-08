@@ -1,8 +1,6 @@
 // Copyright © 2022 Paul Tavitian
 
-import SingleResourceResponse from "@/upapi/SingleResourceResponse";
-import CategoryResource from "@/upapi/CategoryResource";
+import type SingleResourceResponse from '@/upapi/SingleResourceResponse'
+import type CategoryResource from '@/upapi/CategoryResource'
 
-type CategoryResponse = SingleResourceResponse<CategoryResource>;
-
-export default CategoryResponse;
+export type CategoryResponse = SingleResourceResponse<CategoryResource>

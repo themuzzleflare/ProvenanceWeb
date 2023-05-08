@@ -2,32 +2,27 @@
 
 <template>
   <div class="form-check">
-    <input
-      id="settledOnly"
-      v-model="value"
-      class="form-check-input"
-      type="checkbox"
-    />
+    <input id="settledOnly" v-model="value" class="form-check-input" type="checkbox" />
     <label class="form-check-label" for="settledOnly">Settled Only</label>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "SettledOnlyCheckbox",
-  props: ["modelValue"],
-  emits: ["update:modelValue"],
+  name: 'SettledOnlyCheckbox',
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   computed: {
     value: {
       get(): boolean {
-        return this.modelValue;
+        return this.modelValue
       },
       set(newValue: boolean): void {
-        this.$emit("update:modelValue", newValue);
-      },
-    },
-  },
-});
+        this.$emit('update:modelValue', newValue)
+      }
+    }
+  }
+})
 </script>

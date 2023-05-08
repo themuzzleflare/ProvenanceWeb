@@ -6,7 +6,7 @@
     <span
       id="detailText"
       :class="{
-        monoRight: isMonoRight,
+        monoRight: isMonoRight
       }"
       >{{ detailText }}</span
     >
@@ -14,26 +14,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "AttributeCell",
+  name: 'AttributeCell',
   props: {
     leftText: {
       type: String,
-      required: true,
+      required: true
     },
     detailText: {
       type: String,
-      required: false,
-    },
+      required: false
+    }
   },
   computed: {
     isMonoRight(): boolean {
-      return this.leftText === "Raw Text";
-    },
-  },
-});
+      return this.leftText === 'Raw Text'
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +52,6 @@ export default defineComponent({
 }
 
 .monoRight {
-  font-family: "sf-mono", monospace;
+  font-family: 'sf-mono', monospace;
 }
 </style>

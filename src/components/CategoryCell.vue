@@ -5,24 +5,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
-import CategoryResource from "@/upapi/CategoryResource";
+import type CategoryResource from '@/upapi/CategoryResource'
 
 export default defineComponent({
-  name: "CategoryCell",
+  name: 'CategoryCell',
   props: {
     category: {
       type: Object as PropType<CategoryResource>,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     categoryName(): string {
-      return this.category.attributes.name;
-    },
-  },
-});
+      return this.category.attributes.name
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

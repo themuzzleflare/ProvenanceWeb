@@ -1,8 +1,8 @@
 // Copyright © 2021-2022 Paul Tavitian
 
-import MoneyObject from "@/upapi/MoneyObject";
+import type MoneyObject from '@/upapi/MoneyObject'
 
 export default interface HoldInfoObject {
-  amount: MoneyObject;
-  foreignAmount?: MoneyObject;
+  amount: MoneyObject
+  foreignAmount?: MoneyObject
 }

@@ -26,18 +26,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            type="button"
-          >
-            Close
-          </button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
           <button
             class="btn btn-primary"
             data-bs-dismiss="modal"
             type="button"
-            @click="setApiKey(this.text)"
+            @click="setKeyApi(text)"
           >
             Save
           </button>
@@ -48,22 +42,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { mapMutations, mapState } from "vuex";
+import { defineComponent } from 'vue'
+import { mapStores, mapActions, mapState } from 'pinia'
+import { useProvenanceStore } from '@/store'
 
 export default defineComponent({
-  name: "SettingsModal",
+  name: 'SettingsModal',
   data() {
     return {
-      text: "",
-    };
-  },
-  computed: mapState(["apiKey"]),
-  methods: mapMutations(["setApiKey"]),
-  mounted() {
-    if (this.apiKey) {
-      this.text = this.apiKey;
+      text: ''
     }
   },
-});
+  computed: {
+    ...mapStores(useProvenanceStore),
+    ...mapState(useProvenanceStore, ['apiKey'])
+  },
+  methods: {
+    ...mapActions(useProvenanceStore, {
+      setKeyApi: 'setApiKey'
+    })
+  },
+  mounted() {
+    if (this.apiKey) {
+      this.text = this.apiKey
+    }
+  }
+})
 </script>

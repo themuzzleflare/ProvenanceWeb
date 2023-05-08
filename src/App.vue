@@ -29,9 +29,7 @@
       <div id="navbarSupportedContent" class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/transactions"
-              >Transactions
-            </router-link>
+            <router-link class="nav-link" to="/transactions">Transactions </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/accounts">Accounts</router-link>
@@ -40,19 +38,13 @@
             <router-link class="nav-link" to="/tags">Tags</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/categories"
-              >Categories
-            </router-link>
+            <router-link class="nav-link" to="/categories">Categories </router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>
           </li>
         </ul>
-        <button
-          class="d-flex btn btn-outline-primary"
-          type="button"
-          @click="openSettingsModal"
-        >
+        <button class="d-flex btn btn-outline-primary" type="button" @click="openSettingsModal">
           <font-awesome-icon :icon="['fas', 'cog']" />
         </button>
       </div>
@@ -62,77 +54,77 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import APIKeyModal from "@/components/APIKeyModal.vue";
-import SettingsModal from "@/components/SettingsModal.vue";
+import APIKeyModal from '@/components/APIKeyModal.vue'
+import SettingsModal from '@/components/SettingsModal.vue'
 
-import * as bootstrap from "bootstrap";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCog, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import * as bootstrap from 'bootstrap'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faGithub, faEnvelope, faCog);
+library.add(faGithub, faEnvelope, faCog)
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: { SettingsModal, APIKeyModal, FontAwesomeIcon },
   methods: {
     checkApiKey(): void {
       if (!localStorage.apiKey) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const el: HTMLElement = document.getElementById("apiKeyModal")!;
-        const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el);
-        apiKeyModal.toggle();
+        const el: HTMLElement = document.getElementById('apiKeyModal')!
+        const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el)
+        apiKeyModal.toggle()
       }
     },
     openSettingsModal(): void {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const el: HTMLElement = document.getElementById("settingsModal")!;
-      const settingsModal: bootstrap.Modal = new bootstrap.Modal(el);
-      settingsModal.toggle();
-    },
+      const el: HTMLElement = document.getElementById('settingsModal')!
+      const settingsModal: bootstrap.Modal = new bootstrap.Modal(el)
+      settingsModal.toggle()
+    }
   },
   mounted() {
-    this.checkApiKey();
-  },
-});
+    this.checkApiKey()
+  }
+})
 </script>
 
 <style lang="scss">
-@import "~bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap.scss';
 
 @font-face {
-  font-family: "circular-std";
-  src: url("fonts/CircularStd-Book.otf");
+  font-family: 'circular-std';
+  src: url('fonts/CircularStd-Book.otf');
 }
 
 @font-face {
-  font-family: "circular-std";
+  font-family: 'circular-std';
   font-style: italic;
-  src: url("fonts/CircularStd-BookItalic.ttf");
+  src: url('fonts/CircularStd-BookItalic.ttf');
 }
 
 @font-face {
-  font-family: "circular-std";
+  font-family: 'circular-std';
   font-weight: 500;
-  src: url("fonts/CircularStd-Medium.otf");
+  src: url('fonts/CircularStd-Medium.otf');
 }
 
 @font-face {
-  font-family: "circular-std";
+  font-family: 'circular-std';
   font-weight: bold;
-  src: url("fonts/CircularStd-Bold.otf");
+  src: url('fonts/CircularStd-Bold.otf');
 }
 
 @font-face {
-  font-family: "sf-mono";
-  src: url("fonts/SF-Mono-Regular.otf");
+  font-family: 'sf-mono';
+  src: url('fonts/SF-Mono-Regular.otf');
 }
 
 #app {
-  font-family: "circular-std", sans-serif;
+  font-family: 'circular-std', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
