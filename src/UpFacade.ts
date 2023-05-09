@@ -1,4 +1,6 @@
-// Copyright © 2022 Paul Tavitian
+/*
+ * Copyright © 2022-2023 Paul Tavitian.
+ */
 
 import { axiosInstance as axios } from '@/constants'
 import type TransactionsResponse from '@/upapi/TransactionsResponse'

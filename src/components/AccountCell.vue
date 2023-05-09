@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <div id="verticalStack">
@@ -7,42 +9,34 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
 import type AccountResource from '@/upapi/AccountResource'
 
-export default defineComponent({
-  name: 'AccountCell',
-  props: {
-    account: {
-      type: Object as PropType<AccountResource>,
-      required: true
-    }
-  },
-  computed: {
-    accountBalance(): string {
-      return this.formatBalance(
-        this.account.attributes.balance.currencyCode,
-        this.account.attributes.balance.value
-      )
-    },
-    accountDisplayName(): string {
-      return this.account.attributes.displayName
-    }
-  },
-  methods: {
-    formatBalance(currencyCode: string, balance: string): string {
-      const formatter = new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: currencyCode
-      })
-      const newBalance = parseFloat(balance)
-      return formatter.format(newBalance)
-    }
-  }
+const props = defineProps<{
+  account: AccountResource
+}>()
+
+const accountBalance = computed(() => {
+  return formatBalance(
+    props.account.attributes.balance.currencyCode,
+    props.account.attributes.balance.value
+  )
 })
+
+const accountDisplayName = computed(() => {
+  return props.account.attributes.displayName
+})
+
+function formatBalance(currencyCode: string, balance: string): string {
+  const formatter = new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: currencyCode
+  })
+  const newBalance = parseFloat(balance)
+  return formatter.format(newBalance)
+}
 </script>
 
 <style lang="scss" scoped>

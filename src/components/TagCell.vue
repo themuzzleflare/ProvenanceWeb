@@ -1,28 +1,22 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <span id="tagName">{{ tagName }}</span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
 import type TagResource from '@/upapi/TagResource'
 
-export default defineComponent({
-  name: 'TagCell',
-  props: {
-    tag: {
-      type: Object as PropType<TagResource>,
-      required: true
-    }
-  },
-  computed: {
-    tagName(): string {
-      return this.tag.id
-    }
-  }
+const props = defineProps<{
+  tag: TagResource
+}>()
+
+const tagName = computed(() => {
+  return props.tag.id
 })
 </script>
 

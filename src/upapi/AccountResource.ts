@@ -1,4 +1,6 @@
-// Copyright © 2021-2022 Paul Tavitian
+/*
+ * Copyright © 2021-2023 Paul Tavitian.
+ */
 
 import type SelfLink from '@/upapi/SelfLink'
 import type AccountAttributes from '@/upapi/AccountAttributes'

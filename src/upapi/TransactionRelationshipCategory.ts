@@ -1,4 +1,6 @@
-// Copyright © 2021-2022 Paul Tavitian
+/*
+ * Copyright © 2021-2023 Paul Tavitian.
+ */
 
 import type RelationshipData from '@/upapi/RelationshipData'
 import type RelatedLink from '@/upapi/RelatedLink'

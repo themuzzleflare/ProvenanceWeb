@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <div aria-label="Transaction Grouping" class="btn-group" role="group">
@@ -25,21 +27,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapStores, mapActions, mapState } from 'pinia'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { useProvenanceStore } from '@/store'
 
-export default defineComponent({
-  name: 'TransactionGroupingSegmentedControl',
-  computed: {
-    ...mapStores(useProvenanceStore),
-    ...mapState(useProvenanceStore, ['dateGrouping'])
-  },
-  methods: {
-    ...mapActions(useProvenanceStore, {
-      setDateGrouping: 'setDateGrouping'
-    })
-  }
+const dateGrouping = computed(() => {
+  return useProvenanceStore().dateGrouping
 })
+
+function setDateGrouping(dateGrouping: boolean): void {
+  useProvenanceStore().setDateGrouping(dateGrouping)
+}
 </script>

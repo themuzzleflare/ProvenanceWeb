@@ -1,29 +1,21 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <span id="categoryName">{{ categoryName }}</span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
 import type CategoryResource from '@/upapi/CategoryResource'
 
-export default defineComponent({
-  name: 'CategoryCell',
-  props: {
-    category: {
-      type: Object as PropType<CategoryResource>,
-      required: true
-    }
-  },
-  computed: {
-    categoryName(): string {
-      return this.category.attributes.name
-    }
-  }
-})
+const props = defineProps<{
+  category: CategoryResource
+}>()
+
+const categoryName = computed(() => props.category.attributes.name)
 </script>
 
 <style lang="scss" scoped>

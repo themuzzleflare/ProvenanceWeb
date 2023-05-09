@@ -1,4 +1,54 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2023 Paul Tavitian.
+  -->
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import type TransactionResource from '@/upapi/TransactionResource'
+import { useProvenanceStore } from '@/store'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.extend(relativeTime)
+
+const props = defineProps<{
+  transaction: TransactionResource
+}>()
+
+const store = useProvenanceStore()
+
+const description = computed(() => props.transaction.attributes.description)
+const creationDate = computed(() => formatDate(props.transaction.attributes.createdAt))
+const amount = computed(() =>
+  formatAmount(
+    props.transaction.attributes.amount.currencyCode,
+    props.transaction.attributes.amount.value
+  )
+)
+const isPositiveAmount = computed(() => parseFloat(props.transaction.attributes.amount.value) > 0)
+
+const relativeDates = computed(() => store.relativeDates)
+
+function formatDate(date: string): string {
+  return relativeDates.value
+    ? dayjs().to(dayjs(date))
+    : dayjs(date).tz('Australia/Sydney').format('D MMM, YYYY h:mm A')
+}
+
+function formatAmount(currencyCode: string, amount: string): string {
+  const formatter = new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: currencyCode
+  })
+  const newAmount = parseFloat(amount)
+  return formatter.format(newAmount)
+}
+</script>
 
 <template>
   <div id="horizontalStack">
@@ -10,68 +60,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import type TransactionResource from '@/upapi/TransactionResource'
-import { mapStores, mapState } from 'pinia'
-import { useProvenanceStore } from '@/store'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.extend(relativeTime)
-
-export default defineComponent({
-  name: 'TransactionCell',
-  props: {
-    transaction: {
-      type: Object as PropType<TransactionResource>,
-      required: true
-    }
-  },
-  computed: {
-    description(): string {
-      return this.transaction.attributes.description
-    },
-    creationDate(): string {
-      return this.formatDate(this.transaction.attributes.createdAt)
-    },
-    amount(): string {
-      return this.formatAmount(
-        this.transaction.attributes.amount.currencyCode,
-        this.transaction.attributes.amount.value
-      )
-    },
-    isPositiveAmount(): boolean {
-      return parseFloat(this.transaction.attributes.amount.value) > 0
-    },
-    ...mapStores(useProvenanceStore),
-    ...mapState(useProvenanceStore, ['relativeDates'])
-  },
-  methods: {
-    formatDate(date: string): string {
-      return this.relativeDates
-        ? dayjs().to(dayjs(date))
-        : dayjs(date).tz('Australia/Sydney').format('D MMM, YYYY h:mm A')
-    },
-    formatAmount(currencyCode: string, amount: string): string {
-      const formatter = new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: currencyCode
-      })
-      const newAmount = parseFloat(amount)
-      return formatter.format(newAmount)
-    }
-  }
-})
-</script>
-
-<style lang="scss" scoped>
+<style scoped lang="scss">
 #horizontalStack {
   display: flex;
   flex-direction: row;

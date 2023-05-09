@@ -1,8 +1,10 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <transition-group
-    v-for="group in groupedTransactions"
+    v-for="group in props.groupedTransactions"
     id="dateGroup"
     :key="group.date"
     class="list-group"
@@ -22,35 +24,28 @@
   </transition-group>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-
+<script setup lang="ts">
 import TransactionCell from '@/components/TransactionCell.vue'
 
 import type GroupedTransactions from '@/upapi/GroupedTransactions'
 import type TransactionResource from '@/upapi/TransactionResource'
 
-export default defineComponent({
-  name: 'GroupedTransactionCell',
-  components: { TransactionCell },
-  props: {
-    groupedTransactions: {
-      type: Array as PropType<GroupedTransactions[]>,
-      required: true
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const props = defineProps<{
+  groupedTransactions: GroupedTransactions[]
+}>()
+
+function viewTransactionDetails(transaction: TransactionResource): void {
+  router.push({
+    name: 'Transaction Detail',
+    params: {
+      transaction: transaction.id
     }
-  },
-  methods: {
-    viewTransactionDetails(transaction: TransactionResource): void {
-      this.$router.push({
-        name: 'Transaction Detail',
-        params: {
-          transaction: transaction.id
-        }
-      })
-    }
-  }
-})
+  })
+}
 </script>
 
 <style lang="scss" scoped>

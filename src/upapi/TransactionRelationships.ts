@@ -1,4 +1,6 @@
-// Copyright © 2021-2022 Paul Tavitian
+/*
+ * Copyright © 2021-2023 Paul Tavitian.
+ */
 
 import type TransactionRelationshipTag from '@/upapi/TransactionRelationshipTag'
 import type TransactionRelationshipCategory from '@/upapi/TransactionRelationshipCategory'

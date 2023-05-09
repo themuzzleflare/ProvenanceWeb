@@ -1,4 +1,276 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
+
+<script setup lang="ts">
+import { ref, watch, onMounted, computed } from 'vue'
+
+import PageNotFound from '@/views/PageNotFound.vue'
+import Spinner from '@/components/SpinnerComp.vue'
+import AttributeCell from '@/components/AttributeCell.vue'
+
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import type TransactionResource from '@/upapi/TransactionResource'
+import type HoldInfoObject from '@/upapi/HoldInfoObject'
+import type MoneyObject from '@/upapi/MoneyObject'
+import type AccountResource from '@/upapi/AccountResource'
+import type CategoryResource from '@/upapi/CategoryResource'
+import UpFacade from '@/UpFacade'
+import type CardPurchaseMethodObject from '@/upapi/CardPurchaseMethodObject'
+import { useProvenanceStore } from '@/store'
+
+import { useRoute, useRouter } from 'vue-router'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.extend(relativeTime)
+
+const route = useRoute()
+const router = useRouter()
+const store = useProvenanceStore()
+
+const transaction = ref(null as unknown as TransactionResource)
+const error = ref(null as unknown as Error)
+const account = ref(null as unknown as AccountResource)
+const transferAccount = ref(null as unknown as AccountResource)
+const category = ref(null as unknown as CategoryResource)
+const parentCategory = ref(null as unknown as CategoryResource)
+
+const transactionId = computed((): string => {
+  return route.params.transaction as string
+})
+
+const accountId = computed((): string => {
+  return transaction.value.relationships.account.data.id
+})
+
+const transferAccountId = computed((): string | undefined => {
+  return transaction.value.relationships.transferAccount.data?.id
+})
+
+const categoryId = computed((): string | undefined => {
+  return transaction.value.relationships.category.data?.id
+})
+
+const parentCategoryId = computed((): string | undefined => {
+  return transaction.value.relationships.parentCategory.data?.id
+})
+
+const transactionStatus = computed((): string => {
+  return transaction.value.attributes.status.replace('SETTLED', 'Settled').replace('HELD', 'Held')
+})
+
+const holdInfo = computed((): HoldInfoObject | undefined => {
+  return transaction.value.attributes.holdInfo
+})
+
+const foreignAmount = computed((): MoneyObject | undefined => {
+  return transaction.value.attributes.foreignAmount
+})
+
+const cardPurchaseMethod = computed((): CardPurchaseMethodObject | undefined => {
+  return transaction.value.attributes.cardPurchaseMethod
+})
+
+const transactionAmount = computed((): MoneyObject => {
+  return transaction.value.attributes.amount
+})
+
+const transactionHoldValue = computed((): string | null => {
+  if (holdInfo.value && holdInfo.value?.amount.value !== transactionAmount.value.value) {
+    return formatAmount(holdInfo.value!.amount.currencyCode, holdInfo.value!.amount.value)
+  } else {
+    return null
+  }
+})
+
+const transactionHoldForeignValue = computed((): string | null => {
+  if (
+    holdInfo.value?.foreignAmount &&
+    holdInfo.value?.foreignAmount?.value !== foreignAmount.value?.value
+  ) {
+    return formatAmount(
+      holdInfo.value!.foreignAmount!.currencyCode,
+      holdInfo.value!.foreignAmount!.value
+    )
+  } else {
+    return null
+  }
+})
+
+const transactionForeignValue = computed((): string | null => {
+  return foreignAmount.value
+    ? formatAmount(foreignAmount.value!.currencyCode, foreignAmount.value!.value)
+    : null
+})
+
+const transactionAmountValue = computed((): string => {
+  return formatAmount(transactionAmount.value.currencyCode, transactionAmount.value.value)
+})
+
+const transactionMethod = computed((): string | null => {
+  return cardPurchaseMethod.value ? formatMethod(cardPurchaseMethod.value!.method) : null
+})
+
+const transactionCreationDate = computed((): string => {
+  return formatDate(transaction.value.attributes.createdAt)
+})
+
+const transactionSettlementDate = computed((): string | null => {
+  return transaction.value.attributes.settledAt
+    ? formatDate(transaction.value.attributes.settledAt)
+    : null
+})
+
+const relativeDates = computed((): boolean => {
+  return store.relativeDates
+})
+
+watch(transaction, (newValue: TransactionResource) => {
+  setPageTitle(newValue.attributes.description)
+})
+
+watch(error, (newValue: Error) => {
+  setPageTitle(newValue.name)
+  setPageDescription(newValue.message)
+})
+
+onMounted(() => {
+  getTransaction()
+})
+
+function getTransaction(): void {
+  UpFacade.getTransaction(transactionId.value)
+    .then((response) => {
+      console.log(response.data)
+      transaction.value = response.data.data
+      getAccount()
+      if (transferAccountId.value) {
+        getTransferAccount()
+      }
+      if (categoryId.value) {
+        getCategory()
+      }
+      if (parentCategoryId.value) {
+        getParentCategory()
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      error.value = error
+    })
+}
+
+function getAccount(): void {
+  UpFacade.getAccount(accountId.value)
+    .then((response) => {
+      console.log(response.data)
+      account.value = response.data.data
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+function getTransferAccount(): void {
+  UpFacade.getAccount(transferAccountId.value ?? '')
+    .then((response) => {
+      console.log(response.data)
+      transferAccount.value = response.data.data
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+function getCategory(): void {
+  UpFacade.getCategory(categoryId.value ?? '')
+    .then((response) => {
+      console.log(response.data)
+      category.value = response.data.data
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+function getParentCategory(): void {
+  UpFacade.getCategory(parentCategoryId.value ?? '')
+    .then((response) => {
+      console.log(response.data)
+      parentCategory.value = response.data.data
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
+function listTransactionsByAccount(account: AccountResource): void {
+  router.push({
+    name: 'Transactions By Account',
+    params: {
+      account: account.id
+    }
+  })
+}
+
+function listTransactionsByCategory(category: CategoryResource): void {
+  router.push({
+    name: 'Transactions By Category',
+    params: {
+      category: category.id
+    }
+  })
+}
+
+function listTransactionTags(): void {
+  router.push({
+    name: 'Transaction Tags'
+  })
+}
+
+function formatDate(date: string): string {
+  return relativeDates.value
+    ? dayjs().to(dayjs(date))
+    : dayjs(date).tz('Australia/Sydney').format('D MMM, YYYY h:mm A')
+}
+
+function formatMethod(method: string): string {
+  const arr = method.toLowerCase().split('_')
+
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
+  }
+
+  let joined = arr.join(' ')
+
+  if (cardPurchaseMethod.value?.cardNumberSuffix) {
+    joined += ', x' + cardPurchaseMethod.value?.cardNumberSuffix
+  }
+
+  return joined
+}
+
+function formatAmount(currencyCode: string, amount: string): string {
+  const formatter = new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: currencyCode
+  })
+  const newAmount = parseFloat(amount)
+  return formatter.format(newAmount)
+}
+
+function setPageTitle(title: string): void {
+  store.setPageTitle(title)
+}
+
+function setPageDescription(description: string): void {
+  store.setPageDescription(description)
+}
+</script>
 
 <template>
   <PageNotFound v-if="error" :error="error" />
@@ -134,250 +406,6 @@
     </transition-group>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-import PageNotFound from '@/views/PageNotFound.vue'
-import Spinner from '@/components/Spinner.vue'
-import AttributeCell from '@/components/AttributeCell.vue'
-
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-import timezone from 'dayjs/plugin/timezone'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import type TransactionResource from '@/upapi/TransactionResource'
-import type HoldInfoObject from '@/upapi/HoldInfoObject'
-import type MoneyObject from '@/upapi/MoneyObject'
-import type AccountResource from '@/upapi/AccountResource'
-import type CategoryResource from '@/upapi/CategoryResource'
-import { mapStores, mapActions, mapState } from 'pinia'
-import UpFacade from '@/UpFacade'
-import type CardPurchaseMethodObject from '@/upapi/CardPurchaseMethodObject'
-import { useProvenanceStore } from '@/store'
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs.extend(relativeTime)
-
-export default defineComponent({
-  name: 'TransactionDetail',
-  components: { PageNotFound, Spinner, AttributeCell },
-  data() {
-    return {
-      transaction: null as unknown as TransactionResource,
-      error: null as unknown as Error,
-      account: null as unknown as AccountResource,
-      transferAccount: null as unknown as AccountResource,
-      category: null as unknown as CategoryResource,
-      parentCategory: null as unknown as CategoryResource
-    }
-  },
-  watch: {
-    transaction(newValue: TransactionResource): void {
-      this.pageTitle(newValue.attributes.description)
-    },
-    error(newValue: Error): void {
-      this.pageTitle(newValue.name)
-      this.pageDescription(newValue.message)
-    }
-  },
-  computed: {
-    transactionId(): string {
-      return this.$route.params.transaction as string
-    },
-    accountId(): string {
-      return this.transaction.relationships.account.data.id
-    },
-    transferAccountId(): string | undefined {
-      return this.transaction.relationships.transferAccount.data?.id
-    },
-    categoryId(): string | undefined {
-      return this.transaction.relationships.category.data?.id
-    },
-    parentCategoryId(): string | undefined {
-      return this.transaction.relationships.parentCategory.data?.id
-    },
-    transactionStatus(): string {
-      return this.transaction.attributes.status
-        .replace('SETTLED', 'Settled')
-        .replace('HELD', 'Held')
-    },
-    holdInfo(): HoldInfoObject | undefined {
-      return this.transaction.attributes.holdInfo
-    },
-    foreignAmount(): MoneyObject | undefined {
-      return this.transaction.attributes.foreignAmount
-    },
-    cardPurchaseMethod(): CardPurchaseMethodObject | undefined {
-      return this.transaction.attributes.cardPurchaseMethod
-    },
-    transactionAmount(): MoneyObject {
-      return this.transaction.attributes.amount
-    },
-    transactionHoldValue(): string | null {
-      if (this.holdInfo && this.holdInfo?.amount.value !== this.transactionAmount.value) {
-        return this.formatAmount(this.holdInfo.amount.currencyCode, this.holdInfo.amount.value)
-      } else {
-        return null
-      }
-    },
-    transactionHoldForeignValue(): string | null {
-      if (
-        this.holdInfo?.foreignAmount &&
-        this.holdInfo?.foreignAmount?.value !== this.foreignAmount?.value
-      ) {
-        return this.formatAmount(
-          this.holdInfo.foreignAmount.currencyCode,
-          this.holdInfo.foreignAmount.value
-        )
-      } else {
-        return null
-      }
-    },
-    transactionForeignValue(): string | null {
-      return this.foreignAmount
-        ? this.formatAmount(this.foreignAmount.currencyCode, this.foreignAmount.value)
-        : null
-    },
-    transactionAmountValue(): string {
-      return this.formatAmount(this.transactionAmount.currencyCode, this.transactionAmount.value)
-    },
-    transactionMethod(): string | null {
-      return this.cardPurchaseMethod ? this.formatMethod(this.cardPurchaseMethod.method) : null
-    },
-    transactionCreationDate(): string {
-      return this.formatDate(this.transaction.attributes.createdAt)
-    },
-    transactionSettlementDate(): string | null {
-      return this.transaction.attributes.settledAt
-        ? this.formatDate(this.transaction.attributes.settledAt)
-        : null
-    },
-    ...mapStores(useProvenanceStore),
-    ...mapState(useProvenanceStore, ['relativeDates'])
-  },
-  methods: {
-    getTransaction(): void {
-      UpFacade.getTransaction(this.transactionId)
-        .then((response) => {
-          console.log(response.data)
-          this.transaction = response.data.data
-          this.getAccount()
-          if (this.transferAccountId) {
-            this.getTransferAccount()
-          }
-          if (this.categoryId) {
-            this.getCategory()
-          }
-          if (this.parentCategoryId) {
-            this.getParentCategory()
-          }
-        })
-        .catch((error) => {
-          console.error(error)
-          this.error = error
-        })
-    },
-    getAccount(): void {
-      UpFacade.getAccount(this.accountId)
-        .then((response) => {
-          console.log(response.data)
-          this.account = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    getTransferAccount(): void {
-      UpFacade.getAccount(this.transferAccountId ?? '')
-        .then((response) => {
-          console.log(response.data)
-          this.transferAccount = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    getCategory(): void {
-      UpFacade.getCategory(this.categoryId ?? '')
-        .then((response) => {
-          console.log(response.data)
-          this.category = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    getParentCategory(): void {
-      UpFacade.getCategory(this.parentCategoryId ?? '')
-        .then((response) => {
-          console.log(response.data)
-          this.parentCategory = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    listTransactionsByAccount(account: AccountResource): void {
-      this.$router.push({
-        name: 'Transactions By Account',
-        params: {
-          account: account.id
-        }
-      })
-    },
-    listTransactionsByCategory(category: CategoryResource): void {
-      this.$router.push({
-        name: 'Transactions By Category',
-        params: {
-          category: category.id
-        }
-      })
-    },
-    listTransactionTags(): void {
-      this.$router.push({
-        name: 'Transaction Tags'
-      })
-    },
-    formatDate(date: string): string {
-      return this.relativeDates
-        ? dayjs().to(dayjs(date))
-        : dayjs(date).tz('Australia/Sydney').format('D MMM, YYYY h:mm A')
-    },
-    formatMethod(method: string): string {
-      const arr = method.toLowerCase().split('_')
-
-      for (var i = 0; i < arr.length; i++) {
-        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
-      }
-
-      let joined = arr.join(' ')
-
-      if (this.cardPurchaseMethod?.cardNumberSuffix) {
-        joined += ', x' + this.cardPurchaseMethod.cardNumberSuffix
-      }
-
-      return joined
-    },
-    formatAmount(currencyCode: string, amount: string): string {
-      const formatter = new Intl.NumberFormat('en-AU', {
-        style: 'currency',
-        currency: currencyCode
-      })
-      const newAmount = parseFloat(amount)
-      return formatter.format(newAmount)
-    },
-    ...mapActions(useProvenanceStore, {
-      pageTitle: 'setPageTitle',
-      pageDescription: 'setPageDescription'
-    })
-  },
-  mounted() {
-    this.getTransaction()
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 .flip-list-move {

@@ -1,21 +1,15 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
-  <h4 id="noContent">{{ message }}</h4>
+  <h4 id="noContent">{{ props.message }}</h4>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'NoContent',
-  props: {
-    message: {
-      type: String,
-      required: true
-    }
-  }
-})
+<script setup lang="ts">
+const props = defineProps<{
+  message: string
+}>()
 </script>
 
 <style lang="scss" scoped>

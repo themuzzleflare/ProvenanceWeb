@@ -1,4 +1,6 @@
-// Copyright © 2022 Paul Tavitian
+/*
+ * Copyright © 2022-2023 Paul Tavitian.
+ */
 
 import type AccountResource from '@/upapi/AccountResource'
 import type SingleResourceResponse from '@/upapi/SingleResourceResponse'

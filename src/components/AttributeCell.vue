@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <div id="horizontalStack">
@@ -13,27 +15,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-  name: 'AttributeCell',
-  props: {
-    leftText: {
-      type: String,
-      required: true
-    },
-    detailText: {
-      type: String,
-      required: false
-    }
-  },
-  computed: {
-    isMonoRight(): boolean {
-      return this.leftText === 'Raw Text'
-    }
-  }
-})
+const props = defineProps<{
+  leftText: string
+  detailText?: string
+}>()
+
+const isMonoRight = computed(() => props.leftText === 'Raw Text')
 </script>
 
 <style lang="scss" scoped>

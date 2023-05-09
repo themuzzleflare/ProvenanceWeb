@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <div id="apiKeyModal" class="modal fade" tabindex="-1">
@@ -32,7 +34,7 @@
             class="btn btn-primary"
             data-bs-dismiss="modal"
             type="button"
-            @click="setApiKey(this.text)"
+            @click="setApiKey(text)"
           >
             Save
           </button>
@@ -42,31 +44,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapActions, mapState, mapStores } from 'pinia'
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import { useProvenanceStore } from '@/store'
 
-export default defineComponent({
-  name: 'APIKeyModal',
-  data() {
-    return {
-      text: ''
-    }
-  },
-  computed: {
-    ...mapStores(useProvenanceStore),
-    ...mapState(useProvenanceStore, ['apiKey'])
-  },
-  methods: {
-    ...mapActions(useProvenanceStore, {
-      setApiKey: 'setApiKey'
-    })
-  },
-  mounted() {
-    if (this.apiKey) {
-      this.text = this.apiKey
-    }
+const text = ref('')
+const apiKey = computed(() => useProvenanceStore().apiKey)
+
+function setApiKey(text: string) {
+  useProvenanceStore().setApiKey(text)
+}
+
+onMounted(() => {
+  if (apiKey.value) {
+    text.value = apiKey.value
   }
 })
 </script>

@@ -1,4 +1,6 @@
-// Copyright © 2021-2022 Paul Tavitian
+/*
+ * Copyright © 2021-2023 Paul Tavitian.
+ */
 
 import axios from 'axios'
 import { useProvenanceStore } from '@/store'
@@ -13,11 +15,3 @@ export const axiosInstance = axios.create({
     ;(headers ?? {})['Authorization'] = `Bearer ${useProvenanceStore().apiKey}`
   }
 })
-
-export interface State {
-  relativeDates: boolean
-  dateGrouping: boolean
-  pageTitle: string
-  pageDescription: string
-  apiKey: string
-}

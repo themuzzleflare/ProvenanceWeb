@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <PageNotFound v-if="error" :error="error" />
@@ -24,7 +26,7 @@ import { defineComponent } from 'vue'
 import PageNotFound from '@/views/PageNotFound.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import AccountCell from '@/components/AccountCell.vue'
-import Spinner from '@/components/Spinner.vue'
+import Spinner from '@/components/SpinnerComp.vue'
 import NoContent from '@/components/NoContent.vue'
 
 import type AccountResource from '@/upapi/AccountResource'

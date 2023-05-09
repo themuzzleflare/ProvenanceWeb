@@ -1,4 +1,6 @@
-<!-- Copyright © 2021-2022 Paul Tavitian -->
+<!--
+  - Copyright © 2021-2023 Paul Tavitian.
+  -->
 
 <template>
   <APIKeyModal />
@@ -53,8 +55,8 @@
   <router-view />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { onMounted } from 'vue'
 
 import APIKeyModal from '@/components/APIKeyModal.vue'
 import SettingsModal from '@/components/SettingsModal.vue'
@@ -67,29 +69,25 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faGithub, faEnvelope, faCog)
 
-export default defineComponent({
-  name: 'App',
-  components: { SettingsModal, APIKeyModal, FontAwesomeIcon },
-  methods: {
-    checkApiKey(): void {
-      if (!localStorage.apiKey) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const el: HTMLElement = document.getElementById('apiKeyModal')!
-        const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el)
-        apiKeyModal.toggle()
-      }
-    },
-    openSettingsModal(): void {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const el: HTMLElement = document.getElementById('settingsModal')!
-      const settingsModal: bootstrap.Modal = new bootstrap.Modal(el)
-      settingsModal.toggle()
-    }
-  },
-  mounted() {
-    this.checkApiKey()
-  }
+onMounted(() => {
+  checkApiKey()
 })
+
+function checkApiKey(): void {
+  if (!localStorage.apiKey) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const el: HTMLElement = document.getElementById('apiKeyModal')!
+    const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el)
+    apiKeyModal.toggle()
+  }
+}
+
+function openSettingsModal(): void {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const el: HTMLElement = document.getElementById('settingsModal')!
+  const settingsModal: bootstrap.Modal = new bootstrap.Modal(el)
+  settingsModal.toggle()
+}
 </script>
 
 <style lang="scss">
