@@ -4,13 +4,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useProvenanceStore } from '@/store'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type TransactionResource from '@/upapi/TransactionResource'
-import { useProvenanceStore } from '@/store'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

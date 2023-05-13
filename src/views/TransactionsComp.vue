@@ -4,6 +4,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import useProvenanceStore from '@/store'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 import PageNotFound from '@/views/PageNotFound.vue'
 import TransactionGroupingSegmentedControl from '@/components/TransactionGroupingSegmentedControl.vue'
@@ -21,9 +24,6 @@ import timezone from 'dayjs/plugin/timezone'
 import type GroupedTransactions from '@/upapi/GroupedTransactions'
 import type TransactionResource from '@/upapi/TransactionResource'
 import UpFacade from '@/UpFacade'
-import useProvenanceStore from '@/store'
-
-import { useRouter } from 'vue-router'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -34,24 +34,25 @@ type SortingDate = 'sortingDate'
 const router = useRouter()
 const store = useProvenanceStore()
 
-const transactions = ref(null as unknown as TransactionResource[])
-const error = ref(null as unknown as Error)
+const transactions = ref<TransactionResource[]>([])
+const error = ref<Error | null>(null)
 const searchQuery = ref('')
 const settledOnly = ref(false)
-const noTransactions = ref(false)
 
-watch(transactions, (newValue: TransactionResource[]) => {
-  noTransactions.value = newValue.length === 0
+const loading = ref(false)
+
+const { apiKey } = storeToRefs(store)
+
+watch(apiKey, () => {
+  getTransactions()
 })
 
 watch(error, (newValue: Error) => {
-  setPageTitle(newValue.name)
-  setPageDescription(newValue.message)
+  store.setPageTitle(newValue.name)
+  store.setPageDescription(newValue.message)
 })
 
-const dateGrouping = computed((): boolean => {
-  return store.dateGrouping
-})
+const dateGrouping = computed((): boolean => store.dateGrouping)
 
 const filteredTransactions = computed((): TransactionResource[] => {
   return transactions.value.filter((transaction: TransactionResource) => {
@@ -81,17 +82,21 @@ const groupedTransactions = computed((): GroupedTransactions[] => {
   })
 })
 
-onMounted(() => {
+function getTransactions(): void {
+  loading.value = true
+
   UpFacade.getTransactions()
     .then((response) => {
-      console.log(response.data)
+      error.value = null
       transactions.value = response.data.data
     })
-    .catch((error) => {
-      console.error(error)
-      error.value = error
+    .catch((err) => {
+      error.value = err
     })
-})
+    .finally(() => {
+      loading.value = false
+    })
+}
 
 function viewTransactionDetails(transaction: TransactionResource): void {
   router.push({
@@ -109,19 +114,13 @@ function groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
   }, {})
 }
 
-function setPageTitle(title: string): void {
-  store.setPageTitle(title)
-}
-
-function setPageDescription(description: string): void {
-  store.setPageDescription(description)
-}
+onMounted(() => getTransactions())
 </script>
 
 <template>
-  <PageNotFound v-if="error" :error="error" />
-  <NoContent v-else-if="noTransactions" message="No transactions exist" />
-  <Spinner v-else-if="!transactions" />
+  <Spinner v-if="loading" />
+  <PageNotFound v-else-if="error" :error="error" />
+  <NoContent v-else-if="transactions.length == 0" message="No transactions exist" />
   <div v-else id="transactions">
     <div id="searchSection">
       <SearchBar v-model="searchQuery" />

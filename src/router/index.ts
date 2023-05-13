@@ -3,6 +3,7 @@
  */
 
 import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteLocationNormalized } from 'vue-router'
 import { trackRouter } from 'vue-gtag-next'
 
 import { useProvenanceStore } from '@/store'
@@ -27,7 +28,7 @@ const router = createRouter({
     {
       path: '/accounts',
       name: 'Accounts',
-      component: () => import(/* webpackChunkName: "accounts" */ '@/views/Accounts.vue'),
+      component: () => import(/* webpackChunkName: "accounts" */ '@/views/AccountsComp.vue'),
       meta: {
         title: 'Accounts',
         description: 'View your accounts'
@@ -36,7 +37,7 @@ const router = createRouter({
     {
       path: '/tags',
       name: 'Tags',
-      component: () => import(/* webpackChunkName: "tags" */ '@/views/Tags.vue'),
+      component: () => import(/* webpackChunkName: "tags" */ '@/views/TagsComp.vue'),
       meta: {
         title: 'Tags',
         description: 'View your tags'
@@ -45,7 +46,7 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'Categories',
-      component: () => import(/* webpackChunkName: "categories" */ '@/views/Categories.vue'),
+      component: () => import(/* webpackChunkName: "categories" */ '@/views/CategoriesComp.vue'),
       meta: {
         title: 'Categories',
         description: 'View your categories'
@@ -54,7 +55,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'About',
-      component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue'),
+      component: () => import(/* webpackChunkName: "about" */ '@/views/AboutComp.vue'),
       meta: {
         title: 'About'
       }
@@ -108,9 +109,11 @@ const router = createRouter({
   linkActiveClass: 'active'
 })
 
-router.afterEach((to) => {
-  useProvenanceStore().setPageTitle(to.meta.title)
-  useProvenanceStore().setPageDescription(to.meta.description)
+router.afterEach((to: RouteLocationNormalized) => {
+  const store = useProvenanceStore()
+
+  if (to.meta.title) store.setPageTitle(to.meta.title)
+  if (to.meta.description) store.setPageDescription(to.meta.description)
 })
 
 trackRouter(router)

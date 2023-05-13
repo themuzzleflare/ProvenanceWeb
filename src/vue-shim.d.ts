@@ -2,10 +2,13 @@
  * Copyright © 2021-2023 Paul Tavitian.
  */
 
-import axios from 'axios'
+export {}
 
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $http: typeof axios
+import 'vue-router'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string
+    description?: string
   }
 }

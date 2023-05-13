@@ -2,6 +2,25 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{
+  modelValue: string
+}>()
+
+const emit = defineEmits(['update:modelValue'])
+
+const value = computed({
+  get(): string {
+    return props.modelValue
+  },
+  set(newValue: string): void {
+    emit('update:modelValue', newValue)
+  }
+})
+</script>
+
 <template>
   <input
     id="searchBar"
@@ -12,26 +31,6 @@
     type="search"
   />
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'SearchBar',
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  computed: {
-    value: {
-      get(): string {
-        return this.modelValue
-      },
-      set(newValue: string): void {
-        this.$emit('update:modelValue', newValue)
-      }
-    }
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 #searchBar {

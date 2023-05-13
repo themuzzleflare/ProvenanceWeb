@@ -2,24 +2,19 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+const props = defineProps<{
+  error?: Error
+}>()
+</script>
+
 <template>
   <div class="page-not-found">
-    <h1>{{ error?.name ?? 'Error' }}</h1>
-    <h4>{{ error?.message ?? 'Page Not Found' }}</h4>
+    <h1>{{ props.error?.name ?? 'Error' }}</h1>
+    <h4>{{ props.error?.message ?? 'Page Not Found' }}</h4>
     <router-link to="/">Back to Home</router-link>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'PageNotFound',
-  props: {
-    error: Error
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 .page-not-found {

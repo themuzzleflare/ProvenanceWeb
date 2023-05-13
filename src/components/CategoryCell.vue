@@ -2,10 +2,6 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
-<template>
-  <span id="categoryName">{{ categoryName }}</span>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -17,6 +13,10 @@ const props = defineProps<{
 
 const categoryName = computed(() => props.category.attributes.name)
 </script>
+
+<template>
+  <span id="categoryName">{{ categoryName }}</span>
+</template>
 
 <style lang="scss" scoped>
 #categoryName:hover {

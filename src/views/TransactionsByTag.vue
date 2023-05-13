@@ -2,10 +2,89 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { ref, watch, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useProvenanceStore } from '@/store'
+import { storeToRefs } from 'pinia'
+
+import PageNotFound from '@/views/PageNotFound.vue'
+import Spinner from '@/components/SpinnerComp.vue'
+import SearchBar from '@/components/SearchBar.vue'
+import TransactionCell from '@/components/TransactionCell.vue'
+import NoContent from '@/components/NoContent.vue'
+
+import type TransactionResource from '@/upapi/TransactionResource'
+import UpFacade from '@/UpFacade'
+
+const store = useProvenanceStore()
+const route = useRoute()
+const router = useRouter()
+
+const transactions = ref<TransactionResource[]>([])
+const error = ref<Error | null>(null)
+const searchQuery = ref('')
+const loading = ref(false)
+const { apiKey } = storeToRefs(store)
+
+watch(apiKey, () => {
+  getTransactions()
+})
+
+watch(error, (newValue: Error) => {
+  store.setPageTitle(newValue.name)
+  store.setPageDescription(newValue.message)
+})
+
+const tagId = computed(() => route.params.tag as string)
+
+const filteredTransactions = computed(() => {
+  return transactions.value.filter((transaction: TransactionResource) => {
+    return (
+      transaction.attributes.description.toLowerCase().indexOf(searchQuery.value.toLowerCase()) !==
+      -1
+    )
+  })
+})
+
+function getTransactions(): void {
+  loading.value = true
+
+  UpFacade.getTransactionsByTag(tagId.value)
+    .then((response) => {
+      error.value = null
+      transactions.value = response.data.data
+    })
+    .catch((err) => {
+      err.value = err
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+function viewTransactionDetails(transaction: TransactionResource): void {
+  router.push({
+    name: 'Transaction Detail',
+    params: {
+      transaction: transaction.id
+    }
+  })
+}
+
+onMounted(() => {
+  store.setPageTitle(tagId.value)
+  getTransactions()
+})
+</script>
+
 <template>
-  <PageNotFound v-if="error" :error="error" />
-  <NoContent v-else-if="noTransactions" :message="`No transactions exist for tag: ${tagId}`" />
-  <Spinner v-else-if="!transactions" />
+  <Spinner v-if="loading" />
+  <PageNotFound v-else-if="error" :error="error" />
+  <NoContent
+    v-else-if="transactions.length == 0"
+    :message="`No transactions exist for tag: ${tagId}`"
+  />
   <div v-else id="transactionsByTag">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -19,86 +98,6 @@
     </transition-group>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-import PageNotFound from '@/views/PageNotFound.vue'
-import Spinner from '@/components/SpinnerComp.vue'
-import SearchBar from '@/components/SearchBar.vue'
-import TransactionCell from '@/components/TransactionCell.vue'
-import NoContent from '@/components/NoContent.vue'
-
-import type TransactionResource from '@/upapi/TransactionResource'
-import { mapActions } from 'pinia'
-import UpFacade from '@/UpFacade'
-import { useProvenanceStore } from '@/store'
-
-export default defineComponent({
-  name: 'TransactionsByTag',
-  components: { NoContent, PageNotFound, SearchBar, Spinner, TransactionCell },
-  data() {
-    return {
-      transactions: null as unknown as TransactionResource[],
-      error: null as unknown as Error,
-      searchQuery: '',
-      noTransactions: false
-    }
-  },
-  watch: {
-    transactions(newValue: TransactionResource[]): void {
-      this.noTransactions = newValue.length === 0
-    },
-    error(newValue: Error): void {
-      this.pageTitle(newValue.name)
-      this.pageDescription(newValue.message)
-    }
-  },
-  computed: {
-    tagId(): string {
-      return this.$route.params.tag as string
-    },
-    filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction: TransactionResource) => {
-        return (
-          transaction.attributes.description
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) !== -1
-        )
-      })
-    }
-  },
-  methods: {
-    getTransactions(): void {
-      UpFacade.getTransactionsByTag(this.tagId)
-        .then((response) => {
-          console.log(response.data)
-          this.transactions = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-          this.error = error
-        })
-    },
-    viewTransactionDetails(transaction: TransactionResource): void {
-      this.$router.push({
-        name: 'Transaction Detail',
-        params: {
-          transaction: transaction.id
-        }
-      })
-    },
-    ...mapActions(useProvenanceStore, {
-      pageTitle: 'setPageTitle',
-      pageDescription: 'setPageDescription'
-    })
-  },
-  mounted() {
-    this.pageTitle(this.tagId)
-    this.getTransactions()
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 .flip-list-move {

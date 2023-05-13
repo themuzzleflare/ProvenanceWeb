@@ -7,7 +7,7 @@ import { defineStore } from 'pinia'
 import { defaultPageDescription, defaultPageTitle } from '@/constants'
 import { ref } from 'vue'
 
-export const useProvenanceStore = defineStore('provenanceStore', () => {
+export const useProvenanceStore = defineStore('provenance', () => {
   const relativeDates = ref(localStorage.relativeDates === '1')
   const dateGrouping = ref(localStorage.dateGrouping === '1')
   const pageTitle = ref(defaultPageTitle)
@@ -25,16 +25,17 @@ export const useProvenanceStore = defineStore('provenanceStore', () => {
   }
 
   function setPageTitle(title: string): void {
-    if (!title) title = defaultPageTitle
-    else title += ' | Provenance'
+    title += ' | Provenance'
+
     pageTitle.value = title
+
     document.title = title
     document.querySelectorAll('.page-title-meta').forEach((el) => el.setAttribute('content', title))
   }
 
   function setPageDescription(description: string): void {
-    if (!description) description = defaultPageDescription
     pageDescription.value = description
+
     document
       .querySelectorAll('.page-description-meta')
       .forEach((el) => el.setAttribute('content', description))

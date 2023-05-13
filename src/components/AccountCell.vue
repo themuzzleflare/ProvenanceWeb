@@ -2,13 +2,6 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
-<template>
-  <div id="verticalStack">
-    <span id="accountBalance">{{ accountBalance }}</span>
-    <span id="accountDisplayName">{{ accountDisplayName }}</span>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -38,6 +31,13 @@ function formatBalance(currencyCode: string, balance: string): string {
   return formatter.format(newBalance)
 }
 </script>
+
+<template>
+  <div id="verticalStack">
+    <span id="accountBalance">{{ accountBalance }}</span>
+    <span id="accountDisplayName">{{ accountDisplayName }}</span>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 #verticalStack {

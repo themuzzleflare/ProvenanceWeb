@@ -2,6 +2,41 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { onMounted } from 'vue'
+
+import APIKeyModal from '@/components/APIKeyModal.vue'
+import SettingsModal from '@/components/SettingsModal.vue'
+
+import * as bootstrap from 'bootstrap'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faGithub, faEnvelope, faCog)
+
+onMounted(() => {
+  checkApiKey()
+})
+
+function checkApiKey(): void {
+  if (!localStorage.apiKey) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const el: HTMLElement = document.getElementById('apiKeyModal')!
+    const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el)
+    apiKeyModal.toggle()
+  }
+}
+
+function openSettingsModal(): void {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const el: HTMLElement = document.getElementById('settingsModal')!
+  const settingsModal: bootstrap.Modal = new bootstrap.Modal(el)
+  settingsModal.toggle()
+}
+</script>
+
 <template>
   <APIKeyModal />
   <SettingsModal />
@@ -54,41 +89,6 @@
   </nav>
   <router-view />
 </template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue'
-
-import APIKeyModal from '@/components/APIKeyModal.vue'
-import SettingsModal from '@/components/SettingsModal.vue'
-
-import * as bootstrap from 'bootstrap'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faGithub, faEnvelope, faCog)
-
-onMounted(() => {
-  checkApiKey()
-})
-
-function checkApiKey(): void {
-  if (!localStorage.apiKey) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const el: HTMLElement = document.getElementById('apiKeyModal')!
-    const apiKeyModal: bootstrap.Modal = new bootstrap.Modal(el)
-    apiKeyModal.toggle()
-  }
-}
-
-function openSettingsModal(): void {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const el: HTMLElement = document.getElementById('settingsModal')!
-  const settingsModal: bootstrap.Modal = new bootstrap.Modal(el)
-  settingsModal.toggle()
-}
-</script>
 
 <style lang="scss">
 @import 'bootstrap/scss/bootstrap.scss';

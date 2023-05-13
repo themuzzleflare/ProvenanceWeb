@@ -2,13 +2,97 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { ref, watch, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useProvenanceStore } from '@/store'
+
+import PageNotFound from '@/views/PageNotFound.vue'
+import TransactionCell from '@/components/TransactionCell.vue'
+import Spinner from '@/components/SpinnerComp.vue'
+import SearchBar from '@/components/SearchBar.vue'
+import NoContent from '@/components/NoContent.vue'
+
+import type TransactionResource from '@/upapi/TransactionResource'
+import type CategoryResource from '@/upapi/CategoryResource'
+import UpFacade from '@/UpFacade'
+
+const store = useProvenanceStore()
+const router = useRouter()
+const route = useRoute()
+
+const category = ref<CategoryResource>()
+const transactions = ref<TransactionResource[]>([])
+const error = ref<Error | null>(null)
+const searchQuery = ref('')
+const loading = ref(false)
+const { apiKey } = storeToRefs(store)
+
+watch(apiKey, () => getCategoryAndTransactions())
+
+watch(error, (newValue: Error) => {
+  store.setPageTitle(newValue.name)
+  store.setPageDescription(newValue.message)
+})
+
+watch(category, (newValue: CategoryResource) => {
+  store.setPageTitle(newValue.attributes.name)
+})
+
+const categoryId = computed(() => route.params.category as string)
+
+const categoryName = computed((): string | undefined => {
+  return category.value?.attributes.name
+})
+
+const filteredTransactions = computed((): TransactionResource[] => {
+  return transactions.value.filter((transaction: TransactionResource) => {
+    return (
+      transaction.attributes.description.toLowerCase().indexOf(searchQuery.value.toLowerCase()) !==
+      -1
+    )
+  })
+})
+
+const getCategoryAndTransactions = async (): Promise<void> => {
+  loading.value = true
+
+  try {
+    const categoryResponse = await UpFacade.getCategory(categoryId.value)
+    const transactionsResponse = await UpFacade.getTransactionsByCategory(categoryId.value)
+
+    error.value = null
+    category.value = categoryResponse.data.data
+    transactions.value = transactionsResponse.data.data
+  } catch (err) {
+    error.value = err
+  } finally {
+    loading.value = false
+  }
+}
+
+function viewTransactionDetails(transaction: TransactionResource): void {
+  router.push({
+    name: 'Transaction Detail',
+    params: {
+      transaction: transaction.id
+    }
+  })
+}
+
+onMounted(() => {
+  getCategoryAndTransactions()
+})
+</script>
+
 <template>
-  <PageNotFound v-if="error" :error="error" />
+  <Spinner v-if="loading" />
+  <PageNotFound v-else-if="error" :error="error" />
   <NoContent
-    v-else-if="noTransactions"
+    v-else-if="transactions.length === 0"
     :message="`No transactions exist for category: ${categoryName}`"
   />
-  <Spinner v-else-if="!transactions" />
   <div v-else id="transactionsByCategory">
     <SearchBar v-model="searchQuery" />
     <transition-group class="list-group" name="flip-list" tag="ul">
@@ -22,104 +106,6 @@
     </transition-group>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-import PageNotFound from '@/views/PageNotFound.vue'
-import TransactionCell from '@/components/TransactionCell.vue'
-import Spinner from '@/components/SpinnerComp.vue'
-import SearchBar from '@/components/SearchBar.vue'
-import NoContent from '@/components/NoContent.vue'
-
-import type TransactionResource from '@/upapi/TransactionResource'
-import type CategoryResource from '@/upapi/CategoryResource'
-import { mapActions } from 'pinia'
-import UpFacade from '@/UpFacade'
-import { useProvenanceStore } from '@/store'
-
-export default defineComponent({
-  name: 'TransactionsByCategory',
-  components: { PageNotFound, SearchBar, Spinner, TransactionCell, NoContent },
-  data() {
-    return {
-      category: null as unknown as CategoryResource,
-      transactions: null as unknown as TransactionResource[],
-      error: null as unknown as Error,
-      searchQuery: '',
-      noTransactions: false
-    }
-  },
-  watch: {
-    transactions(newValue: TransactionResource[]): void {
-      this.noTransactions = newValue.length === 0
-    },
-    category(newValue: CategoryResource): void {
-      this.pageTitle(newValue.attributes.name)
-    },
-    error(newValue: Error): void {
-      this.pageTitle(newValue.name)
-      this.pageDescription(newValue.message)
-    }
-  },
-  computed: {
-    categoryId(): string {
-      return this.$route.params.category as string
-    },
-    categoryName(): string {
-      return this.category.attributes.name
-    },
-    filteredTransactions(): TransactionResource[] {
-      return this.transactions.filter((transaction: TransactionResource) => {
-        return (
-          transaction.attributes.description
-            .toLowerCase()
-            .indexOf(this.searchQuery.toLowerCase()) !== -1
-        )
-      })
-    }
-  },
-  methods: {
-    getCategory(): void {
-      UpFacade.getCategory(this.categoryId)
-        .then((response) => {
-          console.log(response.data)
-          this.category = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    getTransactions(): void {
-      UpFacade.getTransactionsByCategory(this.categoryId)
-        .then((response) => {
-          console.log(response.data)
-          this.transactions = response.data.data
-        })
-        .catch((error) => {
-          console.error(error)
-          this.error = error
-        })
-    },
-    viewTransactionDetails(transaction: TransactionResource): void {
-      this.$router.push({
-        name: 'Transaction Detail',
-        params: {
-          transaction: transaction.id
-        }
-      })
-    },
-    ...mapActions(useProvenanceStore, {
-      pageTitle: 'setPageTitle',
-      pageDescription: 'setPageDescription'
-    })
-  },
-  mounted() {
-    this.getCategory()
-    this.getTransactions()
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 .flip-list-move {

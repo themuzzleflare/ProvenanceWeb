@@ -2,6 +2,17 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps<{
+  leftText: string
+  detailText?: string
+}>()
+
+const isMonoRight = computed(() => props.leftText === 'Raw Text')
+</script>
+
 <template>
   <div id="horizontalStack">
     <span id="leftText">{{ leftText }}</span>
@@ -14,17 +25,6 @@
     >
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-const props = defineProps<{
-  leftText: string
-  detailText?: string
-}>()
-
-const isMonoRight = computed(() => props.leftText === 'Raw Text')
-</script>
 
 <style lang="scss" scoped>
 #horizontalStack {

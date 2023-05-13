@@ -2,6 +2,15 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useProvenanceStore } from '@/store'
+
+const store = useProvenanceStore()
+
+const relativeDates = computed(() => store.relativeDates)
+</script>
+
 <template>
   <div aria-label="Date Style" class="btn-group" role="group">
     <input
@@ -11,7 +20,7 @@
       class="btn-check"
       name="dsradio"
       type="radio"
-      @click="setRelativeDates(false)"
+      @click="store.setRelativeDates(false)"
     />
     <label class="btn btn-outline-primary" for="dsradio1">Absolute</label>
     <input
@@ -21,19 +30,8 @@
       class="btn-check"
       name="dsradio"
       type="radio"
-      @click="setRelativeDates(true)"
+      @click="store.setRelativeDates(true)"
     />
     <label class="btn btn-outline-primary" for="dsradio2">Relative</label>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useProvenanceStore } from '@/store'
-
-const relativeDates = computed(() => useProvenanceStore().relativeDates)
-
-function setRelativeDates(value: boolean) {
-  useProvenanceStore().setRelativeDates(value)
-}
-</script>

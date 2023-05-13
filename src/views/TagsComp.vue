@@ -4,58 +4,50 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useProvenanceStore } from '@/store'
-import { storeToRefs } from 'pinia'
 
 import PageNotFound from '@/views/PageNotFound.vue'
+import SearchBar from '@/components/SearchBar.vue'
 import TagCell from '@/components/TagCell.vue'
 import Spinner from '@/components/SpinnerComp.vue'
 import NoContent from '@/components/NoContent.vue'
 
-import type TransactionResource from '@/upapi/TransactionResource'
 import type TagResource from '@/upapi/TagResource'
 import UpFacade from '@/UpFacade'
+import { storeToRefs } from 'pinia'
 
 const store = useProvenanceStore()
-const route = useRoute()
 const router = useRouter()
 
-const transaction = ref<TransactionResource>()
+const tags = ref<TagResource[]>([])
 const error = ref<Error | null>(null)
+const searchQuery = ref('')
+
 const loading = ref(false)
+
 const { apiKey } = storeToRefs(store)
 
-const transactionId = computed(() => route.params.transaction as string)
+watch(apiKey, () => getTags())
 
-const transactionDescription = computed(() => transaction.value?.attributes.description)
-
-const tags = computed(() => transaction.value?.relationships.tags.data)
-
-watch(apiKey, () => {
-  getTransaction()
-})
-
-watch(transaction, (newValue: TransactionResource): void => {
-  store.setPageTitle('Tags | ' + newValue.attributes.description)
-})
-
-watch(error, (newValue: Error): void => {
+watch(error, (newValue: Error) => {
   store.setPageTitle(newValue.name)
   store.setPageDescription(newValue.message)
 })
 
-onMounted(() => {
-  getTransaction()
+const filteredTags = computed<TagResource[]>(() => {
+  return tags.value.filter((tag: TagResource) => {
+    return tag.id.toLowerCase().indexOf(searchQuery.value.toLowerCase()) !== -1
+  })
 })
 
-function getTransaction(): void {
+function getTags(): void {
   loading.value = true
 
-  UpFacade.getTransaction(transactionId.value)
+  UpFacade.getTags()
     .then((response) => {
       error.value = null
-      transaction.value = response.data.data
+      tags.value = response.data.data
     })
     .catch((err) => {
       error.value = err
@@ -73,25 +65,27 @@ function listTransactionsByTag(tag: TagResource): void {
     }
   })
 }
+
+onMounted(() => {
+  getTags()
+})
 </script>
 
 <template>
   <Spinner v-if="loading" />
   <PageNotFound v-else-if="error" :error="error" />
-  <NoContent
-    v-else-if="tags?.length === 0"
-    :message="`No tags exist for transaction: ${transactionDescription}`"
-  />
+  <NoContent v-else-if="tags.length == 0" message="No tags exist" />
   <div v-else id="tags">
-    <ul class="list-group">
+    <SearchBar v-model="searchQuery" />
+    <transition-group class="list-group" name="flip-list" tag="ul">
       <TagCell
-        v-for="tag in tags"
+        v-for="tag in filteredTags"
         :key="tag.id"
         :tag="tag"
         class="list-group-item list-group-item-action"
         @click="listTransactionsByTag(tag)"
       />
-    </ul>
+    </transition-group>
   </div>
 </template>
 

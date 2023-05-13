@@ -2,10 +2,6 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
-<template>
-  <span id="tagName">{{ tagName }}</span>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -15,10 +11,12 @@ const props = defineProps<{
   tag: TagResource
 }>()
 
-const tagName = computed(() => {
-  return props.tag.id
-})
+const tagName = computed(() => props.tag.id)
 </script>
+
+<template>
+  <span id="tagName">{{ tagName }}</span>
+</template>
 
 <style lang="scss" scoped>
 #tagName:hover {

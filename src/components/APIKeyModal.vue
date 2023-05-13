@@ -2,6 +2,23 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useProvenanceStore } from '@/store'
+
+const store = useProvenanceStore()
+
+const text = ref('')
+
+const apiKey = computed(() => store.apiKey)
+
+onMounted(() => {
+  if (apiKey.value) {
+    text.value = apiKey.value
+  }
+})
+</script>
+
 <template>
   <div id="apiKeyModal" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
@@ -34,7 +51,7 @@
             class="btn btn-primary"
             data-bs-dismiss="modal"
             type="button"
-            @click="setApiKey(text)"
+            @click="store.setApiKey(text)"
           >
             Save
           </button>
@@ -43,21 +60,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useProvenanceStore } from '@/store'
-
-const text = ref('')
-const apiKey = computed(() => useProvenanceStore().apiKey)
-
-function setApiKey(text: string) {
-  useProvenanceStore().setApiKey(text)
-}
-
-onMounted(() => {
-  if (apiKey.value) {
-    text.value = apiKey.value
-  }
-})
-</script>

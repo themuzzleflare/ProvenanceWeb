@@ -4,6 +4,8 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
+import { useProvenanceStore } from '@/store'
+import { useRoute, useRouter } from 'vue-router'
 
 import PageNotFound from '@/views/PageNotFound.vue'
 import Spinner from '@/components/SpinnerComp.vue'
@@ -20,9 +22,6 @@ import type AccountResource from '@/upapi/AccountResource'
 import type CategoryResource from '@/upapi/CategoryResource'
 import UpFacade from '@/UpFacade'
 import type CardPurchaseMethodObject from '@/upapi/CardPurchaseMethodObject'
-import { useProvenanceStore } from '@/store'
-
-import { useRoute, useRouter } from 'vue-router'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -32,51 +31,51 @@ const route = useRoute()
 const router = useRouter()
 const store = useProvenanceStore()
 
-const transaction = ref(null as unknown as TransactionResource)
-const error = ref(null as unknown as Error)
-const account = ref(null as unknown as AccountResource)
-const transferAccount = ref(null as unknown as AccountResource)
-const category = ref(null as unknown as CategoryResource)
-const parentCategory = ref(null as unknown as CategoryResource)
+const transaction = ref<TransactionResource>()
+const error = ref<Error>()
+const account = ref<AccountResource>()
+const transferAccount = ref<AccountResource>()
+const category = ref<CategoryResource>()
+const parentCategory = ref<CategoryResource>()
 
 const transactionId = computed((): string => {
   return route.params.transaction as string
 })
 
 const accountId = computed((): string => {
-  return transaction.value.relationships.account.data.id
+  return transaction.value!.relationships.account.data.id
 })
 
 const transferAccountId = computed((): string | undefined => {
-  return transaction.value.relationships.transferAccount.data?.id
+  return transaction.value?.relationships.transferAccount.data?.id
 })
 
 const categoryId = computed((): string | undefined => {
-  return transaction.value.relationships.category.data?.id
+  return transaction.value?.relationships.category.data?.id
 })
 
 const parentCategoryId = computed((): string | undefined => {
-  return transaction.value.relationships.parentCategory.data?.id
+  return transaction.value?.relationships.parentCategory.data?.id
 })
 
 const transactionStatus = computed((): string => {
-  return transaction.value.attributes.status.replace('SETTLED', 'Settled').replace('HELD', 'Held')
+  return transaction.value!.attributes.status.replace('SETTLED', 'Settled').replace('HELD', 'Held')
 })
 
 const holdInfo = computed((): HoldInfoObject | undefined => {
-  return transaction.value.attributes.holdInfo
+  return transaction.value?.attributes.holdInfo
 })
 
 const foreignAmount = computed((): MoneyObject | undefined => {
-  return transaction.value.attributes.foreignAmount
+  return transaction.value?.attributes.foreignAmount
 })
 
 const cardPurchaseMethod = computed((): CardPurchaseMethodObject | undefined => {
-  return transaction.value.attributes.cardPurchaseMethod
+  return transaction.value?.attributes.cardPurchaseMethod
 })
 
 const transactionAmount = computed((): MoneyObject => {
-  return transaction.value.attributes.amount
+  return transaction.value!.attributes.amount
 })
 
 const transactionHoldValue = computed((): string | null => {
@@ -116,12 +115,12 @@ const transactionMethod = computed((): string | null => {
 })
 
 const transactionCreationDate = computed((): string => {
-  return formatDate(transaction.value.attributes.createdAt)
+  return formatDate(transaction.value!.attributes.createdAt)
 })
 
 const transactionSettlementDate = computed((): string | null => {
-  return transaction.value.attributes.settledAt
-    ? formatDate(transaction.value.attributes.settledAt)
+  return transaction.value?.attributes.settledAt
+    ? formatDate(transaction.value!.attributes.settledAt!)
     : null
 })
 
@@ -130,12 +129,12 @@ const relativeDates = computed((): boolean => {
 })
 
 watch(transaction, (newValue: TransactionResource) => {
-  setPageTitle(newValue.attributes.description)
+  store.setPageTitle(newValue.attributes.description)
 })
 
 watch(error, (newValue: Error) => {
-  setPageTitle(newValue.name)
-  setPageDescription(newValue.message)
+  store.setPageTitle(newValue.name)
+  store.setPageDescription(newValue.message)
 })
 
 onMounted(() => {
@@ -158,9 +157,9 @@ function getTransaction(): void {
         getParentCategory()
       }
     })
-    .catch((error) => {
-      console.error(error)
-      error.value = error
+    .catch((err) => {
+      console.error(err)
+      error.value = err
     })
 }
 
@@ -170,8 +169,8 @@ function getAccount(): void {
       console.log(response.data)
       account.value = response.data.data
     })
-    .catch((error) => {
-      console.error(error)
+    .catch((err) => {
+      console.error(err)
     })
 }
 
@@ -181,8 +180,8 @@ function getTransferAccount(): void {
       console.log(response.data)
       transferAccount.value = response.data.data
     })
-    .catch((error) => {
-      console.error(error)
+    .catch((err) => {
+      console.error(err)
     })
 }
 
@@ -192,8 +191,8 @@ function getCategory(): void {
       console.log(response.data)
       category.value = response.data.data
     })
-    .catch((error) => {
-      console.error(error)
+    .catch((err) => {
+      console.error(err)
     })
 }
 
@@ -203,8 +202,8 @@ function getParentCategory(): void {
       console.log(response.data)
       parentCategory.value = response.data.data
     })
-    .catch((error) => {
-      console.error(error)
+    .catch((err) => {
+      console.error(err)
     })
 }
 
@@ -262,14 +261,6 @@ function formatAmount(currencyCode: string, amount: string): string {
   const newAmount = parseFloat(amount)
   return formatter.format(newAmount)
 }
-
-function setPageTitle(title: string): void {
-  store.setPageTitle(title)
-}
-
-function setPageDescription(description: string): void {
-  store.setPageDescription(description)
-}
 </script>
 
 <template>
@@ -288,7 +279,7 @@ function setPageDescription(description: string): void {
         :detail-text="account?.attributes?.displayName"
         class="list-group-item list-group-item-action"
         left-text="Account"
-        @click="listTransactionsByAccount(account)"
+        @click="listTransactionsByAccount(account!)"
       />
       <AttributeCell
         v-if="transferAccount"
@@ -391,14 +382,14 @@ function setPageDescription(description: string): void {
       />
     </transition-group>
     <transition-group
-      v-if="transaction.relationships.tags.data.length !== 0"
+      v-if="transaction?.relationships.tags.data.length !== 0"
       class="list-group"
       name="flip-list"
       tag="ul"
     >
       <AttributeCell
         key="tags"
-        :detail-text="transaction.relationships.tags.data.length.toString()"
+        :detail-text="transaction?.relationships.tags.data.length.toString()"
         class="list-group-item list-group-item-action"
         left-text="Tags"
         @click="listTransactionTags"

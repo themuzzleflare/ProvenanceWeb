@@ -2,6 +2,10 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
+<script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+</script>
+
 <template>
   <div class="about">
     <span>
@@ -27,17 +31,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-export default defineComponent({
-  name: 'AboutComp',
-  components: { FontAwesomeIcon }
-})
-</script>
 
 <style lang="scss" scoped>
 .about {

@@ -2,28 +2,6 @@
   - Copyright © 2021-2023 Paul Tavitian.
   -->
 
-<template>
-  <transition-group
-    v-for="group in props.groupedTransactions"
-    id="dateGroup"
-    :key="group.date"
-    class="list-group"
-    name="list-complete"
-    tag="ul"
-  >
-    <div id="dateHeader" :key="group.date" class="list-group-item list-group-item-secondary">
-      <h4>{{ group.date }}</h4>
-    </div>
-    <TransactionCell
-      v-for="transaction in group.transactions"
-      :key="transaction.id"
-      :transaction="transaction"
-      class="list-group-item list-group-item-action"
-      @click="viewTransactionDetails(transaction)"
-    />
-  </transition-group>
-</template>
-
 <script setup lang="ts">
 import TransactionCell from '@/components/TransactionCell.vue'
 
@@ -47,6 +25,28 @@ function viewTransactionDetails(transaction: TransactionResource): void {
   })
 }
 </script>
+
+<template>
+  <transition-group
+    v-for="group in props.groupedTransactions"
+    id="dateGroup"
+    :key="group.date"
+    class="list-group"
+    name="list-complete"
+    tag="ul"
+  >
+    <div id="dateHeader" :key="group.date" class="list-group-item list-group-item-secondary">
+      <h4>{{ group.date }}</h4>
+    </div>
+    <TransactionCell
+      v-for="transaction in group.transactions"
+      :key="transaction.id"
+      :transaction="transaction"
+      class="list-group-item list-group-item-action"
+      @click="viewTransactionDetails(transaction)"
+    />
+  </transition-group>
+</template>
 
 <style lang="scss" scoped>
 .list-group-item {
