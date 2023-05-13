@@ -144,7 +144,6 @@ onMounted(() => {
 function getTransaction(): void {
   UpFacade.getTransaction(transactionId.value)
     .then((response) => {
-      console.log(response.data)
       transaction.value = response.data.data
       getAccount()
       if (transferAccountId.value) {
@@ -158,53 +157,32 @@ function getTransaction(): void {
       }
     })
     .catch((err) => {
-      console.error(err)
       error.value = err
     })
 }
 
 function getAccount(): void {
-  UpFacade.getAccount(accountId.value)
-    .then((response) => {
-      console.log(response.data)
-      account.value = response.data.data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  UpFacade.getAccount(accountId.value).then((response) => {
+    account.value = response.data.data
+  })
 }
 
 function getTransferAccount(): void {
-  UpFacade.getAccount(transferAccountId.value ?? '')
-    .then((response) => {
-      console.log(response.data)
-      transferAccount.value = response.data.data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  UpFacade.getAccount(transferAccountId.value ?? '').then((response) => {
+    transferAccount.value = response.data.data
+  })
 }
 
 function getCategory(): void {
-  UpFacade.getCategory(categoryId.value ?? '')
-    .then((response) => {
-      console.log(response.data)
-      category.value = response.data.data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  UpFacade.getCategory(categoryId.value ?? '').then((response) => {
+    category.value = response.data.data
+  })
 }
 
 function getParentCategory(): void {
-  UpFacade.getCategory(parentCategoryId.value ?? '')
-    .then((response) => {
-      console.log(response.data)
-      parentCategory.value = response.data.data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  UpFacade.getCategory(parentCategoryId.value ?? '').then((response) => {
+    parentCategory.value = response.data.data
+  })
 }
 
 function listTransactionsByAccount(account: AccountResource): void {
