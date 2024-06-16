@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
       </a>
       <a
         class="list-group-item list-group-item-action"
-        href="mailto:feedback@tavitian.cloud?subject=Feedback%20for%20Provenance"
+        href="mailto:paul@tavitian.net.au?subject=Feedback%20for%20Provenance"
       >
         <font-awesome-icon :icon="['fas', 'envelope']" />
         <span>Contact Developer</span>

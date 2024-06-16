@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 Paul Tavitian.
+ * Copyright © 2023-2024 Paul Tavitian.
  */
 
 import { defineStore } from 'pinia'
@@ -24,21 +24,23 @@ export const useProvenanceStore = defineStore('provenance', () => {
     dateGrouping.value = payload
   }
 
-  function setPageTitle(title: string): void {
+  function setPageTitle(title: string | null | undefined): void {
     title += ' | Provenance'
 
-    pageTitle.value = title
+    pageTitle.value = title || defaultPageTitle
 
-    document.title = title
-    document.querySelectorAll('.page-title-meta').forEach((el) => el.setAttribute('content', title))
+    document.title = title || defaultPageTitle
+    document
+      .querySelectorAll('.page-title-meta')
+      .forEach((el) => el.setAttribute('content', title || defaultPageTitle))
   }
 
-  function setPageDescription(description: string): void {
-    pageDescription.value = description
+  function setPageDescription(description: string | null | undefined): void {
+    pageDescription.value = description || defaultPageDescription
 
     document
       .querySelectorAll('.page-description-meta')
-      .forEach((el) => el.setAttribute('content', description))
+      .forEach((el) => el.setAttribute('content', description || defaultPageDescription))
   }
 
   function setApiKey(key: string): void {

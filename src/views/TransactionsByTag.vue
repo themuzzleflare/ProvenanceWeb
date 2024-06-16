@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -31,9 +31,9 @@ watch(apiKey, () => {
   getTransactions()
 })
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
 const tagId = computed(() => route.params.tag as string)
@@ -56,7 +56,7 @@ function getTransactions(): void {
       transactions.value = response.data.data
     })
     .catch((err) => {
-      err.value = err
+      error.value = err
     })
     .finally(() => {
       loading.value = false

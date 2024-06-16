@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -31,13 +31,13 @@ const { apiKey } = storeToRefs(store)
 
 watch(apiKey, () => getCategoryAndTransactions())
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
-watch(category, (newValue: CategoryResource) => {
-  store.setPageTitle(newValue.attributes.name)
+watch(category, (newValue) => {
+  store.setPageTitle(newValue?.attributes.name)
 })
 
 const categoryId = computed(() => route.params.category as string)
@@ -65,7 +65,7 @@ const getCategoryAndTransactions = async (): Promise<void> => {
     error.value = null
     category.value = categoryResponse.data.data
     transactions.value = transactionsResponse.data.data
-  } catch (err) {
+  } catch (err: any) {
     error.value = err
   } finally {
     loading.value = false

@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -47,9 +47,9 @@ watch(apiKey, () => {
   getTransactions()
 })
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
 const dateGrouping = computed((): boolean => store.dateGrouping)

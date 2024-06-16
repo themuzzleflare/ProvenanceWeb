@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -31,9 +31,9 @@ watch(apiKey, () => {
   getAccounts()
 })
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
 const filteredAccounts = computed((): AccountResource[] => {
@@ -51,7 +51,7 @@ const getAccounts = async (): Promise<void> => {
     const response = await UpFacade.getAccounts()
     error.value = null
     accounts.value = response.data.data
-  } catch (err) {
+  } catch (err: any) {
     error.value = err
   } finally {
     loading.value = false

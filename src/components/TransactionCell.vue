@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2023 Paul Tavitian.
+  - Copyright © 2023-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">

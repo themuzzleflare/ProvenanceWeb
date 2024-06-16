@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -128,13 +128,13 @@ const relativeDates = computed((): boolean => {
   return store.relativeDates
 })
 
-watch(transaction, (newValue: TransactionResource) => {
-  store.setPageTitle(newValue.attributes.description)
+watch(transaction, (newValue) => {
+  store.setPageTitle(newValue?.attributes.description)
 })
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
 onMounted(() => {
@@ -218,7 +218,7 @@ function formatDate(date: string): string {
 function formatMethod(method: string): string {
   const arr = method.toLowerCase().split('_')
 
-  for (var i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1)
   }
 

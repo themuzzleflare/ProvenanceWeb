@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -21,9 +21,9 @@ const store = useProvenanceStore()
 const route = useRoute()
 const router = useRouter()
 
-const transaction = ref<TransactionResource>()
+const transaction = ref<TransactionResource | undefined>()
 const error = ref<Error | null>(null)
-const loading = ref(false)
+const loading = ref<boolean>(false)
 const { apiKey } = storeToRefs(store)
 
 const transactionId = computed(() => route.params.transaction as string)
@@ -36,13 +36,13 @@ watch(apiKey, () => {
   getTransaction()
 })
 
-watch(transaction, (newValue: TransactionResource): void => {
-  store.setPageTitle('Tags | ' + newValue.attributes.description)
+watch(transaction, (newValue): void => {
+  store.setPageTitle('Tags | ' + newValue?.attributes.description)
 })
 
-watch(error, (newValue: Error): void => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue): void => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
 onMounted(() => {

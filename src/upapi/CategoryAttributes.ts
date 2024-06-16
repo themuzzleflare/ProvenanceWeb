@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021-2023 Paul Tavitian.
+ * Copyright © 2021-2024 Paul Tavitian.
  */
 
 export default interface CategoryAttributes {

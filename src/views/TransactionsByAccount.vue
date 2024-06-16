@@ -1,5 +1,5 @@
 <!--
-  - Copyright © 2021-2023 Paul Tavitian.
+  - Copyright © 2021-2024 Paul Tavitian.
   -->
 
 <script setup lang="ts">
@@ -33,13 +33,13 @@ const { apiKey } = storeToRefs(store)
 
 watch(apiKey, () => getAccountAndTransactions())
 
-watch(error, (newValue: Error) => {
-  store.setPageTitle(newValue.name)
-  store.setPageDescription(newValue.message)
+watch(error, (newValue) => {
+  store.setPageTitle(newValue?.name)
+  store.setPageDescription(newValue?.message)
 })
 
-watch(account, (newValue: AccountResource) => {
-  store.setPageTitle(newValue.attributes.displayName)
+watch(account, (newValue) => {
+  store.setPageTitle(newValue?.attributes.displayName)
 })
 
 const accountId = computed(() => route.params.account as string)
@@ -66,7 +66,7 @@ const getAccountAndTransactions = async (): Promise<void> => {
     error.value = null
     account.value = accountResponse.data.data
     transactions.value = transactionsResponse.data.data
-  } catch (err) {
+  } catch (err: any) {
     error.value = err
   } finally {
     loading.value = false

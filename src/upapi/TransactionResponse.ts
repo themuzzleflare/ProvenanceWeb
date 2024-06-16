@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2023 Paul Tavitian.
+ * Copyright © 2022-2024 Paul Tavitian.
  */
 
 import type TransactionResource from '@/upapi/TransactionResource'
