@@ -2,7 +2,7 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted } from 'vue'
 
 import APIKeyModal from '@/components/APIKeyModal.vue'
@@ -66,7 +66,7 @@ function openSettingsModal(): void {
       <div id="navbarSupportedContent" class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/transactions">Transactions </router-link>
+            <router-link class="nav-link" to="/transactions">Transactions</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/accounts">Accounts</router-link>
@@ -75,7 +75,7 @@ function openSettingsModal(): void {
             <router-link class="nav-link" to="/tags">Tags</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/categories">Categories </router-link>
+            <router-link class="nav-link" to="/categories">Categories</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/about">About</router-link>

@@ -2,13 +2,13 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, type Ref } from 'vue'
 import { useProvenanceStore } from '@/store'
 
 const store = useProvenanceStore()
 
-const text = ref('')
+const text: Ref<string> = ref<string>('')
 
 const apiKey = computed(() => store.apiKey)
 

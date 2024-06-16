@@ -7,6 +7,7 @@ export {}
 import 'vue-router'
 
 declare module 'vue-router' {
+  // noinspection JSUnusedGlobalSymbols
   interface RouteMeta {
     title?: string
     description?: string

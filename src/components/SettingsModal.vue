@@ -2,8 +2,8 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue'
 import { useProvenanceStore } from '@/store'
 
 const store = useProvenanceStore()

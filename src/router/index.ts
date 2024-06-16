@@ -2,8 +2,8 @@
  * Copyright © 2021-2024 Paul Tavitian.
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteLocationNormalized } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { trackRouter } from 'vue-gtag-next'
 
 import { useProvenanceStore } from '@/store'

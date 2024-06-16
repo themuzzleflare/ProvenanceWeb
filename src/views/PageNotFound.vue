@@ -2,7 +2,7 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const props = defineProps<{
   error?: Error
 }>()

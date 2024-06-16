@@ -2,8 +2,8 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, type ComputedRef, onMounted, ref, watch } from 'vue'
 import useProvenanceStore from '@/store'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -36,51 +36,58 @@ const store = useProvenanceStore()
 
 const transactions = ref<TransactionResource[]>([])
 const error = ref<Error | null>(null)
-const searchQuery = ref('')
-const settledOnly = ref(false)
+const searchQuery = ref<string>('')
+const settledOnly = ref<boolean>(false)
 
-const loading = ref(false)
+const loading = ref<boolean>(false)
 
 const { apiKey } = storeToRefs(store)
 
-watch(apiKey, () => {
+watch(apiKey, (): void => {
   getTransactions()
 })
 
-watch(error, (newValue) => {
+watch(error, (newValue: Error | null): void => {
   store.setPageTitle(newValue?.name)
   store.setPageDescription(newValue?.message)
 })
 
-const dateGrouping = computed((): boolean => store.dateGrouping)
+const dateGrouping: ComputedRef<boolean> = computed<boolean>((): boolean => store.dateGrouping)
 
-const filteredTransactions = computed((): TransactionResource[] => {
-  return transactions.value.filter((transaction: TransactionResource) => {
-    return (
-      (!settledOnly.value || transaction.attributes.status === 'SETTLED') &&
-      transaction.attributes.description.toLowerCase().indexOf(searchQuery.value.toLowerCase()) !==
-        -1
+const filteredTransactions: ComputedRef<TransactionResource[]> = computed(
+  (): TransactionResource[] => {
+    return transactions.value.filter((transaction: TransactionResource): boolean => {
+      return (
+        (!settledOnly.value || transaction.attributes.status === 'SETTLED') &&
+        transaction.attributes.description
+          .toLowerCase()
+          .indexOf(searchQuery.value.toLowerCase()) !== -1
+      )
+    })
+  }
+)
+
+const groupedTransactions: ComputedRef<GroupedTransactions[]> = computed(
+  (): GroupedTransactions[] => {
+    const modified: TransactionResource[] = filteredTransactions.value.map(
+      (transaction: TransactionResource) => {
+        transaction.attributes.sortingDate = dayjs(transaction.attributes.createdAt)
+          .tz('Australia/Sydney')
+          .startOf('day')
+          .format('DD/MM/YYYY')
+        return transaction
+      }
     )
-  })
-})
 
-const groupedTransactions = computed((): GroupedTransactions[] => {
-  const modified = filteredTransactions.value.map((transaction: TransactionResource) => {
-    transaction.attributes.sortingDate = dayjs(transaction.attributes.createdAt)
-      .tz('Australia/Sydney')
-      .startOf('day')
-      .format('DD/MM/YYYY')
-    return transaction
-  })
-
-  const grouped: GroupDictionary = groupBy(modified, 'sortingDate')
-  return Object.keys(grouped).map((key) => {
-    return {
-      date: key,
-      transactions: grouped[key]
-    }
-  })
-})
+    const grouped: GroupDictionary = groupBy(modified, 'sortingDate')
+    return Object.keys(grouped).map((key: string) => {
+      return {
+        date: key,
+        transactions: grouped[key]
+      }
+    })
+  }
+)
 
 function getTransactions(): void {
   loading.value = true
@@ -143,7 +150,7 @@ onMounted(() => getTransactions())
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .list-group-item {
   transition: all 200ms ease;
 }

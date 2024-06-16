@@ -2,10 +2,10 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch } from 'vue'
 import { useProvenanceStore } from '@/store'
-import { useRoute, useRouter } from 'vue-router'
+import { type RouteLocationNormalizedLoaded, type Router, useRoute, useRouter } from 'vue-router'
 
 import PageNotFound from '@/views/PageNotFound.vue'
 import Spinner from '@/components/SpinnerComp.vue'
@@ -27,8 +27,8 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
 
-const route = useRoute()
-const router = useRouter()
+const route: RouteLocationNormalizedLoaded = useRoute()
+const router: Router = useRouter()
 const store = useProvenanceStore()
 
 const transaction = ref<TransactionResource>()

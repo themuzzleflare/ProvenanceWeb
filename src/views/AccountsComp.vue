@@ -2,8 +2,8 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import PageNotFound from '@/views/PageNotFound.vue'

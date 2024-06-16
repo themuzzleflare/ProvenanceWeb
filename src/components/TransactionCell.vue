@@ -2,7 +2,7 @@
   - Copyright © 2023-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from 'vue'
 import { useProvenanceStore } from '@/store'
 
@@ -60,7 +60,7 @@ function formatAmount(currencyCode: string, amount: string): string {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 #horizontalStack {
   display: flex;
   flex-direction: row;

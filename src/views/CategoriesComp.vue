@@ -2,8 +2,8 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProvenanceStore } from '@/store'
 
@@ -21,10 +21,10 @@ const store = useProvenanceStore()
 const router = useRouter()
 
 const categories = ref<CategoryResource[]>([])
-const error = ref<Error | null>(null)
-const searchQuery = ref('')
+const error: Ref<Error | null> = ref<Error | null>(null)
+const searchQuery: Ref<string> = ref<string>('')
 
-const loading = ref(false)
+const loading = ref<boolean>(false)
 
 const { apiKey } = storeToRefs(store)
 

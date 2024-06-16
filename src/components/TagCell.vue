@@ -2,7 +2,7 @@
   - Copyright © 2021-2024 Paul Tavitian.
   -->
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from 'vue'
 
 import type TagResource from '@/upapi/TagResource'
