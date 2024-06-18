@@ -31,7 +31,7 @@
     "@rushstack/eslint-patch": "^1.10.3",
     "@tsconfig/node20": "^20.1.4",
     "@types/bootstrap": "^5.2.10",
-    "@types/node": "^20.14.2",
+    "@types/node": "^20.14.4",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "@vue/eslint-config-prettier": "^9.0.0",
@@ -41,10 +41,10 @@
     "eslint-plugin-vue": "^9.26.0",
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.3.2",
-    "sass": "^1.77.5",
+    "sass": "^1.77.6",
     "typescript": "~5.4.5",
     "vite": "^5.3.1",
-    "vite-plugin-vue-devtools": "^7.2.1",
+    "vite-plugin-vue-devtools": "^7.3.0",
     "vue-tsc": "^2.0.21"
   }
 }

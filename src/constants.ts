@@ -12,7 +12,7 @@ export const defaultPageDescription: string =
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: 'https://api.up.com.au/api/v1',
-  transformRequest(data: any, headers): void {
+  transformRequest(data, headers): void {
     const store = useProvenanceStore()
     headers['Authorization'] = `Bearer ${store.apiKey}`
   }
