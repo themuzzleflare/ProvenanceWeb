@@ -7,5 +7,5 @@ import type RelatedLink from '@/upapi/RelatedLink'
 
 export default interface TransactionRelationshipAccount {
   data: RelationshipData
-  links?: RelatedLink
+  links?: RelatedLink | null
 }

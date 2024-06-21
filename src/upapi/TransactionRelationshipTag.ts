@@ -7,5 +7,5 @@ import type SelfLink from '@/upapi/SelfLink'
 
 export default interface TransactionRelationshipTag {
   data: RelationshipData[]
-  links?: SelfLink
+  links?: SelfLink | null
 }

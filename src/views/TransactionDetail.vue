@@ -16,12 +16,10 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type TransactionResource from '@/upapi/TransactionResource'
-import type HoldInfoObject from '@/upapi/HoldInfoObject'
 import type MoneyObject from '@/upapi/MoneyObject'
 import type AccountResource from '@/upapi/AccountResource'
 import type CategoryResource from '@/upapi/CategoryResource'
 import UpFacade from '@/UpFacade'
-import type CardPurchaseMethodObject from '@/upapi/CardPurchaseMethodObject'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -62,15 +60,15 @@ const transactionStatus = computed((): string => {
   return transaction.value!.attributes.status.replace('SETTLED', 'Settled').replace('HELD', 'Held')
 })
 
-const holdInfo = computed((): HoldInfoObject | undefined => {
+const holdInfo = computed(() => {
   return transaction.value?.attributes.holdInfo
 })
 
-const foreignAmount = computed((): MoneyObject | undefined => {
+const foreignAmount = computed(() => {
   return transaction.value?.attributes.foreignAmount
 })
 
-const cardPurchaseMethod = computed((): CardPurchaseMethodObject | undefined => {
+const cardPurchaseMethod = computed(() => {
   return transaction.value?.attributes.cardPurchaseMethod
 })
 

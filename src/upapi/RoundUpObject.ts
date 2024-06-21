@@ -6,5 +6,5 @@ import type MoneyObject from '@/upapi/MoneyObject'
 
 export default interface RoundUpObject {
   amount: MoneyObject
-  boostPortion?: MoneyObject
+  boostPortion?: MoneyObject | null
 }

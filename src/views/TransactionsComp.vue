@@ -116,7 +116,7 @@ function viewTransactionDetails(transaction: TransactionResource): void {
 
 function groupBy(xs: TransactionResource[], key: SortingDate): GroupDictionary {
   return xs.reduce<GroupDictionary>((rv, x) => {
-    ;(rv[x.attributes[key]] = rv[x.attributes[key]] || []).push(x)
+    ;(rv[x.attributes[key]!] = rv[x.attributes[key]!] || []).push(x)
     return rv
   }, {})
 }

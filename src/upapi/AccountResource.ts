@@ -11,5 +11,5 @@ export default interface AccountResource {
   id: string
   attributes: AccountAttributes
   relationships: AccountRelationships
-  links?: SelfLink
+  links?: SelfLink | null
 }

@@ -4,4 +4,5 @@
 
 export default interface RelatedLink {
   related: string
+  self?: string | null
 }

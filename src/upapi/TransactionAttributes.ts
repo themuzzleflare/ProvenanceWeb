@@ -10,16 +10,17 @@ import type CardPurchaseMethodObject from '@/upapi/CardPurchaseMethodObject'
 
 export default interface TransactionAttributes {
   status: string
-  rawText?: string
+  rawText?: string | null
   description: string
-  message?: string
-  holdInfo?: HoldInfoObject
-  roundUp?: RoundUpObject
-  cashback?: CashbackObject
+  message?: string | null
+  isCategorizable: boolean // Boolean flag set to true on transactions that support the use of categories.
+  holdInfo?: HoldInfoObject | null
+  roundUp?: RoundUpObject | null
+  cashback?: CashbackObject | null
   amount: MoneyObject
-  foreignAmount?: MoneyObject
-  cardPurchaseMethod?: CardPurchaseMethodObject
-  settledAt?: string
+  foreignAmount?: MoneyObject | null
+  cardPurchaseMethod?: CardPurchaseMethodObject | null
+  settledAt?: string | null
   createdAt: string
-  sortingDate: string
+  sortingDate?: string | null
 }

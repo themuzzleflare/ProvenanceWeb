@@ -6,6 +6,6 @@ import type RelationshipData from '@/upapi/RelationshipData'
 import type RelatedLink from '@/upapi/RelatedLink'
 
 export default interface CategoryRelationshipParent {
-  data?: RelationshipData
-  links?: RelatedLink
+  data?: RelationshipData | null
+  links?: RelatedLink | null
 }

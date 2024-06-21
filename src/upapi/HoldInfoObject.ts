@@ -6,5 +6,5 @@ import type MoneyObject from '@/upapi/MoneyObject'
 
 export default interface HoldInfoObject {
   amount: MoneyObject
-  foreignAmount?: MoneyObject
+  foreignAmount?: MoneyObject | null
 }

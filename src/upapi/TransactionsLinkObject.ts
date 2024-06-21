@@ -5,5 +5,5 @@
 import type RelatedLink from '@/upapi/RelatedLink'
 
 export default interface TransactionsLinkObject {
-  links?: RelatedLink
+  links?: RelatedLink | null
 }

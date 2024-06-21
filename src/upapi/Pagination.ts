@@ -3,6 +3,6 @@
  */
 
 export default interface Pagination {
-  prev?: string
-  next?: string
+  prev?: string | null
+  next?: string | null
 }

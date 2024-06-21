@@ -6,7 +6,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/
-// noinspection JSUnusedGlobalSymbols
 export default defineConfig({
   plugins: [
     vue(),

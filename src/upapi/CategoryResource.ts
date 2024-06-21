@@ -11,5 +11,5 @@ export default interface CategoryResource {
   id: string
   attributes: CategoryAttributes
   relationships: CategoryRelationships
-  links?: SelfLink
+  links?: SelfLink | null
 }

@@ -4,5 +4,5 @@
 
 export default interface CardPurchaseMethodObject {
   method: string
-  cardNumberSuffix?: string
+  cardNumberSuffix?: string | null
 }

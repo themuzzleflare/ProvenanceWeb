@@ -7,5 +7,5 @@ import type TagRelationships from '@/upapi/TagRelationships'
 export default interface TagResource {
   type: string
   id: string
-  relationships?: TagRelationships
+  relationships?: TagRelationships | null
 }
